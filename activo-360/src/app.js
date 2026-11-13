@@ -141,7 +141,7 @@ function alerts(){if(!S)return[];const o=[],K=C(),add=(l,cat,t,d,act)=>o.push({l
   S.col.filter(c=>c.st==='Baja laboral'&&assignedTo(c.emp).some(a=>a.estado==='Pendiente de devolución')).forEach(c=>add('bad','Sistemas',`Baja laboral con equipo sin devolver · ${c.name}`,`${assignedTo(c.emp).length} activo(s) pendiente(s) de devolución`,{v:'ti'}));
   const pl=S.items.filter(e=>e.p==='CONFIRMADO'&&e.AS_ESTATUS==='PLAN DE RENOVACION / ENVIADO A CSI').length;if(pl)add('info','AppSheet',`${pl} equipos en plan de renovación`,'Vienen de AppSheet y esperan diagnóstico del ingeniero',{v:'ingeniero'});
   (S.feedLog||[]).slice(0,3).forEach(f=>add('info','AppSheet',f.t,f.d,{v:'inventario'}));
-  return o}
+  const g=engCur();return g?o.filter(a=>a.act&&(a.act.eq!=null?mine(S.items[a.act.eq]):a.act.eng?g.clinicas.includes(a.act.eng):false)):o}
 const LV={bad:['p-bad','Urgente'],warn:['p-warn','Por atender'],info:['p-info','Aviso']};
 function alertRow(a,i){return `<div class="alr ${a.l}"><span class="pill ${LV[a.l][0]}">${LV[a.l][1]}</span><div class="alt"><b>${esc(a.t)}</b><div class="note">${esc(a.cat)} · ${esc(a.d)}</div></div><button class="btn sm" data-alr="${i}">Ver</button></div>`}
 function bindAlerts(list){$$('[data-alr]').forEach(b=>b.onclick=()=>{const a=list[+b.dataset.alr].act;if(a.eq!=null)openEq(a.eq);else if(a.eng){S.engClinic=a.eng;go('ingeniero')}else go(a.v)})}
@@ -196,6 +196,20 @@ const TRZ={live:false,q:[],h:0,url:'',view:null};
 const dmy=s=>s?s.split('-').reverse().join('/'):'';
 const trzRow=(e,fecha,etapa,resp,donde,evento,origen,folio)=>[fecha,folio||e.sale?.folio||'',e.ID_ACTIVO,eqName(e),e.CLINICA,etapa,resp,donde,evento,origen];
 function trzSend(rows,ok,fail){google.script.run.withSuccessHandler(r=>{if(r&&r.url)TRZ.url=r.url;ok&&ok(r)}).withFailureHandler(err=>fail&&fail(err&&err.message||String(err))).appendTraza(rows)}
+/* Perfiles: el administrador ve todo; el ingeniero solo las clínicas que le asignan en "Ingenieros y clínicas". */
+const tCase=s=>String(s||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+const engMail=n=>{const p=String(n).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').split(/\s+/).filter(Boolean);return(p.length>=3?p[2]+'.'+p[0]:p.join('.'))+'@demo.activo360'};
+function engList(){if(!S.engs){const by={};S.items.forEach(e=>{const o=by[e.CLINICA]??={};o[e.INGENIERO]=(o[e.INGENIERO]||0)+1});const m={};
+    Object.entries(by).forEach(([c,o])=>{const u=Object.entries(o).sort((a,b)=>b[1]-a[1])[0][0];(m[u]??=[]).push(c)});
+    S.engs=Object.keys(m).sort().map((n,i)=>({id:'ING-'+String(i+1).padStart(3,'0'),nombre:n,correo:engMail(n),clinicas:m[n].sort()}))}return S.engs}
+const engCur=()=>S&&S.role==='ing'?engList().find(g=>g.id===S.asEng)||null:null;
+const ING=()=>!!engCur();
+const mine=e=>{const g=engCur();return!g||g.clinicas.includes(e.CLINICA)};
+const ING_V=['misequipos','alertas','ingeniero','recorrido'];
+function setRole(r,id){S.role=r;S.asEng=r==='ing'?id:null;S.engClinic=null;S.dxId=null;S.rec=null;closeDrawer();go(r==='ing'?'misequipos':'panel')}
+function paintViewAs(){const el=$('#viewas');if(!el)return;const L=engList(),v=ING()?S.asEng:'admin';
+  el.innerHTML=`<option value="admin">Ver como: Administrador</option><optgroup label="Ver como ingeniero">${L.map(g=>`<option value="${g.id}">${esc(tCase(g.nombre))} · ${g.clinicas.length} clínica${g.clinicas.length>1?'s':''}</option>`).join('')}</optgroup>`;el.value=v;
+  el.onchange=()=>setRole(el.value==='admin'?'admin':'ing',el.value)}
 function trzFlush(){if(!GAS||!TRZ.q.length)return;const rows=TRZ.q.splice(0);trzSend(rows,null,m=>{TRZ.q.unshift(...rows);toast('No se pudo escribir la traza: '+m)})}
 function log(m,ep,src,body,desc){S.log.unshift({d:S.today,m,ep,src,body,desc})}
 function notify(to,txt,kind){S.notifs.unshift({d:S.today,to,txt,kind:kind||'info'})}
@@ -445,24 +459,27 @@ const legend=items=>`<div class="legend">${items.map(([c,l])=>`<span><i style="b
 
 /* ---------- Navegación ---------- */
 const NAVS={
- venta:[['h','Equipo de clínicas','mv'],['panel','Panel ejecutivo'],['recorrido','Recorrido de un equipo'],['alertas','Alertas'],['clinicas','Activos por clínica'],['inventario','Inventario AppSheet'],['ingeniero','Ingeniero de Sistemas'],['seguimiento','Seguimiento de ventas'],['hgestion','Aprobaciones (Activo Fijo e Ingresos)'],['facturacion','Facturación'],['destruccion','Destrucción certificada'],['donacion','Donación'],['fiscal','Fiscal'],['config','Tabulador y reglas'],
+ venta:[['h','Equipo de clínicas','mv'],['panel','Panel ejecutivo'],['recorrido','Recorrido de un equipo'],['alertas','Alertas'],['clinicas','Activos por clínica'],['inventario','Inventario AppSheet'],['ingeniero','Ingeniero de Sistemas'],['seguimiento','Seguimiento de ventas'],['hgestion','Aprobaciones (Activo Fijo e Ingresos)'],['facturacion','Facturación'],['destruccion','Destrucción certificada'],['donacion','Donación'],['fiscal','Fiscal'],['config','Tabulador y reglas'],['ingenieros','Ingenieros y clínicas'],
   ['h','Humand','hm'],['hbazar','Bazar de Activos'],['compra','Gestión de Servicios · compra'],['hfirma','Firma del formato de compra'],['hnotif','Notificaciones'],['h','Google'],['correos','Correos enviados'],['h','Para Humand'],['integracion','Integración técnica']],
+ ing:[['h','Mis clínicas','mv'],['misequipos','Mis equipos'],['alertas','Mis alertas'],['ingeniero','Diagnóstico y entregas'],['recorrido','Recorrido de un equipo']],
  ti:[['h','Inventario de Sistemas','mt'],['alertas','Alertas'],['ti','Activos por colaborador'],['carta','Carta responsiva'],
   ['h','Humand','hm'],['hfirma','Firma de carta responsiva'],['hnotif','Notificaciones'],['h','Para Humand'],['integracion','Integración técnica']]};
-const MODV={ti:['ti','carta'],venta:['panel','recorrido','clinicas','inventario','ingeniero','seguimiento','compra','facturacion','destruccion','donacion','fiscal','config','hgestion','hbazar','correos']};
+const MODV={ti:['ti','carta'],venta:['panel','recorrido','misequipos','ingenieros','clinicas','inventario','ingeniero','seguimiento','compra','facturacion','destruccion','donacion','fiscal','config','hgestion','hbazar','correos']};
 const MODTAG={venta:['VENTA DE EQUIPO DE CLÍNICAS','Equipo de cómputo de las clínicas que cumplió su vida útil: venta local, destrucción o donación.'],ti:['INVENTARIO DE SISTEMAS','Equipo asignado a cada colaborador y su carta responsiva consolidada (SGC-N4-347).']};
 const HMV=['compra','hbazar','hfirma','hnotif'];
 const pendOf=(type)=>S.reqs.filter(r=>r.state==='Pendiente'&&(Array.isArray(type)?type.includes(r.type):r.type===type)).length;
 function counts(){return{alertas:alerts().filter(x=>x.l!=='info').length,hgestion:S.reqs.filter(r=>r.state==='Pendiente'&&RT[r.type].ch==='humand').length,hbazar:S.items.filter(e=>e.p==='PUBLICADO'||e.p==='SUBASTA').length,
-  ingeniero:S.items.filter(e=>(!e.p&&soon(e))||['CONFIRMADO','AGENDA','ENTREGA','DONACION'].includes(e.p)).length,seguimiento:S.items.filter(e=>e.p&&!['ENTREGADO',...DESTR].includes(e.p)).length,
+  misequipos:ING()?S.items.filter(e=>mine(e)&&!e.p&&soon(e)).length:null,
+  ingeniero:S.items.filter(e=>mine(e)&&((!e.p&&soon(e))||['CONFIRMADO','AGENDA','ENTREGA','DONACION'].includes(e.p))).length,seguimiento:S.items.filter(e=>e.p&&!['ENTREGADO',...DESTR].includes(e.p)).length,
   hnotif:S.notifs.filter(n=>n.d===S.today).length,donacion:S.items.filter(e=>['DONACION','DONADO_FACT'].includes(e.p)).length,
   hfirma:S.mod==='ti'?Object.values(S.cartas).filter(L=>L[L.length-1].st==='Pendiente de firma').length:pendOf(['FIRMA_COL','FIRMA_JEFE']),ti:S.ast.filter(tiSoon).length,
   facturacion:pendOf('FACTURA'),fiscal:pendOf('REVFIS'),correos:S.mails.filter(m=>m.d===S.today).length}}
 
-function renderNav(){const c=counts();$('#nav').innerHTML=NAVS[S.mod||'venta'].map(n=>n[0]==='h'?`<h6 class="${n[2]||''}">${n[1]}</h6>`:`<button data-v="${n[0]}" class="${HMV.includes(n[0])?'hmb ':''}${S.view===n[0]?'on':''}">${n[1]}${c[n[0]]!=null?`<span class="cnt ${['hgestion','hfirma','alertas'].includes(n[0])&&c[n[0]]?'hot':''}">${c[n[0]]}</span>`:''}</button>`).join('')}
+function renderNav(){const c=counts();$('#nav').innerHTML=NAVS[ING()?'ing':S.mod||'venta'].map(n=>n[0]==='h'?`<h6 class="${n[2]||''}">${n[1]}</h6>`:`<button data-v="${n[0]}" class="${HMV.includes(n[0])?'hmb ':''}${S.view===n[0]?'on':''}">${n[1]}${c[n[0]]!=null?`<span class="cnt ${['hgestion','hfirma','alertas'].includes(n[0])&&c[n[0]]?'hot':''}">${c[n[0]]}</span>`:''}</button>`).join('')}
 function go(v){if(MODV.ti.includes(v))S.mod='ti';else if(MODV.venta.includes(v))S.mod='venta';S.view=v;save();render();window.scrollTo(0,0)}
 function setMod(m){S.mod=m;S.view=m==='ti'?'ti':'panel';closeDrawer();save();render();window.scrollTo(0,0)}
-function render(){if(!S.mod)S.mod=MODV.ti.includes(S.view)?'ti':'venta';$('#today').textContent=fd(S.today);document.body.classList.toggle('mod-ti',S.mod==='ti');$$('#mods [data-modulo]').forEach(b=>{const on=b.dataset.modulo===S.mod;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});renderNav();const f=VIEWS[S.view]||VIEWS.panel;const t=MODTAG[S.mod];$('#main').innerHTML=`<div class="modtag"><b>${t[0]}</b><span>${t[1]}</span></div>`+f();after[S.view]?.();paintGreet()}
+function render(){if(ING()){S.mod='venta';if(!ING_V.includes(S.view))S.view='misequipos'}document.body.classList.toggle('rol-ing',ING());paintViewAs();
+  if(!S.mod)S.mod=MODV.ti.includes(S.view)?'ti':'venta';$('#today').textContent=fd(S.today);document.body.classList.toggle('mod-ti',S.mod==='ti');$$('#mods [data-modulo]').forEach(b=>{const on=b.dataset.modulo===S.mod;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});renderNav();const f=VIEWS[S.view]||VIEWS.panel;const t=MODTAG[S.mod];$('#main').innerHTML=`<div class="modtag"><b>${t[0]}</b><span>${t[1]}</span></div>`+f();after[S.view]?.();paintGreet()}
 const after={},VIEWS={};
 
 /* ================= PANEL EJECUTIVO ================= */
@@ -674,7 +691,7 @@ after.panel=()=>bindAlerts(alerts());
 
 /* ================= INGENIERO ================= */
 VIEWS.ingeniero=()=>{
-  const clins=[...new Set(S.items.map(e=>e.CLINICA))].sort();
+  const clins=[...new Set(S.items.filter(mine).map(e=>e.CLINICA))].sort();
   const score=c=>S.items.filter(e=>e.CLINICA===c&&((!e.p&&soon(e))||['CONFIRMADO','AGENDA','ENTREGA','DONACION'].includes(e.p))).length;
   if(!S.engClinic||!clins.includes(S.engClinic))S.engClinic=clins.slice().sort((a,b)=>score(b)-score(a))[0];
   const its=S.items.filter(e=>e.CLINICA===S.engClinic);const eng=its[0]?.INGENIERO||'Ingeniero';
@@ -777,8 +794,8 @@ const RWHO={A360:'Activo 360',SIS:'Sistemas · ingeniero',AF:'Activo Fijo',HUM:'
 const RCH={a360:['En Activo 360','rc-sd'],humand:['En Humand','rc-hm'],firma:['Firma en Humand','rc-hm'],correo:['Aviso por correo','rc-in']};
 const RSC=[['venta','Venta normal'],['baja','No se vende → baja de precio'],['subasta','No se vende → subasta'],['destruccion','No se vende → destrucción'],['nofunc','No enciende → destrucción'],['donacion','No se vende → donación']];
 const RP2K={CONFIRMADO:'dx',PRECIO:'af',PUBLICADO:'bz',SUBASTA:'sub1',PAGO:'pg2',DEPOSITO:'ing',FACTURA:'fac',AGENDA:'ent1',ENTREGA:'ent2',ENTREGADO:'ent2',DESTRUCCION:'des1',RECOLECCION:'des2',DESTRUIDO:'des3',DONACION:'don1',DONADO_FACT:'don2',DONADO:'don3'};
-function recEx(){const R=S.rec||{};if(R.eq!=null&&S.items[R.eq])return S.items[R.eq];
-  const pcs=S.items.filter(x=>!x.p&&['Escritorio','Laptop'].includes(tipo(x)));const l=pcs.filter(x=>baseSt(x)==='ALERTA');const pool=l.length?l:pcs.length?pcs:S.items;
+function recEx(){const R=S.rec||{};if(R.eq!=null&&S.items[R.eq]&&mine(S.items[R.eq]))return S.items[R.eq];
+  const pcs=S.items.filter(x=>mine(x)&&!x.p&&['Escritorio','Laptop'].includes(tipo(x)));const l=pcs.filter(x=>baseSt(x)==='ALERTA');const pool=l.length?l:pcs.length?pcs:S.items.filter(mine).length?S.items.filter(mine):S.items;
   return pool[(R.pick||0)%pool.length]}
 function recSteps(e,R){const K=C(),P=K.plazo,sla=K.sla,ing=e.INGENIERO||'Ingeniero de Sistemas',buyer=(e.buyer||BUYERS[0]).split(' · ')[0],jefe=e.sale?.jefe||JEFES[2],folio0=R.folio;
   const price=r50(e.price?.aut??estValue(e)),low=r50(price*.85),mun=e.MUNICIPIO||e.CLINICA,fac=R.fac,folio=e.sale?.folio||folio0||'VTA-'+S.today.slice(0,4)+'-00123';
@@ -853,6 +870,51 @@ after.recorrido=()=>{const R=S.rec;const mv=k=>{R.k=k;save();render()};
   $$('[data-rsc]').forEach(b=>b.onclick=()=>{R.sc=b.dataset.rsc;mv(0)});$$('[data-rfac]').forEach(b=>b.onclick=()=>{R.fac=b.dataset.rfac==='1';render()});
   $$('[data-rx]').forEach(b=>b.onclick=()=>{if(b.dataset.rx==='ej'){S.rec={sc:'venta',fac:false,k:0,pick:0};render()}else{R.pick=(R.pick||0)+1;mv(0)}})};
 document.addEventListener('keydown',ev=>{if(S?.view!=='recorrido'||$('.drawer')||/INPUT|TEXTAREA|SELECT/.test(ev.target.tagName))return;const b=$(`[data-rmv="${ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0}"]`);if(b&&!b.disabled){ev.preventDefault();b.click()}});
+/* ---------- Perfil de ingeniero: Mis equipos ---------- */
+VIEWS.misequipos=()=>{const g=engCur()||engList()[0],cl=g.clinicas,its=S.items.filter(e=>cl.includes(e.CLINICA));
+  const n=(l,f)=>l.filter(f).length,al=e=>!e.p&&baseSt(e)==='ALERTA',ve=e=>!e.p&&baseSt(e)==='VENCIDO',dx=e=>e.p==='CONFIRMADO',en=e=>['AGENDA','ENTREGA','DONACION'].includes(e.p);
+  const fc=S.meqClin&&cl.includes(S.meqClin)?S.meqClin:'';const rows=its.filter(e=>!fc||e.CLINICA===fc).sort((a,b)=>due(a)<due(b)?-1:1);
+  return `<div><h1>Mis equipos</h1><p class="sub"><b>${esc(tCase(g.nombre))}</b> · ve solo ${cl.length===1?'la clínica que tiene':`las ${cl.length} clínicas que tiene`} a cargo, con sus equipos y alertas. Las asigna el administrador en “Ingenieros y clínicas”.</p></div>
+  <div class="grid g4">
+   <div class="card kpi"><div class="l">Equipos en mis clínicas</div><div class="v">${its.length}</div><div class="s">${cl.length} clínica${cl.length>1?'s':''}</div></div>
+   <div class="card kpi"><div class="l">Cumplen 5 años en ≤3 meses</div><div class="v" style="color:var(--warn)">${n(its,al)}</div><div class="s">Programar reemplazo</div></div>
+   <div class="card kpi"><div class="l">Ya cumplieron 5 años</div><div class="v" style="color:var(--bad)">${n(its,ve)}</div><div class="s">Sin proceso iniciado</div></div>
+   <div class="card kpi"><div class="l">Por diagnosticar · entregas</div><div class="v">${n(its,dx)} · ${n(its,en)}</div><div class="s">Tareas pendientes</div></div></div>
+  <div class="eg-cl">${cl.map(c=>{const l=its.filter(e=>e.CLINICA===c);return `<div class="card eg-c"><b>${esc(c)}</b><div class="note">${l.length} equipos</div>
+    <div class="row" style="gap:6px;flex-wrap:wrap;margin:8px 0">${n(l,ve)?`<span class="pill p-bad">${n(l,ve)} cumplieron 5 años</span>`:''}${n(l,al)?`<span class="pill p-warn">${n(l,al)} por cumplir</span>`:''}${n(l,dx)?`<span class="pill p-info">${n(l,dx)} por diagnosticar</span>`:''}${n(l,en)?`<span class="pill p-info">${n(l,en)} por entregar</span>`:''}${!n(l,ve)&&!n(l,al)&&!n(l,dx)&&!n(l,en)?'<span class="pill p-ok">Sin pendientes</span>':''}</div>
+    <div class="row" style="gap:6px"><button class="btn sm p" data-egt="${esc(c)}">Ver tareas</button><button class="btn sm" data-egf="${esc(c)}">Ver equipos</button></div></div>`}).join('')}</div>
+  <div class="card"><div class="row" style="flex-wrap:wrap;gap:8px"><h2 style="margin:0">Equipos${fc?' · '+esc(fc):''}</h2><span class="sp"></span>${fc?'<button class="btn sm" data-egf="">Todas mis clínicas</button>':''}</div>
+   <div class="tbl" style="margin-top:10px"><table><tr><th>Equipo</th><th>Clínica</th><th>Instalado</th><th>Cumple 5 años</th><th>Estado</th></tr>
+   ${rows.map(e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td><b class="mono">${esc(e.ID_ACTIVO)}</b><div class="note">${esc(eqName(e))}</div></td><td>${esc(e.CLINICA)}<div class="note">${esc(e.SERVICIO)}</div></td><td class="mono">${fd(e.FECHA_ADQUISICION)}</td><td class="mono">${fd(due(e))}</td><td>${pill(stOf(e))}${e.p&&!DESTR.includes(e.p)?'<div>'+steps(e,true)+'</div>':''}</td></tr>`).join('')}</table></div></div>`};
+after.misequipos=()=>{$$('[data-egt]').forEach(b=>b.onclick=()=>{S.engClinic=b.dataset.egt;S.dxId=null;go('ingeniero')});$$('[data-egf]').forEach(b=>b.onclick=()=>{S.meqClin=b.dataset.egf;render()})};
+/* ---------- Administrador: Ingenieros y clínicas ---------- */
+VIEWS.ingenieros=()=>{const L=engList(),all=[...new Set(S.items.map(e=>e.CLINICA))].sort(),cnt={};S.items.forEach(e=>cnt[e.CLINICA]=(cnt[e.CLINICA]||0)+1);
+  const asg={};L.forEach(g=>g.clinicas.forEach(c=>(asg[c]??=[]).push(g)));const sin=all.filter(c=>!asg[c]);
+  const ed=S.engEdit==='new'?{id:'',nombre:'',correo:'',clinicas:[]}:S.engEdit?L.find(g=>g.id===S.engEdit):null;const sel=new Set(S.engSel||ed?.clinicas||[]);const q=(S.engQ||'').toLowerCase();
+  const alr=g=>S.items.filter(e=>g.clinicas.includes(e.CLINICA)&&!e.p&&soon(e)).length;
+  return `<div><h1>Ingenieros y clínicas</h1><p class="sub">Da de alta a cada ingeniero de Sistemas y elige las clínicas que puede ver. Al entrar, solo verá los equipos y las alertas de esas clínicas. ${GAS?'Se guarda en la pestaña <b>Ingenieros</b> del mismo Sheets; el ingeniero entra con su correo.':'Al publicarlo en Apps Script se guarda en la pestaña <b>Ingenieros</b> del Sheets y cada ingeniero entra con su correo.'}</p></div>
+  <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn p" data-ege="new">+ Dar de alta ingeniero</button><span class="note">${L.length} ingenieros · ${all.length-sin.length} de ${all.length} clínicas asignadas</span></div>
+  ${sin.length?`<div class="banner"><div><b>Clínicas sin ingeniero:</b> ${sin.map(esc).join(', ')}. Nadie recibe sus alertas.</div></div>`:''}
+  ${ed?`<div class="card eg-ed"><h2>${ed.id?'Editar ingeniero':'Alta de ingeniero'}</h2>
+   <div class="grid g2"><label>Nombre<input id="egn" value="${esc(ed.nombre)}" placeholder="Nombre completo"></label><label>Correo<input id="egm" type="email" value="${esc(ed.correo)}" placeholder="nombre.apellido@…"></label></div>
+   <div class="row" style="margin:12px 0 6px;gap:8px;flex-wrap:wrap"><b>Clínicas que puede ver</b><span class="note">${sel.size} seleccionada${sel.size===1?'':'s'}</span><span class="sp"></span><input id="egq" placeholder="Buscar clínica" value="${esc(S.engQ||'')}" style="max-width:220px"></div>
+   <div class="eg-pick">${all.filter(c=>!q||c.toLowerCase().includes(q)).map(c=>{const o=(asg[c]||[]).filter(g=>g.id!==ed.id);return `<label class="${sel.has(c)?'on':''}"><input type="checkbox" data-egc="${esc(c)}" ${sel.has(c)?'checked':''}><span><b>${esc(c)}</b><span class="note">${cnt[c]} equipos${o.length?' · también '+o.map(g=>esc(tCase(g.nombre).split(' ')[2]||tCase(g.nombre))).join(', '):''}</span></span></label>`}).join('')}</div>
+   <div class="row" style="gap:8px;margin-top:12px"><button class="btn p" data-egs>Guardar</button><button class="btn" data-egx>Cancelar</button></div></div>`:''}
+  <div class="tbl"><table><tr><th>Ingeniero</th><th>Clínicas a cargo</th><th class="n">Equipos</th><th class="n">Alertas</th><th></th></tr>
+  ${L.map(g=>`<tr><td><b>${esc(tCase(g.nombre))}</b><div class="note mono">${esc(g.correo)}</div></td><td><div class="eg-chips">${g.clinicas.map(c=>`<span>${esc(c)}</span>`).join('')}</div></td><td class="n">${sum(g.clinicas,c=>cnt[c]||0)}</td><td class="n">${alr(g)}</td>
+   <td><div class="row" style="gap:6px;justify-content:flex-end"><button class="btn sm p" data-egv="${g.id}">Ver como</button><button class="btn sm" data-ege="${g.id}">Editar</button><button class="btn sm" data-egd="${g.id}">Quitar</button></div></td></tr>`).join('')}</table></div>`};
+after.ingenieros=()=>{const keep=()=>{S.engN=$('#egn')?.value;S.engM=$('#egm')?.value};
+  $$('[data-ege]').forEach(b=>b.onclick=()=>{S.engEdit=b.dataset.ege;S.engSel=null;S.engQ='';render();$('.eg-ed')?.scrollIntoView({behavior:'smooth',block:'start'})});
+  $('[data-egx]')&&($('[data-egx]').onclick=()=>{S.engEdit=null;S.engSel=null;render()});
+  $$('[data-egc]').forEach(b=>b.onchange=()=>{const ed=S.engEdit==='new'?[]:engList().find(g=>g.id===S.engEdit)?.clinicas||[];const s=new Set(S.engSel||ed);b.checked?s.add(b.dataset.egc):s.delete(b.dataset.egc);S.engSel=[...s];const n=$('#egn').value,m=$('#egm').value;render();$('#egn').value=n;$('#egm').value=m});
+  $('#egq')&&($('#egq').oninput=ev=>{const n=$('#egn').value,m=$('#egm').value,p=ev.target.selectionStart;S.engQ=ev.target.value;render();$('#egn').value=n;$('#egm').value=m;const q=$('#egq');q.focus();q.setSelectionRange(p,p)});
+  $('[data-egs]')&&($('[data-egs]').onclick=()=>{const L=engList(),nom=$('#egn').value.trim(),mail=$('#egm').value.trim(),cur=S.engEdit==='new'?null:L.find(g=>g.id===S.engEdit),cl=[...new Set(S.engSel||cur?.clinicas||[])].sort();
+    if(!nom)return toast('Escribe el nombre del ingeniero');if(!cl.length)return toast('Elige al menos una clínica');
+    if(cur){cur.nombre=nom;cur.correo=mail;cur.clinicas=cl}else L.push({id:'ING-'+String(Math.max(0,...L.map(g=>+g.id.slice(4)||0))+1).padStart(3,'0'),nombre:nom,correo:mail||engMail(nom),clinicas:cl});
+    S.engEdit=null;S.engSel=null;save();engSave();render();toast('Ingeniero guardado')});
+  $$('[data-egd]').forEach(b=>b.onclick=()=>{const L=engList(),i=L.findIndex(g=>g.id===b.dataset.egd);if(i<0||!confirm(`¿Quitar a ${tCase(L[i].nombre)}? Sus clínicas quedarán sin ingeniero.`))return;L.splice(i,1);save();engSave();render()});
+  $$('[data-egv]').forEach(b=>b.onclick=()=>setRole('ing',b.dataset.egv))};
+function engSave(){if(!GAS)return;google.script.run.withFailureHandler(err=>toast('No se pudo guardar en la hoja: '+(err&&err.message||err))).saveIngenieros(engList().map(g=>[g.id,g.nombre,g.correo,g.clinicas.join(' | ')]))}
 function frozenNote(e){if(e.p==='FIRMAS')return `Congelado para ${esc(e.buyer)}. ${e.sale.colSig?`Falta la firma de ${esc(e.sale.jefe)}`:'Falta la firma del colaborador'}; si no se completa antes del ${fd(addD(e.sale.firmDl,1))} se libera.`;
   if(e.p==='PAGO')return `Congelado para ${esc(e.buyer)}. Debe depositar y subir el váucher a más tardar el ${fd(e.pay.dl)}${e.pay.rej?' (Ingresos no encontró el primer depósito)':''}.`;
   if(e.p==='DEPOSITO')return `Congelado para ${esc(e.buyer)} mientras Ingresos valida el váucher.`;return ''}
@@ -1410,5 +1472,7 @@ $('#d1').onclick=()=>{admT(false);tick(1)};$('#d30').onclick=()=>{admT(false);ti
 $('#reset').onclick=()=>{admT(false);init(true);save();render();toast('Datos restablecidos')};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
 load();render();welcome();TRZ.live=true;
+if(GAS)google.script.run.withSuccessHandler(r=>{if(!r)return;if(r.rows&&r.rows.length)S.engs=r.rows.map(x=>({id:String(x[0]),nombre:String(x[1]),correo:String(x[2]),clinicas:String(x[3]).split('|').map(s=>s.trim()).filter(Boolean)}));
+  const m=String(r.email||'').toLowerCase(),g=m&&engList().find(x=>String(x.correo).toLowerCase()===m);if(g){S.role='ing';S.asEng=g.id}save();render()}).getIngenieros();
 if(GAS&&window.A360_FEED){syncFeed(false);setInterval(()=>syncFeed(false),Math.max(1,+window.A360_POLL||5)*60000);addEventListener('focus',()=>syncFeed(false))}
 

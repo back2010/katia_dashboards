@@ -146,3 +146,36 @@ function getTraza(id) {
     .map(r => r.map(v => v instanceof Date ? Utilities.formatDate(v, tz, 'dd/MM/yyyy HH:mm:ss') : String(v)));
   return { ok: true, url: url, rows: rows };
 }
+
+/* ================= Ingenieros y clínicas =================
+ * Pestaña "Ingenieros" del mismo Sheets: ID | Nombre | Correo | Clínicas (separadas por " | ").
+ * Si el correo de quien entra coincide con un ingeniero, la herramienta abre en su perfil (solo sus clínicas).
+ */
+const ING_COLS = ['ID', 'Nombre', 'Correo', 'Clínicas'];
+function ingHoja_() {
+  const ss = trazaHoja_().ss;
+  let sh = ss.getSheetByName('Ingenieros');
+  if (!sh) {
+    sh = ss.insertSheet('Ingenieros', ss.getNumSheets());
+    sh.getRange(1, 1, 1, ING_COLS.length).setValues([ING_COLS]).setFontWeight('bold');
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+function getIngenieros() {
+  let email = '';
+  try { email = Session.getActiveUser().getEmail() || ''; } catch (e) {}
+  const sh = ingHoja_(), last = sh.getLastRow();
+  const rows = last < 2 ? [] : sh.getRange(2, 1, last - 1, ING_COLS.length).getValues().filter(r => r[0] && r[1]).map(r => r.map(String));
+  return { rows: rows, email: email };
+}
+function saveIngenieros(rows) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const sh = ingHoja_(), last = sh.getLastRow();
+    if (last > 1) sh.getRange(2, 1, last - 1, ING_COLS.length).clearContent();
+    if (rows && rows.length) sh.getRange(2, 1, rows.length, ING_COLS.length).setValues(rows.map(r => ING_COLS.map((_, i) => String(r[i] == null ? '' : r[i]))));
+    return { ok: true, n: rows ? rows.length : 0 };
+  } finally { lock.releaseLock(); }
+}
