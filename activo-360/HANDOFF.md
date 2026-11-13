@@ -52,6 +52,7 @@ Demo funcional del proyecto LAI (Líderes de Alto Impacto) de Salud Digna. Su ob
 
 ## Pendientes conocidos
 
+0. **Apps Script ya probado (13 nov 2026):** el proyecto ligado a "Activo 360 data" guarda los 15 archivos y la URL de prueba (`/dev`) carga completa leyendo la pestaña INVENTARIO. Hubo que cargar Xlsx1-5 y App1-3 como `<script type="text/plain">` (ver `CLAUDE.md`). Falta crear una versión nueva de la implementación para la URL pública.
 1. **No se pudo guardar el proyecto en el editor de Apps Script** ("no se puede guardar, intente más tarde"). Falló desde el primer archivo, así que no es por tamaño: el proyecto pesa unos 2.2 MB y el límite práctico ronda 10 MB. Causa probable: varias cuentas de Google abiertas en el navegador, o la red corporativa. Prueba sugerida: ventana de incógnito con una sola cuenta y proyecto creado desde Drive. **Sin confirmar.**
 2. **Decisiones posteriores que esta versión todavía no implementa:**
    - El inventario vive en un Google Sheets de la cuenta corporativa de Salud Digna y el Apps Script va ligado a esa hoja, con lectura y escritura (no solo lectura de un archivo).

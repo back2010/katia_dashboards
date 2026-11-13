@@ -32,6 +32,8 @@ Para agregar una vista: `VIEWS.x=()=>'html'`, `after.x=()=>{...}`, agregar `['x'
 ## Reglas para no romper Apps Script
 - `build.py` divide `app.js` en App1/App2/App3 por las líneas que empiezan con `/* ================= INVENTARIO (formato` y `/* ================= INVENTARIO TECNOL`. No renombres esos comentarios.
 - Cada parte se carga en su propio `<script>`: el código de nivel superior de App1 no puede llamar funciones definidas en App2 o App3 al momento de cargar.
+- Xlsx1-5 y App1-3 van en `<script type="text/plain">` y un cargador en `Index` los ejecuta. No los pases a `<script>` normal: `createHtmlOutputFromFile` rechaza JavaScript suelto ("Malformed HTML") y HtmlService "limpia" comentarios dentro de `<script>` con un análisis que corta `https://…` y borra desde `image/*` hasta el siguiente `*/`.
+- `app.js` no puede contener `</script`. Si algo falla en Apps Script, el aviso rojo muestra el primer error con el texto de la línea.
 - Sin BOM ni `<!--` en `app.js` (build lo verifica).
 - En `Index` solo hay scriptlets `<?!= ... ?>`; no metas `<?` en `shell.html`.
 - `google.script.run` solo devuelve primitivos: las fechas viajan como texto dd/MM/yyyy.
