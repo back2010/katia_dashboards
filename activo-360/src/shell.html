@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<title>Activo 360</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+{{STYLES}}
+
+<header class="top">
+  <div class="greet" id="greet"></div>
+  <div class="mods" id="mods" role="tablist" aria-label="Módulo"><button data-modulo="venta" role="tab"><b>Venta de equipo de clínicas</b><small>venta · destrucción · donación</small></button><button data-modulo="ti" role="tab"><b>Inventario de Sistemas</b><small>activos por colaborador · carta responsiva</small></button></div>
+  <div class="clock">
+    <button class="bell" id="bell" type="button" data-v="alertas"></button>
+    <button class="thm" id="thm" type="button" aria-label="Cambiar entre modo claro y oscuro"></button>
+    <span style="font-size:12px;color:var(--muted)">Hoy</span><span class="d" id="today"></span>
+    <span class="adm"><button id="admb" aria-expanded="false">Administración</button><div id="admm" hidden>
+      <button id="d1">Ejecutar cierre del día (recordatorios)</button>
+      <button id="d30">Ejecutar 30 cierres diarios</button>
+      <button data-rep>Exportar reporte de trazabilidad</button>
+      <button id="reset">Restablecer datos iniciales</button></div></span>
+  </div>
+</header>
+<div class="shell">
+  <aside class="rail"><img class="navlogo" src="{{LOGO}}" alt="Activo 360 · Salud Digna"><nav id="nav" aria-label="Secciones"></nav></aside>
+  <main><div class="wrap" id="main"></div></main>
+</div>
+<div id="drawer"></div>
+<div id="toast" hidden class="toast"></div>
+
+{{SCRIPTS}}
+
+</html>

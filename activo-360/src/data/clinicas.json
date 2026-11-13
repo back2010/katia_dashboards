@@ -1,0 +1,17222 @@
+[
+{
+"n": "ACAPULCO",
+"dv": "SUR",
+"z": "GUERRERO",
+"e": "GUERRERO",
+"m": "ACAPULCO DE JUAREZ",
+"ap": "2019-09-09",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-09-09"
+},
+{
+"n": "ACAPULCO DIAMANTE",
+"dv": "SUR",
+"z": "GUERRERO",
+"e": "GUERRERO",
+"m": "ACAPULCO DE JUAREZ",
+"ap": "2023-02-13",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-02-13"
+},
+{
+"n": "ACAPULCO EL COLOSO",
+"dv": "SUR",
+"z": "GUERRERO",
+"e": "GUERRERO",
+"m": "ACAPULCO DE JUAREZ",
+"ap": "2023-04-24",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2023-04-24"
+},
+{
+"n": "ACAPULCO RENACIMIENTO",
+"dv": "SUR",
+"z": "GUERRERO",
+"e": "GUERRERO",
+"m": "ACAPULCO DE JUAREZ",
+"ap": "2021-08-16",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2026-08-16"
+},
+{
+"n": "AGUASCALIENTES",
+"dv": "NORTE",
+"z": "AGUASCALIENTES",
+"e": "AGUASCALIENTES",
+"m": "AGUASCALIENTES",
+"ap": "2010-11-19",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2025-11-19"
+},
+{
+"n": "AGUASCALIENTES GANDHI",
+"dv": "NORTE",
+"z": "AGUASCALIENTES",
+"e": "AGUASCALIENTES",
+"m": "AGUASCALIENTES",
+"ap": "2026-03-30",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2026-03-30"
+},
+{
+"n": "AGUASCALIENTES OJO CALIENTE",
+"dv": "NORTE",
+"z": "AGUASCALIENTES",
+"e": "AGUASCALIENTES",
+"m": "AGUASCALIENTES",
+"ap": "2026-01-23",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2026-01-23"
+},
+{
+"n": "AGUASCALIENTES UNIVERSIDAD",
+"dv": "NORTE",
+"z": "AGUASCALIENTES",
+"e": "AGUASCALIENTES",
+"m": "AGUASCALIENTES",
+"ap": "2021-02-08",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2026-02-08"
+},
+{
+"n": "ALVARO OBREGON",
+"dv": "CENTRO",
+"z": "CDMX SUR I",
+"e": "CIUDAD DE MEXICO",
+"m": "ALVARO OBREGON",
+"ap": "2019-12-30",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2024-12-28"
+},
+{
+"n": "ALVARO OBREGON PORTALES",
+"dv": "CENTRO",
+"z": "CDMX SUR I",
+"e": "CIUDAD DE MEXICO",
+"m": "ALVARO OBREGON",
+"ap": "2023-10-23",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2023-10-23"
+},
+{
+"n": "APODACA PLAZA CITADINA",
+"dv": "NORTE",
+"z": "NUEVO LEON METROPOLITANA",
+"e": "NUEVO LEÓN",
+"m": "APODACA",
+"ap": "2021-11-15",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2021-11-15"
+},
+{
+"n": "APODACA PLAZA HUINALA",
+"dv": "NORTE",
+"z": "NUEVO LEON METROPOLITANA",
+"e": "NUEVO LEÓN",
+"m": "APODACA",
+"ap": "2025-03-10",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2025-03-10"
+},
+{
+"n": "APODACA SAN MIGUEL",
+"dv": "NORTE",
+"z": "NUEVO LEON METROPOLITANA",
+"e": "NUEVO LEÓN",
+"m": "APODACA",
+"ap": "2025-04-30",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2025-04-30"
+},
+{
+"n": "ATIZAPAN DE ZARAGOZA",
+"dv": "CENTRO",
+"z": "CDMX PONIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "ATIZAPAN DE ZARAGOZA",
+"ap": "2016-03-14",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 21,
+"acq": "2026-03-14"
+},
+{
+"n": "AZCAPOTZALCO",
+"dv": "CENTRO",
+"z": "CDMX CENTRO",
+"e": "CIUDAD DE MEXICO",
+"m": "AZCAPOTZALCO",
+"ap": "2014-11-04",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-11-04"
+},
+{
+"n": "BENITO JUAREZ",
+"dv": "CENTRO",
+"z": "CDMX SUR I",
+"e": "CIUDAD DE MEXICO",
+"m": "BENITO JUAREZ",
+"ap": "2022-06-13",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-06-13"
+},
+{
+"n": "BENITO JUAREZ NARVARTE",
+"dv": "CENTRO",
+"z": "CDMX CENTRO II",
+"e": "CIUDAD DE MEXICO",
+"m": "BENITO JUAREZ",
+"ap": "2025-12-03",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2025-12-03"
+},
+{
+"n": "BOCA DEL RIO",
+"dv": "SUR",
+"z": "VERACRUZ",
+"e": "VERACRUZ",
+"m": "BOCA DEL RIO",
+"ap": "2019-10-28",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2024-10-28"
+},
+{
+"n": "BOCA DEL RIO DIAZ MIRON",
+"dv": "SUR",
+"z": "VERACRUZ",
+"e": "VERACRUZ",
+"m": "BOCA DEL RIO",
+"ap": "2023-06-30",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-06-30"
+},
+{
+"n": "CADEREYTA JIMENEZ",
+"dv": "NORTE",
+"z": "NUEVO LEON METROPOLITANA",
+"e": "NUEVO LEÓN",
+"m": "CADEREYTA JIMENEZ",
+"ap": "2021-12-07",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2021-12-07"
+},
+{
+"n": "CAMPECHE",
+"dv": "SUR",
+"z": "QUINTANA ROO",
+"e": "CAMPECHE",
+"m": "CAMPECHE",
+"ap": "2019-07-29",
+"f": "GRANDE",
+"t": "A+",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2024-07-28"
+},
+{
+"n": "CAMPECHE CIUDAD DEL CARMEN",
+"dv": "SUR",
+"z": "QUINTANA ROO",
+"e": "CAMPECHE",
+"m": "CARMEN",
+"ap": "2026-10-06",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2026-10-06"
+},
+{
+"n": "CANCUN",
+"dv": "SUR",
+"z": "QUINTANA ROO",
+"e": "QUINTANA ROO",
+"m": "BENITO JUAREZ",
+"ap": "2017-12-18",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 21,
+"acq": "2022-12-18"
+},
+{
+"n": "CANCUN LOPEZ PORTILLO",
+"dv": "SUR",
+"z": "QUINTANA ROO",
+"e": "QUINTANA ROO",
+"m": "BENITO JUAREZ",
+"ap": "2022-04-25",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-04-25"
+},
+{
+"n": "CARDENAS",
+"dv": "SUR",
+"z": "CHIAPAS",
+"e": "TABASCO",
+"m": "CARDENAS",
+"ap": "2021-05-31",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 14,
+"acq": "2026-05-28"
+},
+{
+"n": "CELAYA",
+"dv": "BAJIO",
+"z": "GUANAJUATO SUR",
+"e": "GUANAJUATO",
+"m": "CELAYA",
+"ap": "2018-04-02",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2023-04-02"
+},
+{
+"n": "CELAYA TECNOLOGICO",
+"dv": "BAJIO",
+"z": "GUANAJUATO SUR",
+"e": "GUANAJUATO",
+"m": "CELAYA",
+"ap": "2022-04-29",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-04-29"
+},
+{
+"n": "CHALCO",
+"dv": "CENTRO",
+"z": "CDMX ORIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "CHALCO",
+"ap": "2017-03-20",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2022-03-20"
+},
+{
+"n": "CHALCO AV SOLIDARIDAD",
+"dv": "CENTRO",
+"z": "CDMX ORIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "CHALCO",
+"ap": "2026-07-24",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2026-07-24"
+},
+{
+"n": "CHICOLOAPAN",
+"dv": "CENTRO",
+"z": "CDMX ORIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "CHICOLOAPAN",
+"ap": "2023-08-21",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2023-08-21"
+},
+{
+"n": "CHIHUAHUA",
+"dv": "NORTE",
+"z": "CHIHUAHUA",
+"e": "CHIHUAHUA",
+"m": "CHIHUAHUA",
+"ap": "2016-11-16",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2021-11-16"
+},
+{
+"n": "CHIHUAHUA DEPORTISTAS",
+"dv": "NORTE",
+"z": "CHIHUAHUA",
+"e": "CHIHUAHUA",
+"m": "CHIHUAHUA",
+"ap": "2019-10-07",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-10-07"
+},
+{
+"n": "CHIHUAHUA NUEVA ESPAÑA",
+"dv": "NORTE",
+"z": "CHIHUAHUA",
+"e": "CHIHUAHUA",
+"m": "CHIHUAHUA",
+"ap": "2021-08-23",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2026-08-23"
+},
+{
+"n": "CHIMALHUACAN",
+"dv": "CENTRO",
+"z": "CDMX ORIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "CHIMALHUACAN",
+"ap": "2017-02-27",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2022-02-27"
+},
+{
+"n": "CIUDAD AZTECA",
+"dv": "CENTRO",
+"z": "CDMX CENTRO",
+"e": "ESTADO DE MEXICO",
+"m": "ECATEPEC DE MORELOS",
+"ap": "2015-12-14",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2025-12-14"
+},
+{
+"n": "CIUDAD JUAREZ",
+"dv": "NORTE",
+"z": "CHIHUAHUA",
+"e": "CHIHUAHUA",
+"m": "JUAREZ",
+"ap": "2020-03-16",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2025-03-16"
+},
+{
+"n": "CIUDAD JUAREZ CLOUTHIER",
+"dv": "NORTE",
+"z": "CHIHUAHUA",
+"e": "CHIHUAHUA",
+"m": "JUAREZ",
+"ap": "2023-04-28",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2023-04-28"
+},
+{
+"n": "CIUDAD JUAREZ GOMEZ MORIN",
+"dv": "NORTE",
+"z": "CHIHUAHUA",
+"e": "CHIHUAHUA",
+"m": "JUAREZ",
+"ap": "2022-03-22",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-03-22"
+},
+{
+"n": "CIUDAD JUAREZ TRONCOSO",
+"dv": "NORTE",
+"z": "CHIHUAHUA",
+"e": "CHIHUAHUA",
+"m": "JUAREZ",
+"ap": "2025-09-18",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2025-09-18"
+},
+{
+"n": "CIUDAD JUAREZ ZARAGOZA",
+"dv": "NORTE",
+"z": "CHIHUAHUA",
+"e": "CHIHUAHUA",
+"m": "JUAREZ",
+"ap": "2026-03-30",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2026-03-30"
+},
+{
+"n": "CIUDAD VALLES",
+"dv": "NORTE",
+"z": "TAMAULIPAS",
+"e": "SAN LUIS POTOSI",
+"m": "CIUDAD VALLES",
+"ap": "2023-12-08",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-12-08"
+},
+{
+"n": "CIUDAD VICTORIA",
+"dv": "NORTE",
+"z": "TAMAULIPAS",
+"e": "TAMAULIPAS",
+"m": "VICTORIA",
+"ap": "2022-08-29",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2022-08-29"
+},
+{
+"n": "COACALCO",
+"dv": "CENTRO",
+"z": "CDMX NORTE",
+"e": "ESTADO DE MEXICO",
+"m": "COACALCO DE BERRIOZABAL",
+"ap": "2017-06-26",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2022-06-26"
+},
+{
+"n": "COATZACOALCOS",
+"dv": "SUR",
+"z": "VERACRUZ",
+"e": "VERACRUZ",
+"m": "COATZACOALCOS",
+"ap": "2020-11-30",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2025-11-28"
+},
+{
+"n": "COLIMA",
+"dv": "BAJIO",
+"z": "JALISCO CENTRO",
+"e": "COLIMA",
+"m": "COLIMA",
+"ap": "2019-10-03",
+"f": "GRANDE",
+"t": "A+",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-10-03"
+},
+{
+"n": "CORDOBA",
+"dv": "SUR",
+"z": "PUEBLA",
+"e": "VERACRUZ",
+"m": "CORDOBA",
+"ap": "2018-07-23",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 15,
+"acq": "2023-07-23"
+},
+{
+"n": "CORREGIDORA EL PUEBLITO",
+"dv": "BAJIO",
+"z": "GUANAJUATO SUR",
+"e": "QUERETARO",
+"m": "CORREGIDORA",
+"ap": "2022-10-17",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2022-10-17"
+},
+{
+"n": "COYOACÁN",
+"dv": "CENTRO",
+"z": "CDMX CENTRO II",
+"e": "CIUDAD DE MEXICO",
+"m": "COYOACÁN",
+"ap": "2013-11-07",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2023-11-07"
+},
+{
+"n": "COYOACÁN DIVISIÓN NORTE",
+"dv": "CENTRO",
+"z": "CDMX CENTRO II",
+"e": "CIUDAD DE MEXICO",
+"m": "COYOACÁN",
+"ap": "2023-07-31",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 21,
+"acq": "2023-07-31"
+},
+{
+"n": "CUAJIMALPA",
+"dv": "CENTRO",
+"z": "CDMX CENTRO II",
+"e": "CIUDAD DE MEXICO",
+"m": "CUAJIMALPA DE MORELOS",
+"ap": "2019-12-26",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-12-26"
+},
+{
+"n": "CUAUHTEMOC",
+"dv": "CENTRO",
+"z": "CDMX CENTRO II",
+"e": "CIUDAD DE MEXICO",
+"m": "CUAUHTEMOC",
+"ap": "2016-05-03",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2026-05-03"
+},
+{
+"n": "CUAUHTEMOC INSURGENTES",
+"dv": "CENTRO",
+"z": "CDMX CENTRO II",
+"e": "CIUDAD DE MEXICO",
+"m": "CUAUHTEMOC",
+"ap": "2022-12-19",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2022-12-19"
+},
+{
+"n": "CUAUTITLAN",
+"dv": "CENTRO",
+"z": "CDMX NORTE",
+"e": "ESTADO DE MEXICO",
+"m": "CUAUTITLAN",
+"ap": "2021-12-13",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2021-12-13"
+},
+{
+"n": "CUAUTITLAN IZCALLI",
+"dv": "CENTRO",
+"z": "CDMX NORTE",
+"e": "ESTADO DE MEXICO",
+"m": "CUAUTITLAN",
+"ap": "2024-08-02",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-08-02"
+},
+{
+"n": "CUAUTLA",
+"dv": "SUR",
+"z": "GUERRERO",
+"e": "MORELOS",
+"m": "CUAUTLA",
+"ap": "2024-04-03",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-04-03"
+},
+{
+"n": "CUERNAVACA",
+"dv": "SUR",
+"z": "GUERRERO",
+"e": "MORELOS",
+"m": "CUERNAVACA",
+"ap": "2018-08-06",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2023-08-06"
+},
+{
+"n": "CUERNAVACA PLAN DE AYALA",
+"dv": "SUR",
+"z": "GUERRERO",
+"e": "MORELOS",
+"m": "CUERNAVACA",
+"ap": "2024-10-07",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2024-10-07"
+},
+{
+"n": "CULHUACAN",
+"dv": "CENTRO",
+"z": "CDMX SUR I",
+"e": "CIUDAD DE MEXICO",
+"m": "IZTAPALAPA",
+"ap": "2017-06-05",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-06-05"
+},
+{
+"n": "CULIACAN",
+"dv": "NOROESTE",
+"z": "SINALOA",
+"e": "SINALOA",
+"m": "CULIACAN",
+"ap": "2003-10-03",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2023-10-03"
+},
+{
+"n": "CULIACAN CAÑADAS",
+"dv": "NOROESTE",
+"z": "SINALOA CENTRO",
+"e": "SINALOA",
+"m": "CULIACAN",
+"ap": "2012-09-06",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2022-09-06"
+},
+{
+"n": "CULIACAN COLEGIO MILITAR",
+"dv": "NOROESTE",
+"z": "SINALOA CENTRO",
+"e": "SINALOA",
+"m": "CULIACAN",
+"ap": "2020-11-09",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2025-11-09"
+},
+{
+"n": "CULIACAN LA CONQUISTA",
+"dv": "NOROESTE",
+"z": "SINALOA CENTRO",
+"e": "SINALOA",
+"m": "CULIACAN",
+"ap": "2021-10-04",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2026-10-04"
+},
+{
+"n": "CULIACAN LAS TORRES",
+"dv": "NOROESTE",
+"z": "SINALOA",
+"e": "SINALOA",
+"m": "CULIACAN",
+"ap": "2017-12-04",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2022-12-04"
+},
+{
+"n": "CULIACAN NAKAYAMA",
+"dv": "NOROESTE",
+"z": "SINALOA CENTRO",
+"e": "SINALOA",
+"m": "CULIACAN",
+"ap": "2021-09-06",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2026-09-06"
+},
+{
+"n": "CULIACAN UNIVERSITARIOS",
+"dv": "NOROESTE",
+"z": "SINALOA CENTRO",
+"e": "SINALOA",
+"m": "CULIACAN",
+"ap": "2022-12-13",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2022-12-13"
+},
+{
+"n": "DELICIAS",
+"dv": "NORTE",
+"z": "CHIHUAHUA",
+"e": "CHIHUAHUA",
+"m": "DELICIAS",
+"ap": "2021-06-01",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2026-06-01"
+},
+{
+"n": "DURANGO",
+"dv": "NORTE",
+"z": "LAGUNA",
+"e": "DURANGO",
+"m": "DURANGO",
+"ap": "2014-10-20",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-10-20"
+},
+{
+"n": "DURANGO DOMINGO ARRIETA",
+"dv": "NORTE",
+"z": "LAGUNA",
+"e": "DURANGO",
+"m": "DURANGO",
+"ap": "2023-12-07",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-12-07"
+},
+{
+"n": "DURANGO JUVENTUD",
+"dv": "NORTE",
+"z": "LAGUNA",
+"e": "DURANGO",
+"m": "DURANGO",
+"ap": "2022-06-27",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-06-27"
+},
+{
+"n": "ECATEPEC",
+"dv": "CENTRO",
+"z": "CDMX CENTRO",
+"e": "ESTADO DE MEXICO",
+"m": "ECATEPEC DE MORELOS",
+"ap": "2014-06-02",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2024-06-02"
+},
+{
+"n": "ECATEPEC BICENTENARIO",
+"dv": "CENTRO",
+"z": "CDMX NORTE",
+"e": "ESTADO DE MEXICO",
+"m": "ECATEPEC DE MORELOS",
+"ap": "2023-05-15",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-05-15"
+},
+{
+"n": "ECATEPEC LOPEZ PORTILLO",
+"dv": "CENTRO",
+"z": "CDMX NORTE",
+"e": "ESTADO DE MEXICO",
+"m": "ECATEPEC DE MORELOS",
+"ap": "2024-04-12",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-04-12"
+},
+{
+"n": "ECATEPEC SUPER PLAZA",
+"dv": "CENTRO",
+"z": "CDMX CENTRO",
+"e": "ESTADO DE MEXICO",
+"m": "ECATEPEC DE MORELOS",
+"ap": "2025-12-15",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2025-12-15"
+},
+{
+"n": "EL SALTO",
+"dv": "BAJIO",
+"z": "JALISCO",
+"e": "JALISCO",
+"m": "EL SALTO",
+"ap": "2022-04-29",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-04-29"
+},
+{
+"n": "EL SALVADOR",
+"dv": "CENTROAMERICA",
+"z": "CENTROAMERICA",
+"e": "SAN SALVADOR",
+"m": "SAN SALVADOR",
+"ap": "2023-03-22",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2023-03-22"
+},
+{
+"n": "ENSENADA",
+"dv": "NOROESTE",
+"z": "BAJA CALIFORNIA",
+"e": "BAJA CALIFORNIA",
+"m": "ENSENADA",
+"ap": "2012-04-30",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2022-04-28"
+},
+{
+"n": "ENSENADA LOMA DORADA",
+"dv": "NOROESTE",
+"z": "BAJA CALIFORNIA",
+"e": "BAJA CALIFORNIA",
+"m": "ENSENADA",
+"ap": "2024-10-18",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-10-18"
+},
+{
+"n": "ESCOBEDO OTTAWA",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "GENERAL ESCOBEDO",
+"ap": "2026-10-07",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2026-10-07"
+},
+{
+"n": "ESCOBEDO PLAZA LOS GIRASOLES",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "GENERAL ESCOBEDO",
+"ap": "2022-04-18",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-04-18"
+},
+{
+"n": "GARCIA",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "GARCIA",
+"ap": "2022-05-16",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2022-05-16"
+},
+{
+"n": "GOMEZ PALACIO",
+"dv": "NORTE",
+"z": "LAGUNA",
+"e": "DURANGO",
+"m": "GOMEZ PALACIO",
+"ap": "2019-12-09",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 14,
+"acq": "2024-12-09"
+},
+{
+"n": "GUADALAJARA AMERICAS",
+"dv": "BAJIO",
+"z": "JALISCO CENTRO",
+"e": "JALISCO",
+"m": "GUADALAJARA ",
+"ap": "2013-05-02",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2023-05-02"
+},
+{
+"n": "GUADALAJARA CIRCUNVALACION",
+"dv": "BAJIO",
+"z": "JALISCO CENTRO",
+"e": "JALISCO",
+"m": "GUADALAJARA ",
+"ap": "2016-10-17",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2021-10-17"
+},
+{
+"n": "GUADALAJARA CRISTOBAL COLON",
+"dv": "BAJIO",
+"z": "JALISCO CENTRO",
+"e": "JALISCO",
+"m": "GUADALAJARA ",
+"ap": "2022-05-23",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-05-23"
+},
+{
+"n": "GUADALAJARA MARIANO OTERO",
+"dv": "BAJIO",
+"z": "JALISCO CENTRO",
+"e": "JALISCO",
+"m": "GUADALAJARA ",
+"ap": "2023-08-30",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2023-08-30"
+},
+{
+"n": "GUADALAJARA SAN JUAN",
+"dv": "BAJIO",
+"z": "JALISCO CENTRO",
+"e": "JALISCO",
+"m": "GUADALAJARA ",
+"ap": "2013-08-02",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2023-08-02"
+},
+{
+"n": "GUADALAJARA TETLAN",
+"dv": "BAJIO",
+"z": "JALISCO CENTRO",
+"e": "JALISCO",
+"m": "GUADALAJARA ",
+"ap": "2015-08-03",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2025-08-03"
+},
+{
+"n": "GUADALAJARA WASHINGTON",
+"dv": "BAJIO",
+"z": "JALISCO CENTRO",
+"e": "JALISCO",
+"m": "GUADALAJARA ",
+"ap": "2025-07-29",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2025-07-29"
+},
+{
+"n": "GUADALUPE",
+"dv": "NORTE",
+"z": "NUEVO LEON METROPOLITANA",
+"e": "NUEVO LEÓN",
+"m": "GUADALUPE",
+"ap": "2018-10-01",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2023-10-01"
+},
+{
+"n": "GUADALUPE AV JUAREZ",
+"dv": "NORTE",
+"z": "NUEVO LEON METROPOLITANA",
+"e": "NUEVO LEÓN",
+"m": "GUADALUPE",
+"ap": "2022-12-13",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-12-13"
+},
+{
+"n": "GUADALUPE CENTRO",
+"dv": "NORTE",
+"z": "NUEVO LEON METROPOLITANA",
+"e": "NUEVO LEÓN",
+"m": "GUADALUPE",
+"ap": "2025-12-02",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2025-12-02"
+},
+{
+"n": "GUAMUCHIL CENTRO",
+"dv": "NOROESTE",
+"z": "SINALOA",
+"e": "SINALOA",
+"m": "SALVADOR ALVARADO",
+"ap": "2009-04-16",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO",
+"NUTRICION"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2024-04-16"
+},
+{
+"n": "GUASAVE",
+"dv": "NOROESTE",
+"z": "SINALOA",
+"e": "SINALOA",
+"m": "GUASAVE",
+"ap": "2009-01-02",
+"f": "GRANDE",
+"t": "B+",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2024-01-02"
+},
+{
+"n": "GUATEMALA",
+"dv": "CENTROAMERICA",
+"z": "CENTROAMERICA",
+"e": "GUATEMALA",
+"m": "CIUDAD DE GUATEMALA",
+"ap": "2023-12-12",
+"f": "GRANDE",
+"t": null,
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2023-12-12"
+},
+{
+"n": "GUSTAVO A. MADERO",
+"dv": "CENTRO",
+"z": "CDMX CENTRO",
+"e": "CIUDAD DE MEXICO",
+"m": "GUSTAVO A. MADERO",
+"ap": "2016-10-31",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 21,
+"acq": "2021-10-28"
+},
+{
+"n": "GUSTAVO A. MADERO CUAUTEPEC",
+"dv": "CENTRO",
+"z": "CDMX CENTRO",
+"e": "CIUDAD DE MEXICO",
+"m": "GUSTAVO A. MADERO",
+"ap": "2024-04-09",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-04-09"
+},
+{
+"n": "GUSTAVO A. MADERO PLAZA MISTERIOS",
+"dv": "CENTRO",
+"z": "CDMX CENTRO",
+"e": "CIUDAD DE MEXICO",
+"m": "GUSTAVO A. MADERO",
+"ap": "2024-03-09",
+"f": "GRANDE",
+"t": "B+",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2024-03-09"
+},
+{
+"n": "GUSTAVO A. MADERO TICOMAN",
+"dv": "CENTRO",
+"z": "CDMX CENTRO",
+"e": "CIUDAD DE MEXICO",
+"m": "GUSTAVO A. MADERO",
+"ap": "2023-07-06",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-07-06"
+},
+{
+"n": "HERMOSILLO",
+"dv": "NOROESTE",
+"z": "SONORA",
+"e": "SONORA",
+"m": "HERMOSILLO",
+"ap": "2011-12-22",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2021-12-22"
+},
+{
+"n": "HERMOSILLO MORELOS",
+"dv": "NOROESTE",
+"z": "SONORA",
+"e": "SONORA",
+"m": "HERMOSILLO",
+"ap": "2021-04-12",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2026-04-12"
+},
+{
+"n": "HERMOSILLO PALO VERDE",
+"dv": "NOROESTE",
+"z": "SONORA",
+"e": "SONORA",
+"m": "HERMOSILLO",
+"ap": "2022-10-17",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2022-10-17"
+},
+{
+"n": "HERMOSILLO SOLIDARIDAD",
+"dv": "NOROESTE",
+"z": "SONORA",
+"e": "SONORA",
+"m": "HERMOSILLO",
+"ap": "2021-10-04",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2026-10-04"
+},
+{
+"n": "HUIXQUILUCAN",
+"dv": "CENTRO",
+"z": "CDMX PONIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "HUIXQUILUCAN",
+"ap": "2020-09-14",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2025-09-14"
+},
+{
+"n": "IRAPUATO",
+"dv": "BAJIO",
+"z": "GUANAJUATO SUR",
+"e": "GUANAJUATO",
+"m": "IRAPUATO",
+"ap": "2016-03-09",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2026-03-09"
+},
+{
+"n": "IXTAPALUCA",
+"dv": "CENTRO",
+"z": "CDMX ORIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "IXTAPALUCA",
+"ap": "2016-09-19",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2026-09-19"
+},
+{
+"n": "IXTAPALUCA PATIO AYOTLA",
+"dv": "CENTRO",
+"z": "CDMX ORIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "IXTAPALUCA",
+"ap": "2025-12-15",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2025-12-15"
+},
+{
+"n": "IZTACALCO LA VIGA",
+"dv": "CENTRO",
+"z": "CDMX CENTRO II",
+"e": "CIUDAD DE MEXICO",
+"m": "IZTACALCO",
+"ap": "2017-05-29",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-05-28"
+},
+{
+"n": "IZTAPALAPA",
+"dv": "CENTRO",
+"z": "CDMX SUR I",
+"e": "CIUDAD DE MEXICO",
+"m": "IZTAPALAPA",
+"ap": "2016-05-13",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2026-05-13"
+},
+{
+"n": "IZTAPALAPA AZTAHUACAN",
+"dv": "CENTRO",
+"z": "CDMX SUR I",
+"e": "CIUDAD DE MEXICO",
+"m": "IZTAPALAPA",
+"ap": "2024-12-16",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-12-16"
+},
+{
+"n": "IZTAPALAPA CENTRO",
+"dv": "CENTRO",
+"z": "CDMX SUR I",
+"e": "CIUDAD DE MEXICO",
+"m": "IZTAPALAPA",
+"ap": "2017-01-09",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2022-01-09"
+},
+{
+"n": "IZTAPALAPA LEYES DE REFORMA",
+"dv": "CENTRO",
+"z": "CDMX SUR I",
+"e": "CIUDAD DE MEXICO",
+"m": "IZTAPALAPA",
+"ap": "2023-08-25",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-08-25"
+},
+{
+"n": "JUAREZ",
+"dv": "NORTE",
+"z": "NUEVO LEON METROPOLITANA",
+"e": "NUEVO LEÓN",
+"m": "JUAREZ",
+"ap": "2022-06-13",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-06-13"
+},
+{
+"n": "LA PAZ",
+"dv": "NOROESTE",
+"z": "MEXICALI FRONTERA",
+"e": "BAJA CALIFORNIA SUR",
+"m": "LA PAZ",
+"ap": "2018-12-17",
+"f": "GRANDE",
+"t": "A+",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2023-12-17"
+},
+{
+"n": "LEON",
+"dv": "BAJIO",
+"z": "GUANAJUATO",
+"e": "GUANAJUATO",
+"m": "LEON",
+"ap": "2010-12-16",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2025-12-16"
+},
+{
+"n": "LEON CAMPESTRE",
+"dv": "BAJIO",
+"z": "GUANAJUATO",
+"e": "GUANAJUATO",
+"m": "LEON",
+"ap": "2022-07-18",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-07-18"
+},
+{
+"n": "LEON FRANCISCO VILLA",
+"dv": "BAJIO",
+"z": "GUANAJUATO",
+"e": "GUANAJUATO",
+"m": "LEON",
+"ap": "2022-03-22",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-03-22"
+},
+{
+"n": "LEON HIDALGO",
+"dv": "BAJIO",
+"z": "GUANAJUATO",
+"e": "GUANAJUATO",
+"m": "LEON",
+"ap": "2022-08-22",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 21,
+"acq": "2022-08-22"
+},
+{
+"n": "LEON OBELISCO",
+"dv": "BAJIO",
+"z": "GUANAJUATO",
+"e": "GUANAJUATO",
+"m": "LEON",
+"ap": "2014-01-16",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-01-16"
+},
+{
+"n": "LEON SAN JUAN BOSCO",
+"dv": "BAJIO",
+"z": "GUANAJUATO",
+"e": "GUANAJUATO",
+"m": "LEON",
+"ap": "2025-01-21",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2025-01-21"
+},
+{
+"n": "LEON SAN PEDRO",
+"dv": "BAJIO",
+"z": "GUANAJUATO",
+"e": "GUANAJUATO",
+"m": "LEON",
+"ap": "2025-01-30",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2025-01-30"
+},
+{
+"n": "LEON TORRES LANDA",
+"dv": "BAJIO",
+"z": "GUANAJUATO",
+"e": "GUANAJUATO",
+"m": "LEON",
+"ap": "2019-11-25",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2024-11-25"
+},
+{
+"n": "LERMA DE VILLADA",
+"dv": "SUR",
+"z": "GUERRERO",
+"e": "ESTADO DE MEXICO",
+"m": "LERMA",
+"ap": "2024-10-30",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-10-30"
+},
+{
+"n": "LOS MOCHIS",
+"dv": "NOROESTE",
+"z": "SINALOA",
+"e": "SINALOA",
+"m": "AHOME",
+"ap": "2008-04-03",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2023-04-03"
+},
+{
+"n": "LOS MOCHIS LOS ALAMOS",
+"dv": "NOROESTE",
+"z": "SINALOA",
+"e": "SINALOA",
+"m": "AHOME",
+"ap": "2023-08-31",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-08-31"
+},
+{
+"n": "LOS MOCHIS ROSALES",
+"dv": "NOROESTE",
+"z": "SINALOA",
+"e": "SINALOA",
+"m": "AHOME",
+"ap": "2022-12-13",
+"f": "CHICA (+RESO)",
+"t": "A",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO",
+"RESONANCIA MAGNETICA"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2022-12-13"
+},
+{
+"n": "LOS REYES-LA PAZ",
+"dv": "CENTRO",
+"z": "CDMX ORIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "LA PAZ",
+"ap": "2017-01-16",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-01-16"
+},
+{
+"n": "MANAGUA",
+"dv": "CENTROAMERICA",
+"z": "CENTROAMERICA",
+"e": "MANAGUA",
+"m": "MANAGUA",
+"ap": "2018-09-10",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2023-09-10"
+},
+{
+"n": "MANZANILLO",
+"dv": "BAJIO",
+"z": "JALISCO CENTRO",
+"e": "COLIMA",
+"m": "MANZANILLO",
+"ap": "2021-06-14",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2026-06-14"
+},
+{
+"n": "MATAMOROS",
+"dv": "NORTE",
+"z": "TAMAULIPAS",
+"e": "TAMAULIPAS",
+"m": "MATAMOROS",
+"ap": "2019-10-14",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2024-10-14"
+},
+{
+"n": "MATAMOROS VIRGILIO GARZA",
+"dv": "NORTE",
+"z": "TAMAULIPAS",
+"e": "TAMAULIPAS",
+"m": "MATAMOROS",
+"ap": "2026-08-18",
+"f": "CHICA",
+"t": "F",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2026-08-18"
+},
+{
+"n": "MAZATLAN",
+"dv": "NOROESTE",
+"z": "SINALOA CENTRO",
+"e": "SINALOA",
+"m": "MAZATLAN",
+"ap": "2008-04-24",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2023-04-24"
+},
+{
+"n": "MERIDA",
+"dv": "SUR",
+"z": "QUINTANA ROO",
+"e": "YUCATAN",
+"m": "MERIDA",
+"ap": "2018-11-26",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2023-11-26"
+},
+{
+"n": "MERIDA ALTABRISA",
+"dv": "SUR",
+"z": "QUINTANA ROO",
+"e": "YUCATAN",
+"m": "MERIDA",
+"ap": "2021-02-01",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2026-02-01"
+},
+{
+"n": "MERIDA BUENA VISTA",
+"dv": "SUR",
+"z": "QUINTANA ROO",
+"e": "YUCATAN",
+"m": "MERIDA",
+"ap": "2024-03-11",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2024-03-11"
+},
+{
+"n": "MERIDA CANEK",
+"dv": "SUR",
+"z": "QUINTANA ROO",
+"e": "YUCATAN",
+"m": "MERIDA",
+"ap": "2022-08-22",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2022-08-22"
+},
+{
+"n": "METEPEC",
+"dv": "SUR",
+"z": "GUERRERO",
+"e": "ESTADO DE MEXICO",
+"m": "METEPEC",
+"ap": "2017-12-22",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2022-12-22"
+},
+{
+"n": "MEXICALI",
+"dv": "NOROESTE",
+"z": "MEXICALI FRONTERA",
+"e": "BAJA CALIFORNIA",
+"m": "MEXICALI",
+"ap": "2006-04-25",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2026-04-25"
+},
+{
+"n": "MEXICALI LAZARO CARDENAS",
+"dv": "NOROESTE",
+"z": "MEXICALI FRONTERA",
+"e": "BAJA CALIFORNIA",
+"m": "MEXICALI",
+"ap": "2021-01-25",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2026-01-25"
+},
+{
+"n": "MEXICALI PEDREGAL",
+"dv": "NOROESTE",
+"z": "MEXICALI FRONTERA",
+"e": "BAJA CALIFORNIA",
+"m": "MEXICALI",
+"ap": "2009-07-27",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2024-07-27"
+},
+{
+"n": "MIGUEL HIDALGO",
+"dv": "CENTRO",
+"z": "CDMX CENTRO II",
+"e": "CIUDAD DE MEXICO",
+"m": "MIGUEL HIDALGO",
+"ap": "2016-08-08",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 21,
+"acq": "2026-08-08"
+},
+{
+"n": "MIGUEL HIDALGO OBSERVATORIO",
+"dv": "CENTRO",
+"z": "CDMX CENTRO II",
+"e": "CIUDAD DE MEXICO",
+"m": "MIGUEL HIDALGO",
+"ap": "2023-08-15",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2023-08-15"
+},
+{
+"n": "MONCLOVA CENTRO",
+"dv": "NORTE",
+"z": "LAGUNA",
+"e": "COAHUILA",
+"m": "MONCLOVA",
+"ap": "2026-04-30",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2026-04-30"
+},
+{
+"n": "MONTERREY",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "MONTERREY",
+"ap": "2015-10-26",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2025-10-26"
+},
+{
+"n": "MONTERREY CENTRIKA",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "MONTERREY",
+"ap": "2024-10-30",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2024-10-30"
+},
+{
+"n": "MONTERREY LA FE",
+"dv": "NORTE",
+"z": "NUEVO LEON METROPOLITANA",
+"e": "NUEVO LEÓN",
+"m": "MONTERREY",
+"ap": "2019-03-11",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2024-03-11"
+},
+{
+"n": "MONTERREY LAZARO CARDENAS",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "MONTERREY",
+"ap": "2022-12-21",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-12-21"
+},
+{
+"n": "MONTERREY LINCOLN",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "MONTERREY",
+"ap": "2019-08-19",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-08-19"
+},
+{
+"n": "MONTERREY SAN BERNABE",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "MONTERREY",
+"ap": "2021-10-18",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2021-10-18"
+},
+{
+"n": "MONTERREY SOLIDARIDAD",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "MONTERREY",
+"ap": "2026-04-28",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2026-04-28"
+},
+{
+"n": "MORELIA",
+"dv": "BAJIO",
+"z": "MICHOACAN",
+"e": "MICHOACAN",
+"m": "MORELIA",
+"ap": "2015-04-06",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2025-04-06"
+},
+{
+"n": "MORELIA 3 PUENTES",
+"dv": "BAJIO",
+"z": "MICHOACAN",
+"e": "MICHOACAN",
+"m": "MORELIA",
+"ap": "2020-10-12",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2025-10-12"
+},
+{
+"n": "MORELIA PASEO DE LA REPUBLICA",
+"dv": "BAJIO",
+"z": "MICHOACAN",
+"e": "MICHOACAN",
+"m": "MORELIA",
+"ap": "2023-04-20",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-04-20"
+},
+{
+"n": "MOROLEON",
+"dv": "BAJIO",
+"z": "GUANAJUATO SUR",
+"e": "GUANAJUATO",
+"m": "MOROLEON",
+"ap": "2023-11-08",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2023-11-08"
+},
+{
+"n": "NAUCALPAN",
+"dv": "CENTRO",
+"z": "CDMX PONIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "NAUCALPAN DE JUAREZ",
+"ap": "2017-08-14",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 21,
+"acq": "2022-08-14"
+},
+{
+"n": "NAUCALPAN SAN MATEO",
+"dv": "CENTRO",
+"z": "CDMX PONIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "NAUCALPAN DE JUAREZ",
+"ap": "2024-04-30",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-04-30"
+},
+{
+"n": "NAUCALPAN SATELITE",
+"dv": "CENTRO",
+"z": "CDMX PONIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "NAUCALPAN DE JUAREZ",
+"ap": "2025-12-15",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2025-12-15"
+},
+{
+"n": "NAVOJOA",
+"dv": "NOROESTE",
+"z": "SONORA",
+"e": "SONORA",
+"m": "NAVOJOA",
+"ap": "2015-10-12",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 15,
+"acq": "2025-10-12"
+},
+{
+"n": "NAVOLATO",
+"dv": "NOROESTE",
+"z": "SINALOA",
+"e": "SINALOA",
+"m": "NAVOLATO",
+"ap": "2009-06-15",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-06-15"
+},
+{
+"n": "NEZAHUALCÓYOTL",
+"dv": "CENTRO",
+"z": "CDMX ORIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "NEZAHUALCÓYOTL",
+"ap": "2016-10-10",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2026-10-10"
+},
+{
+"n": "NEZAHUALCOYOTL GUSTAVO BAZ",
+"dv": "CENTRO",
+"z": "CDMX ORIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "NEZAHUALCÓYOTL",
+"ap": "2025-06-26",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2025-06-26"
+},
+{
+"n": "NICARAGUA ROTONDA CENTROAMERICA",
+"dv": "CENTROAMERICA",
+"z": "CENTROAMERICA",
+"e": "MANAGUA",
+"m": "MANAGUA",
+"ap": "2024-08-08",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-08-08"
+},
+{
+"n": "NICOLAS ROMERO",
+"dv": "CENTRO",
+"z": "CDMX PONIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "NICOLAS ROMERO",
+"ap": "2022-12-28",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-12-28"
+},
+{
+"n": "NOGALES",
+"dv": "NOROESTE",
+"z": "SONORA",
+"e": "SONORA",
+"m": "NOGALES",
+"ap": "2018-11-19",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2023-11-19"
+},
+{
+"n": "NUEVO LAREDO",
+"dv": "NORTE",
+"z": "TAMAULIPAS",
+"e": "TAMAULIPAS",
+"m": "NUEVO LAREDO",
+"ap": "2022-03-28",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-03-28"
+},
+{
+"n": "OAXACA",
+"dv": "SUR",
+"z": "PUEBLA",
+"e": "OAXACA",
+"m": "OAXACA DE JUAREZ",
+"ap": "2018-09-17",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2023-09-17"
+},
+{
+"n": "OAXACA AV UNIVERSIDAD",
+"dv": "SUR",
+"z": "PUEBLA",
+"e": "OAXACA",
+"m": "OAXACA DE JUAREZ",
+"ap": "2025-09-22",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2025-09-22"
+},
+{
+"n": "OBREGON",
+"dv": "NOROESTE",
+"z": "SONORA",
+"e": "SONORA",
+"m": "CAJEME",
+"ap": "2010-10-25",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2025-10-25"
+},
+{
+"n": "PACHUCA",
+"dv": "BAJIO",
+"z": "QUERETARO",
+"e": "HIDALGO",
+"m": "PACHUCA DE SOTO",
+"ap": "2018-12-03",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2023-12-03"
+},
+{
+"n": "PLAYA DEL CARMEN",
+"dv": "SUR",
+"z": "QUINTANA ROO",
+"e": "QUINTANA ROO",
+"m": "SOLIDARIDAD",
+"ap": "2021-06-14",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 14,
+"acq": "2026-06-14"
+},
+{
+"n": "POZA RICA",
+"dv": "SUR",
+"z": "VERACRUZ",
+"e": "VERACRUZ",
+"m": "POZA RICA DE HIDALGO",
+"ap": "2021-10-18",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2021-10-18"
+},
+{
+"n": "PUEBLA",
+"dv": "SUR",
+"z": "PUEBLA SUR",
+"e": "PUEBLA",
+"m": "PUEBLA",
+"ap": "2014-12-01",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 21,
+"acq": "2024-12-01"
+},
+{
+"n": "PUEBLA ANGELOPOLIS",
+"dv": "SUR",
+"z": "PUEBLA SUR",
+"e": "PUEBLA",
+"m": "PUEBLA",
+"ap": "2025-12-01",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2025-12-01"
+},
+{
+"n": "PUEBLA AZALEAS",
+"dv": "SUR",
+"z": "PUEBLA SUR",
+"e": "PUEBLA",
+"m": "PUEBLA DE ZARAGOZA",
+"ap": "2024-11-04",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-11-04"
+},
+{
+"n": "PUEBLA AZCARATE",
+"dv": "SUR",
+"z": "PUEBLA",
+"e": "PUEBLA",
+"m": "PUEBLA",
+"ap": "2023-07-17",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2023-07-17"
+},
+{
+"n": "PUEBLA CAPU",
+"dv": "SUR",
+"z": "PUEBLA",
+"e": "PUEBLA",
+"m": "PUEBLA",
+"ap": "2017-06-01",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-06-01"
+},
+{
+"n": "PUEBLA EL PORVENIR",
+"dv": "SUR",
+"z": "PUEBLA",
+"e": "PUEBLA",
+"m": "PUEBLA",
+"ap": "2020-08-28",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2025-08-28"
+},
+{
+"n": "PUEBLA MUNICIPIO LIBRE",
+"dv": "SUR",
+"z": "PUEBLA SUR",
+"e": "PUEBLA",
+"m": "PUEBLA",
+"ap": "2025-04-22",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2025-04-22"
+},
+{
+"n": "PUEBLA SAN SEBASTIAN",
+"dv": "SUR",
+"z": "PUEBLA",
+"e": "PUEBLA",
+"m": "PUEBLA",
+"ap": "2019-03-25",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-03-25"
+},
+{
+"n": "PUEBLA XILOTZINGO",
+"dv": "SUR",
+"z": "PUEBLA SUR",
+"e": "PUEBLA",
+"m": "PUEBLA",
+"ap": "2017-12-27",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-12-27"
+},
+{
+"n": "PUERTO VALLARTA",
+"dv": "BAJIO",
+"z": "JALISCO",
+"e": "JALISCO",
+"m": "PUERTO VALLARTA",
+"ap": "2020-11-30",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2025-11-28"
+},
+{
+"n": "QUERÉTARO",
+"dv": "BAJIO",
+"z": "QUERETARO",
+"e": "QUERETARO",
+"m": "QUERÉTARO",
+"ap": "2014-07-28",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2024-07-28"
+},
+{
+"n": "QUERETARO AV DE LA LUZ",
+"dv": "BAJIO",
+"z": "QUERETARO",
+"e": "QUERETARO",
+"m": "QUERÉTARO",
+"ap": "2021-12-20",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2021-12-20"
+},
+{
+"n": "QUERETARO EJERCITO REPUBLICANO",
+"dv": "BAJIO",
+"z": "QUERETARO",
+"e": "QUERETARO",
+"m": "QUERÉTARO",
+"ap": "2025-01-28",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2025-01-28"
+},
+{
+"n": "QUERÉTARO PIE DE LA CUESTA",
+"dv": "BAJIO",
+"z": "QUERETARO",
+"e": "QUERETARO",
+"m": "QUERÉTARO",
+"ap": "2018-09-24",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2023-09-24"
+},
+{
+"n": "QUERETARO REVOLUCION",
+"dv": "BAJIO",
+"z": "QUERETARO",
+"e": "QUERETARO",
+"m": "QUERÉTARO",
+"ap": "2022-12-07",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-12-07"
+},
+{
+"n": "QUERETARO SUR",
+"dv": "BAJIO",
+"z": "QUERETARO",
+"e": "QUERETARO",
+"m": "QUERÉTARO",
+"ap": "2023-01-23",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2023-01-23"
+},
+{
+"n": "REYNOSA",
+"dv": "NORTE",
+"z": "TAMAULIPAS",
+"e": "TAMAULIPAS",
+"m": "REYNOSA",
+"ap": "2019-06-10",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2024-06-10"
+},
+{
+"n": "RIO DE LOS REMEDIOS",
+"dv": "CENTRO",
+"z": "CDMX CENTRO",
+"e": "ESTADO DE MEXICO",
+"m": "ECATEPEC DE MORELOS",
+"ap": "2017-01-30",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-01-28"
+},
+{
+"n": "ROSARITO",
+"dv": "NOROESTE",
+"z": "BAJA CALIFORNIA",
+"e": "BAJA CALIFORNIA",
+"m": "PLAYAS DE ROSARITO",
+"ap": "2024-02-21",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-02-21"
+},
+{
+"n": "SALAMANCA",
+"dv": "BAJIO",
+"z": "GUANAJUATO SUR",
+"e": "GUANAJUATO",
+"m": "SALAMANCA",
+"ap": "2018-11-19",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 14,
+"acq": "2023-11-19"
+},
+{
+"n": "SALTILLO",
+"dv": "NORTE",
+"z": "LAGUNA",
+"e": "COAHUILA",
+"m": "SALTILLO",
+"ap": "2013-11-11",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2023-11-11"
+},
+{
+"n": "SALTILLO NORTE",
+"dv": "NORTE",
+"z": "LAGUNA",
+"e": "COAHUILA",
+"m": "SALTILLO",
+"ap": "2024-01-30",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-01-30"
+},
+{
+"n": "SAN ANDRES CHOLULA",
+"dv": "SUR",
+"z": "PUEBLA SUR",
+"e": "PUEBLA",
+"m": "SAN ANDRES CHOLULA",
+"ap": "2022-09-12",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-09-12"
+},
+{
+"n": "SAN CRISTOBAL DE LAS CASAS",
+"dv": "SUR",
+"z": "CHIAPAS",
+"e": "CHIAPAS",
+"m": "SAN CRISTOBAL DE LAS CASAS",
+"ap": "2018-06-04",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 15,
+"acq": "2023-06-04"
+},
+{
+"n": "SAN FRANCISCO DEL RINCON",
+"dv": "BAJIO",
+"z": "GUANAJUATO",
+"e": "GUANAJUATO",
+"m": "SAN FRANCISCO DEL RINCON",
+"ap": "2023-11-01",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-11-01"
+},
+{
+"n": "SAN JUAN DEL RIO",
+"dv": "BAJIO",
+"z": "QUERETARO",
+"e": "QUERETARO",
+"m": "SAN JUAN DEL RIO",
+"ap": "2021-01-04",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 15,
+"acq": "2026-01-04"
+},
+{
+"n": "SAN LUIS POTOSI",
+"dv": "NORTE",
+"z": "AGUASCALIENTES",
+"e": "SAN LUIS POTOSI",
+"m": "SAN LUIS POTOSI",
+"ap": "2016-07-18",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2026-07-18"
+},
+{
+"n": "SAN LUIS POTOSI ACCESO NORTE",
+"dv": "NORTE",
+"z": "AGUASCALIENTES",
+"e": "SAN LUIS POTOSI",
+"m": "SAN LUIS POTOSI",
+"ap": "2025-10-15",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2025-10-15"
+},
+{
+"n": "SAN LUIS POTOSI DE GALVEZ",
+"dv": "NORTE",
+"z": "AGUASCALIENTES",
+"e": "SAN LUIS POTOSI",
+"m": "SAN LUIS POTOSI",
+"ap": "2022-10-10",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2022-10-10"
+},
+{
+"n": "SAN LUIS POTOSI MUÑOZ",
+"dv": "NORTE",
+"z": "AGUASCALIENTES",
+"e": "SAN LUIS POTOSI",
+"m": "SAN LUIS POTOSI",
+"ap": "2019-12-16",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2024-12-16"
+},
+{
+"n": "SAN LUIS RIO COLORADO",
+"dv": "NOROESTE",
+"z": "MEXICALI FRONTERA",
+"e": "SONORA",
+"m": "SAN LUIS RIO COLORADO",
+"ap": "2022-04-29",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-04-29"
+},
+{
+"n": "SAN MARTIN TEXMELUCAN",
+"dv": "SUR",
+"z": "PUEBLA SUR",
+"e": "PUEBLA",
+"m": "SAN MARTIN TEXMELUCAN",
+"ap": "2022-12-15",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-12-15"
+},
+{
+"n": "SAN NICOLAS DE LOS GARZA",
+"dv": "NORTE",
+"z": "NUEVO LEON METROPOLITANA",
+"e": "NUEVO LEÓN",
+"m": "SAN NICOLAS DE LOS GARZA",
+"ap": "2017-09-18",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 21,
+"acq": "2022-09-18"
+},
+{
+"n": "SAN NICOLAS PLAZA OPCION",
+"dv": "NORTE",
+"z": "NUEVO LEON METROPOLITANA",
+"e": "NUEVO LEÓN",
+"m": "SAN NICOLAS DE LOS GARZA",
+"ap": "2023-12-04",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2023-12-04"
+},
+{
+"n": "SAN NICOLAS SANTO DOMINGO",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "SAN NICOLAS DE LOS GARZA",
+"ap": "2025-12-08",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2025-12-08"
+},
+{
+"n": "SAN PEDRO CHOLULA",
+"dv": "SUR",
+"z": "PUEBLA SUR",
+"e": "PUEBLA",
+"m": "SAN PEDRO CHOLULA",
+"ap": "2023-06-05",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-06-05"
+},
+{
+"n": "SANTA CATARINA",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "SANTA CATARINA",
+"ap": "2018-05-28",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2023-05-28"
+},
+{
+"n": "SANTA CATARINA CLOUTHIER",
+"dv": "NORTE",
+"z": "NUEVO LEON",
+"e": "NUEVO LEÓN",
+"m": "SANTA CATARINA",
+"ap": "2025-12-05",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2025-12-05"
+},
+{
+"n": "SILAO",
+"dv": "BAJIO",
+"z": "GUANAJUATO SUR",
+"e": "GUANAJUATO",
+"m": "SILAO DE LA VICTORIA",
+"ap": "2022-08-01",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2022-08-01"
+},
+{
+"n": "TAMPICO",
+"dv": "NORTE",
+"z": "TAMAULIPAS",
+"e": "TAMAULIPAS",
+"m": "TAMPICO",
+"ap": "2018-10-08",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2023-10-08"
+},
+{
+"n": "TAMPICO EJERCITO MEXICANO",
+"dv": "NORTE",
+"z": "TAMAULIPAS",
+"e": "TAMAULIPAS",
+"m": "TAMPICO",
+"ap": "2025-11-13",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2025-11-13"
+},
+{
+"n": "TAPACHULA",
+"dv": "SUR",
+"z": "CHIAPAS",
+"e": "CHIAPAS",
+"m": "TAPACHULA",
+"ap": "2021-08-30",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2026-08-28"
+},
+{
+"n": "TECAMAC",
+"dv": "CENTRO",
+"z": "CDMX NORTE",
+"e": "ESTADO DE MEXICO",
+"m": "TECAMAC",
+"ap": "2017-01-09",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2022-01-09"
+},
+{
+"n": "TECAMAC BELLA MEXIQUENSE",
+"dv": "CENTRO",
+"z": "CDMX NORTE",
+"e": "ESTADO DE MEXICO",
+"m": "TECAMAC",
+"ap": "2026-04-30",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2026-04-30"
+},
+{
+"n": "TECAMAC CENTRO",
+"dv": "CENTRO",
+"z": "CDMX NORTE",
+"e": "ESTADO DE MEXICO",
+"m": "TECAMAC",
+"ap": "2024-01-29",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-01-29"
+},
+{
+"n": "TEHUACAN",
+"dv": "SUR",
+"z": "PUEBLA",
+"e": "PUEBLA",
+"m": "TEHUACÁN ",
+"ap": "2024-11-07",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-11-07"
+},
+{
+"n": "TEPIC",
+"dv": "BAJIO",
+"z": "JALISCO",
+"e": "NAYARIT",
+"m": "TEPIC",
+"ap": "2014-07-07",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2024-07-07"
+},
+{
+"n": "TEXCOCO",
+"dv": "CENTRO",
+"z": "CDMX ORIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "TEXCOCO",
+"ap": "2023-12-05",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 14,
+"acq": "2023-12-05"
+},
+{
+"n": "TIJUANA",
+"dv": "NOROESTE",
+"z": "BAJA CALIFORNIA",
+"e": "BAJA CALIFORNIA",
+"m": "TIJUANA",
+"ap": "2006-06-25",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2026-06-25"
+},
+{
+"n": "TIJUANA CASA BLANCA",
+"dv": "NOROESTE",
+"z": "MEXICALI FRONTERA",
+"e": "BAJA CALIFORNIA",
+"m": "TIJUANA",
+"ap": "2022-12-19",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-12-19"
+},
+{
+"n": "TIJUANA CENTRO",
+"dv": "NOROESTE",
+"z": "BAJA CALIFORNIA",
+"e": "BAJA CALIFORNIA",
+"m": "TIJUANA",
+"ap": "2011-03-28",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2026-03-28"
+},
+{
+"n": "TIJUANA CUCAPAH",
+"dv": "NOROESTE",
+"z": "MEXICALI FRONTERA",
+"e": "BAJA CALIFORNIA",
+"m": "TIJUANA",
+"ap": "2019-04-01",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2024-04-01"
+},
+{
+"n": "TIJUANA DIAZ ORDAZ",
+"dv": "NOROESTE",
+"z": "BAJA CALIFORNIA",
+"e": "BAJA CALIFORNIA",
+"m": "TIJUANA",
+"ap": "2026-04-30",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2026-04-30"
+},
+{
+"n": "TIJUANA MATAMOROS",
+"dv": "NOROESTE",
+"z": "BAJA CALIFORNIA",
+"e": "BAJA CALIFORNIA",
+"m": "TIJUANA",
+"ap": "2022-06-27",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2022-06-27"
+},
+{
+"n": "TIJUANA OTAY",
+"dv": "NOROESTE",
+"z": "BAJA CALIFORNIA",
+"e": "BAJA CALIFORNIA",
+"m": "TIJUANA",
+"ap": "2022-12-19",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2022-12-19"
+},
+{
+"n": "TLAJOMULCO",
+"dv": "BAJIO",
+"z": "JALISCO",
+"e": "JALISCO",
+"m": "TLAJOMULCO DE ZUÑIGA",
+"ap": "2018-04-30",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2023-04-28"
+},
+{
+"n": "TLAJOMULCO CENTRO",
+"dv": "BAJIO",
+"z": "JALISCO",
+"e": "JALISCO",
+"m": "TLAJOMULCO DE ZUÑIGA",
+"ap": "2022-03-22",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2022-03-22"
+},
+{
+"n": "TLALNEPANTLA",
+"dv": "CENTRO",
+"z": "CDMX PONIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "TLALNEPANTLA DE BAZ",
+"ap": "2016-04-18",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2026-04-18"
+},
+{
+"n": "TLALNEPANTLA GUSTAVO BAZ",
+"dv": "CENTRO",
+"z": "CDMX PONIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "TLALNEPANTLA DE BAZ",
+"ap": "2023-04-26",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-04-26"
+},
+{
+"n": "TLALNEPANTLA REYES HEROLES",
+"dv": "CENTRO",
+"z": "CDMX PONIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "TLALNEPANTLA DE BAZ",
+"ap": "2024-05-22",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2024-05-22"
+},
+{
+"n": "TLALNEPANTLA SANTA MONICA",
+"dv": "CENTRO",
+"z": "CDMX PONIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "TLALNEPANTLA DE BAZ",
+"ap": "2025-11-28",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2025-11-28"
+},
+{
+"n": "TLALPAN",
+"dv": "CENTRO",
+"z": "CDMX SUR I",
+"e": "CIUDAD DE MEXICO",
+"m": "TLALPAN",
+"ap": "2016-08-29",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2026-08-28"
+},
+{
+"n": "TLALPAN GRAN TERRAZA COAPA",
+"dv": "CENTRO",
+"z": "CDMX SUR I",
+"e": "CIUDAD DE MEXICO",
+"m": "TLALPAN",
+"ap": "2026-09-15",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2026-09-15"
+},
+{
+"n": "TLAQUEPAQUE",
+"dv": "BAJIO",
+"z": "JALISCO CENTRO",
+"e": "JALISCO",
+"m": "SAN PEDRO TLAQUEPAQUE",
+"ap": "2022-03-28",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2022-03-28"
+},
+{
+"n": "TLAQUEPAQUE NIÑOS HEROES",
+"dv": "BAJIO",
+"z": "JALISCO",
+"e": "JALISCO",
+"m": "SAN PEDRO TLAQUEPAQUE",
+"ap": "2025-12-08",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2025-12-08"
+},
+{
+"n": "TLAXCALA",
+"dv": "SUR",
+"z": "PUEBLA SUR",
+"e": "TLAXCALA",
+"m": "TLAXCALA",
+"ap": "2019-10-07",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2024-10-07"
+},
+{
+"n": "TOLUCA",
+"dv": "SUR",
+"z": "GUERRERO",
+"e": "ESTADO DE MEXICO",
+"m": "TOLUCA",
+"ap": "2014-12-20",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 21,
+"acq": "2024-12-20"
+},
+{
+"n": "TOLUCA CENTRAL",
+"dv": "SUR",
+"z": "GUERRERO",
+"e": "ESTADO DE MEXICO",
+"m": "TOLUCA",
+"ap": "2017-07-31",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-07-28"
+},
+{
+"n": "TONALA TONALTECAS",
+"dv": "BAJIO",
+"z": "JALISCO",
+"e": "JALISCO",
+"m": "TONALA",
+"ap": "2015-12-21",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2025-12-21"
+},
+{
+"n": "TORREON",
+"dv": "NORTE",
+"z": "LAGUNA",
+"e": "COAHUILA",
+"m": "TORREON",
+"ap": "2014-11-18",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2024-11-18"
+},
+{
+"n": "TORREON DIAGONAL REFORMA",
+"dv": "NORTE",
+"z": "LAGUNA",
+"e": "COAHUILA",
+"m": "TORREON",
+"ap": "2025-01-30",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2025-01-30"
+},
+{
+"n": "TORREON PLAZA TRIANA",
+"dv": "NORTE",
+"z": "LAGUNA",
+"e": "COAHUILA",
+"m": "TORREON",
+"ap": "2022-04-04",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 12,
+"acq": "2022-04-04"
+},
+{
+"n": "TULTITLAN",
+"dv": "CENTRO",
+"z": "CDMX NORTE",
+"e": "ESTADO DE MEXICO",
+"m": "TULTITLAN",
+"ap": "2017-07-17",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 16,
+"acq": "2022-07-17"
+},
+{
+"n": "TULTITLAN SAN PABLO DE SALINAS",
+"dv": "CENTRO",
+"z": "CDMX NORTE",
+"e": "ESTADO DE MEXICO",
+"m": "TULTITLAN",
+"ap": "2025-09-22",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2025-09-22"
+},
+{
+"n": "TUXTLA GUTIERREZ",
+"dv": "SUR",
+"z": "CHIAPAS",
+"e": "CHIAPAS",
+"m": "TUXTLA GUTIERREZ",
+"ap": "2016-11-28",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2021-11-28"
+},
+{
+"n": "TUXTLA GUTIERREZ 5TA NORTE",
+"dv": "SUR",
+"z": "CHIAPAS",
+"e": "CHIAPAS",
+"m": "TUXTLA GUTIERREZ",
+"ap": "2020-09-21",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2025-09-21"
+},
+{
+"n": "URUAPAN",
+"dv": "BAJIO",
+"z": "MICHOACAN",
+"e": "MICHOACAN",
+"m": "URUAPAN",
+"ap": "2018-07-02",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2023-07-02"
+},
+{
+"n": "VALLE DE CHALCO TEZOZOMOC",
+"dv": "CENTRO",
+"z": "CDMX ORIENTE",
+"e": "ESTADO DE MEXICO",
+"m": "VALLE DE CHALCO",
+"ap": "2024-07-29",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2024-07-29"
+},
+{
+"n": "VALLE DE GUADALUPE",
+"dv": "CENTRO",
+"z": "CDMX CENTRO",
+"e": "ESTADO DE MEXICO",
+"m": "ECATEPEC DE MORELOS",
+"ap": "2016-06-13",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 14,
+"acq": "2026-06-13"
+},
+{
+"n": "VERACRUZ",
+"dv": "SUR",
+"z": "VERACRUZ",
+"e": "VERACRUZ",
+"m": "VERACRUZ",
+"ap": "2015-11-04",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2025-11-04"
+},
+{
+"n": "VERACRUZ NORTE",
+"dv": "SUR",
+"z": "VERACRUZ",
+"e": "VERACRUZ",
+"m": "VERACRUZ",
+"ap": "2020-09-07",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2025-09-07"
+},
+{
+"n": "VERACRUZ VALENTE DIAZ",
+"dv": "SUR",
+"z": "VERACRUZ",
+"e": "VERACRUZ",
+"m": "VERACRUZ",
+"ap": "2023-04-27",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2023-04-27"
+},
+{
+"n": "VILLAHERMOSA GREGORIO MENDEZ",
+"dv": "SUR",
+"z": "CHIAPAS",
+"e": "TABASCO",
+"m": "CENTRO",
+"ap": "2022-10-10",
+"f": "GRANDE",
+"t": "B",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"PAPANICOLAOU",
+"RAYOS X",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2022-10-10"
+},
+{
+"n": "VILLAHERMOSA TABASCO",
+"dv": "SUR",
+"z": "CHIAPAS",
+"e": "TABASCO",
+"m": "CENTRO",
+"ap": "2018-09-24",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2023-09-24"
+},
+{
+"n": "VISTA HERMOSA",
+"dv": "BAJIO",
+"z": "MICHOACAN",
+"e": "MICHOACAN",
+"m": "VISTA HERMOSA",
+"ap": "2015-09-28",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 15,
+"acq": "2025-09-28"
+},
+{
+"n": "XALAPA",
+"dv": "SUR",
+"z": "VERACRUZ",
+"e": "VERACRUZ",
+"m": "XALAPA",
+"ap": "2017-11-21",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2022-11-21"
+},
+{
+"n": "XALAPA LAZARO CARDENAS",
+"dv": "SUR",
+"z": "VERACRUZ",
+"e": "VERACRUZ",
+"m": "XALAPA",
+"ap": "2024-11-21",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2024-11-21"
+},
+{
+"n": "XALAPA REVOLUCION",
+"dv": "SUR",
+"z": "VERACRUZ",
+"e": "VERACRUZ",
+"m": "XALAPA",
+"ap": "2026-04-27",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2026-04-27"
+},
+{
+"n": "XOCHIMILCO",
+"dv": "CENTRO",
+"z": "CDMX SUR I",
+"e": "CIUDAD DE MEXICO",
+"m": "XOCHIMILCO",
+"ap": "2025-10-08",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 18,
+"acq": "2025-10-08"
+},
+{
+"n": "ZACATECAS",
+"dv": "NORTE",
+"z": "AGUASCALIENTES",
+"e": "ZACATECAS",
+"m": "ZACATECAS",
+"ap": "2018-12-10",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 17,
+"acq": "2023-12-10"
+},
+{
+"n": "ZACATECAS ADOLFO LOPEZ MATEOS",
+"dv": "NORTE",
+"z": "AGUASCALIENTES",
+"e": "ZACATECAS",
+"m": "ZACATECAS",
+"ap": "2023-08-31",
+"f": "CHICA (+RESO y TOMO)",
+"t": "A",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 14,
+"acq": "2023-08-31"
+},
+{
+"n": "ZAMORA",
+"dv": "BAJIO",
+"z": "MICHOACAN",
+"e": "MICHOACAN",
+"m": "ZAMORA",
+"ap": "2020-03-16",
+"f": "GRANDE",
+"t": "C",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"RAYOS X",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+4
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 15,
+"acq": "2025-03-16"
+},
+{
+"n": "ZAPOPAN CENTRO",
+"dv": "BAJIO",
+"z": "JALISCO",
+"e": "JALISCO",
+"m": "ZAPOPAN",
+"ap": "2017-12-18",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+4
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+3
+],
+[
+"Ultrasonido",
+2
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 20,
+"acq": "2022-12-18"
+},
+{
+"n": "ZAPOPAN LAS AGUILAS",
+"dv": "BAJIO",
+"z": "JALISCO",
+"e": "JALISCO",
+"m": "ZAPOPAN",
+"ap": "2014-08-11",
+"f": "GRANDE",
+"t": "A",
+"sv": [
+"DENSITOMETRIA",
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"MASTOGRAFIA",
+"NUTRICION",
+"PAPANICOLAOU",
+"RAYOS X",
+"RESONANCIA MAGNETICA",
+"TOMOGRAFIA",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+3
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Densitometría",
+1
+],
+[
+"Mastografía",
+1
+],
+[
+"Rayos X",
+1
+],
+[
+"Nutrición",
+1
+],
+[
+"Tomografía",
+1
+],
+[
+"Resonancia",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 19,
+"acq": "2024-08-11"
+},
+{
+"n": "ZAPOTLANEJO",
+"dv": "BAJIO",
+"z": "JALISCO",
+"e": "JALISCO",
+"m": "ZAPOTLANEJO",
+"ap": "2021-12-08",
+"f": "CHICA",
+"t": "D",
+"sv": [
+"ELECTROCARDIOGRAMA",
+"LABORATORIO",
+"LENTES",
+"PAPANICOLAOU",
+"ULTRASONIDO"
+],
+"ar": [
+[
+"Recepción",
+3
+],
+[
+"Recepción Lentes",
+2
+],
+[
+"Optometría",
+2
+],
+[
+"Ultrasonido",
+1
+],
+[
+"Papanicolaou",
+1
+],
+[
+"Almacén",
+1
+],
+[
+"Administración",
+1
+]
+],
+"pc": 11,
+"acq": "2021-12-08"
+}
+]
