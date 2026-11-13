@@ -181,14 +181,22 @@ const soon=e=>diff(S.today,due(e))<=90;
 const stOf=e=>e.p||baseSt(e);
 const tipo=e=>e.TIPO_EQUIPO||'Escritorio';
 function freshItems(inv){return inv.map((x,i)=>({...x,TIPO_EQUIPO:/escrit/i.test(x.TIPO_EQUIPO||'Escritorio')?'Escritorio':x.TIPO_EQUIPO,_i:i,p:null,dx:null,price:null,pub:null,buyer:null,pay:null,fac:null,destD:null,hist:[]}))}
-function init(sample=true,src){src=src||base0();
+function init(sample=true,src){src=src||base0();const lv=TRZ.live;TRZ.live=false;try{init0(sample,src)}finally{TRZ.live=lv}}
+function init0(sample,src){
   S={cfg:defaultCfg(),meClinic:null,today:sample?T0:new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),items:freshItems(src.inv),prev:src.prev||[],src:src.name||'AppSheet',invAs:'',mod:'venta',reqs:[],notifs:[],log:[],mails:[],mailTab:'',fisDraft:null,seq:1000,view:'panel',hmTab:'ALL',city:null,engClinic:null,dxId:null,dxDraft:null,buyId:null,invQ:'',invClin:'',invSt:'',invPage:0,segArea:'',sample,
      col:[],ast:[],cartas:{},movs:[],emp:'102458',tiQ:'',tiTipo:'',tiEst:'',tiPage:0,mov:null,clinQ:''};
   applyAS(S.items);
   genTI();
   if(sample)seed();
 }
-function H(e,txt,area,kind){e.hist.push({d:S.today,t:txt,a:area,k:kind||''})}
+function H(e,txt,area,kind){e.hist.push({d:S.today,t:txt,a:area,k:kind||''});
+  if(TRZ.live&&GAS){TRZ.q.push(trzRow(e,dmy(S.today),ST[e.p]?.[0]||'',AREAS[area]||area||'',kind==='hmn'?'Humand':'',txt,'Demo en vivo'));clearTimeout(TRZ.h);TRZ.h=setTimeout(trzFlush,1500)}}
+/* Traza en Google Sheets (pestaña "Traza", ver Code.gs). Solo con Apps Script; las filas viajan como texto. */
+const TRZ={live:false,q:[],h:0,url:'',view:null};
+const dmy=s=>s?s.split('-').reverse().join('/'):'';
+const trzRow=(e,fecha,etapa,resp,donde,evento,origen,folio)=>[fecha,folio||e.sale?.folio||'',e.ID_ACTIVO,eqName(e),e.CLINICA,etapa,resp,donde,evento,origen];
+function trzSend(rows,ok,fail){google.script.run.withSuccessHandler(r=>{if(r&&r.url)TRZ.url=r.url;ok&&ok(r)}).withFailureHandler(err=>fail&&fail(err&&err.message||String(err))).appendTraza(rows)}
+function trzFlush(){if(!GAS||!TRZ.q.length)return;const rows=TRZ.q.splice(0);trzSend(rows,null,m=>{TRZ.q.unshift(...rows);toast('No se pudo escribir la traza: '+m)})}
 function log(m,ep,src,body,desc){S.log.unshift({d:S.today,m,ep,src,body,desc})}
 function notify(to,txt,kind){S.notifs.unshift({d:S.today,to,txt,kind:kind||'info'})}
 function newReq(type,e,extra){const t=RT[type];const r={id:'SOL-'+(++S.seq),type,eq:e._i,created:S.today,last:S.today,state:'Pendiente',rem:0,esc:false,res:null,amount:extra?.amount??null,dl:extra?.dl||null};S.reqs.unshift(r);
@@ -772,8 +780,8 @@ const RP2K={CONFIRMADO:'dx',PRECIO:'af',PUBLICADO:'bz',SUBASTA:'sub1',PAGO:'pg2'
 function recEx(){const R=S.rec||{};if(R.eq!=null&&S.items[R.eq])return S.items[R.eq];
   const pcs=S.items.filter(x=>!x.p&&['Escritorio','Laptop'].includes(tipo(x)));const l=pcs.filter(x=>baseSt(x)==='ALERTA');const pool=l.length?l:pcs.length?pcs:S.items;
   return pool[(R.pick||0)%pool.length]}
-function recSteps(e,R){const K=C(),P=K.plazo,sla=K.sla,ing=e.INGENIERO||'Ingeniero de Sistemas',buyer=(e.buyer||BUYERS[0]).split(' · ')[0],jefe=e.sale?.jefe||JEFES[2];
-  const price=r50(e.price?.aut??estValue(e)),low=r50(price*.85),mun=e.MUNICIPIO||e.CLINICA,fac=R.fac,folio=e.sale?.folio||'VTA-'+S.today.slice(0,4)+'-00123';
+function recSteps(e,R){const K=C(),P=K.plazo,sla=K.sla,ing=e.INGENIERO||'Ingeniero de Sistemas',buyer=(e.buyer||BUYERS[0]).split(' · ')[0],jefe=e.sale?.jefe||JEFES[2],folio0=R.folio;
+  const price=r50(e.price?.aut??estValue(e)),low=r50(price*.85),mun=e.MUNICIPIO||e.CLINICA,fac=R.fac,folio=e.sale?.folio||folio0||'VTA-'+S.today.slice(0,4)+'-00123';
   const mk=(k,ph,who,ch,t,what,o={})=>({k,ph,who,ch,t,what,...o});
   const pre=[
    mk('det','det','A360','a360','Cumple 5 años: Activo 360 lo detecta',`Se instaló el ${fd(e.FECHA_ADQUISICION)} y cumple su vida útil el ${fd(due(e))}. Tres meses antes aparece en Alertas y en la bandeja de ${esc(ing)}.`,{notif:'Correo al ingeniero de Sistemas de la clínica',mock:`<div class="rx-alr"><b>⚠ Cumple 5 años en ≤3 meses</b><span>${esc(eqName(e))} · ${esc(e.CLINICA)}</span></div>`}),
@@ -822,9 +830,26 @@ VIEWS.recorrido=()=>{const R=S.rec||(S.rec={sc:'venta',fac:false,k:0,pick:0});co
     <h2>${s.t}</h2><div class="rx-chips"><span class="rx-c">👤 ${RWHO[who]}</span><span class="rx-c ${ch[1]}">${ch[0]}</span>${s.plazo?`<span class="rx-c">⏱ ${s.plazo}</span>`:''}</div>
     <p class="rx-what">${s.what}</p>${s.notif?`<p class="note">📣 Aviso a: ${s.notif}</p>`:''}${s.fail?`<p class="rx-fail">⚠ ${s.fail}</p>`:''}
     <div class="rx-nav"><button class="btn" data-rmv="-1" ${R.k?'':'disabled'}>◀ Anterior</button><button class="btn p" data-rmv="1" ${nx?'':'disabled'}>${nx?'Siguiente: '+nx.t.replace(/<[^>]+>/g,''):'Fin del recorrido'} ▶</button>${real&&R.k!==cur?`<button class="btn sm" data-rk="${cur}">Ir a la etapa actual</button>`:''}${!real&&R.k?'<button class="btn sm" data-rk="0">Reiniciar</button>':''}</div></div>
-   <div class="rx-see"><div class="note">Lo que ve ${RWHO[who].toLowerCase()}</div>${s.mock||`<div class="rx-req"><b>${s.t}</b></div>`}</div></div>`};
+   <div class="rx-see"><div class="note">Lo que ve ${RWHO[who].toLowerCase()}</div>${s.mock||`<div class="rx-req"><b>${s.t}</b></div>`}</div></div>${trzCard(e,real)}`};
+const txtOf=h=>{const d=document.createElement('div');d.innerHTML=h;return d.textContent};
+function recExampleRows(e,R){R.folio='EJ-'+S.today.slice(0,4)+'-'+String(++S.seq).padStart(5,'0');const L=recSteps(e,R),lab=RSC.find(x=>x[0]===R.sc)?.[1]||'';let d=S.today;
+  return L.map((s,i)=>{if(i)d=addBiz(d,1);return trzRow(e,dmy(d),RPH.concat(RPH2).find(p=>p[0]===s.ph)[1],RWHO[s.who],RCH[s.ch][0],txtOf(s.t)+'. '+txtOf(s.what),'Ejemplo · '+lab,R.folio)})}
+const histRows=(e,origen)=>e.hist.map(h=>trzRow(e,dmy(h.d),'',AREAS[h.a]||h.a||'',h.k==='hmn'?'Humand':'',h.t,origen));
+function trzCard(e,real){const V=TRZ.view&&TRZ.view.key===e.ID_ACTIVO?TRZ.view:null,rows=V?.rows||[];
+  return `<div class="card"><div class="row" style="flex-wrap:wrap;gap:8px"><h3 style="margin:0">Traza en Google Sheets</h3><span class="sp"></span>
+   ${real?'<button class="btn sm p" data-trz="leer">Ver traza de este equipo</button>':'<button class="btn sm p" data-trz="ej">Generar venta de ejemplo en la hoja</button><button class="btn sm" data-trz="dump">Volcar ventas simuladas del demo</button>'}
+   ${TRZ.url?`<a class="btn sm" href="${esc(TRZ.url)}" target="_blank" rel="noopener">Abrir la hoja</a>`:''}</div>
+   <p class="note">Cada paso queda como una fila en la pestaña <b>Traza</b> del mismo Sheets del inventario: fecha, folio, etapa, responsable, dónde y qué pasó. Datos inventados del demo.${GAS?'':' Fuera de Apps Script solo se muestra la vista previa; publicado en Apps Script se escribe en la hoja.'}</p>
+   ${V?`<p class="note" style="margin:6px 0"><b>${esc(V.msg)}</b></p>${rows.length?`<div class="tbl rx-trz"><table><tr><th>Fecha</th><th>Folio</th><th>Etapa</th><th>Responsable</th><th>Dónde</th><th>Evento</th><th>Origen</th></tr>${rows.slice(-200).map(r=>`<tr><td class="mono">${esc(r[0])}</td><td class="mono">${esc(r[1])}</td><td>${esc(r[5])}</td><td>${esc(r[6])}</td><td>${esc(r[7])}</td><td>${esc(r[8])}</td><td class="note">${esc(r[9])}</td></tr>`).join('')}</table></div>${rows.length>200?`<p class="note">Se muestran las últimas 200 de ${rows.length} filas.</p>`:''}`:''}`:''}</div>`}
+function trzAct(k){const e=recEx(),R=S.rec;const show=(rows,msg)=>{TRZ.view={key:e.ID_ACTIVO,rows,msg};render()};
+  const write=(rows,what)=>{if(!GAS)return show(rows,`${what}: ${rows.length} filas (vista previa).`);show(rows,'Escribiendo en la hoja…');trzSend(rows,r=>show(rows,`${what}: ${r.n} filas escritas en la pestaña Traza.`),m=>show(rows,'No se pudo escribir en la hoja: '+m))};
+  if(k==='ej'){const rows=recExampleRows(e,R);save();write(rows,'Venta de ejemplo '+R.folio)}
+  else if(k==='dump'){const rows=S.items.filter(x=>x.p&&x.hist.length).flatMap(x=>histRows(x,'Venta simulada del demo'));
+    if(GAS&&!confirm(`Se agregarán ${rows.length} filas de ${new Set(rows.map(r=>r[2])).size} ventas simuladas a la pestaña Traza. ¿Continuar?`))return;write(rows,'Ventas simuladas del demo')}
+  else if(k==='leer'){if(!GAS)return show(histRows(e,'Bitácora local'),'Bitácora de este navegador (publicado en Apps Script se lee de la hoja).');show([],'Leyendo la hoja…');
+    google.script.run.withSuccessHandler(r=>{TRZ.url=r.url||TRZ.url;const rows=(r.rows||[]).map(x=>x.slice(1));show(rows,rows.length?`${rows.length} filas en la hoja para ${e.ID_ACTIVO}.`:'Este equipo todavía no tiene filas en la hoja.')}).withFailureHandler(err=>show([],'No se pudo leer la hoja: '+(err&&err.message||err))).getTraza(e.ID_ACTIVO)}}
 after.recorrido=()=>{const R=S.rec;const mv=k=>{R.k=k;save();render()};
-  $$('[data-rk]').forEach(b=>b.onclick=()=>mv(+b.dataset.rk));$$('[data-rmv]').forEach(b=>b.onclick=()=>mv(R.k+ +b.dataset.rmv));
+  $$('[data-rk]').forEach(b=>b.onclick=()=>mv(+b.dataset.rk));$$('[data-trz]').forEach(b=>b.onclick=()=>trzAct(b.dataset.trz));$$('[data-rmv]').forEach(b=>b.onclick=()=>mv(R.k+ +b.dataset.rmv));
   $$('[data-rsc]').forEach(b=>b.onclick=()=>{R.sc=b.dataset.rsc;mv(0)});$$('[data-rfac]').forEach(b=>b.onclick=()=>{R.fac=b.dataset.rfac==='1';render()});
   $$('[data-rx]').forEach(b=>b.onclick=()=>{if(b.dataset.rx==='ej'){S.rec={sc:'venta',fac:false,k:0,pick:0};render()}else{R.pick=(R.pick||0)+1;mv(0)}})};
 document.addEventListener('keydown',ev=>{if(S?.view!=='recorrido'||$('.drawer')||/INPUT|TEXTAREA|SELECT/.test(ev.target.tagName))return;const b=$(`[data-rmv="${ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0}"]`);if(b&&!b.disabled){ev.preventDefault();b.click()}});
@@ -1384,6 +1409,6 @@ $('#thm').onclick=()=>{const n=curTheme()==='dark'?'light':'dark';document.docum
 $('#d1').onclick=()=>{admT(false);tick(1)};$('#d30').onclick=()=>{admT(false);tick(30)};
 $('#reset').onclick=()=>{admT(false);init(true);save();render();toast('Datos restablecidos')};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
-load();render();welcome();
+load();render();welcome();TRZ.live=true;
 if(GAS&&window.A360_FEED){syncFeed(false);setInterval(()=>syncFeed(false),Math.max(1,+window.A360_POLL||5)*60000);addEventListener('focus',()=>syncFeed(false))}
 

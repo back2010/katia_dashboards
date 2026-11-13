@@ -44,7 +44,15 @@ function nombreUsuario_() {
 function getFeedInfo() {
   if (!CONFIG.FILE_ID) return { ok: false, msg: 'Configura FILE_ID en Code.gs con el ID del archivo de AppSheet en Drive' };
   const f = DriveApp.getFileById(CONFIG.FILE_ID);
-  return { ok: true, name: f.getName(), mime: f.getMimeType(), updated: f.getLastUpdated().getTime() };
+  const mime = f.getMimeType();
+  if (mime === MimeType.GOOGLE_SHEETS) {
+    // Huella solo de la pestaña del inventario: escribir en "Traza" no debe recargar el inventario.
+    const ss = SpreadsheetApp.openById(CONFIG.FILE_ID);
+    const sh = CONFIG.SHEET_NAME ? ss.getSheetByName(CONFIG.SHEET_NAME) : ss.getSheets()[0];
+    const dig = Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, JSON.stringify(sh ? sh.getDataRange().getValues() : []));
+    return { ok: true, name: f.getName(), mime: mime, updated: Utilities.base64Encode(dig) };
+  }
+  return { ok: true, name: f.getName(), mime: mime, updated: f.getLastUpdated().getTime() };
 }
 
 /** Contenido del archivo: Google Sheets -> filas; Excel/CSV -> archivo en base64 (lo lee el navegador). */
@@ -70,4 +78,71 @@ function getFeedData() {
     return { rows: rows, name: f.getName(), mime: mime };
   }
   return { b64: Utilities.base64Encode(f.getBlob().getBytes()), name: f.getName(), mime: mime, sheet: CONFIG.SHEET_NAME };
+}
+
+/* ================= Traza en Google Sheets =================
+ * Cada evento del proceso (diagnóstico, precio, compra, firmas, depósito, factura, entrega...) se agrega
+ * como una fila en la pestaña "Traza". Solo para el demo: los datos son inventados.
+ * La pestaña "Traza" se crea dentro del mismo Sheets del inventario; la pestaña del inventario no se toca.
+ * Archivo que se usa, en este orden:
+ *   1. TRAZA_ID, si lo llenas (ID de otro Google Sheets).
+ *   2. La hoja a la que está ligado este script (Extensiones > Apps Script desde la hoja del inventario).
+ *   3. CONFIG.FILE_ID, si es un Google Sheets.
+ *   4. Si no hay ninguno, se crea "Activo 360 · Traza (demo)" en tu Drive y se recuerda su ID.
+ */
+const TRAZA = {
+  TRAZA_ID: '',     // opcional
+  PESTANA: 'Traza',
+  COLS: ['Registrado', 'Fecha del demo', 'Folio', 'ID activo', 'Equipo', 'Clínica', 'Etapa', 'Responsable', 'Dónde', 'Evento', 'Origen']
+};
+
+function trazaHoja_() {
+  let ss = null;
+  if (TRAZA.TRAZA_ID) ss = SpreadsheetApp.openById(TRAZA.TRAZA_ID);
+  if (!ss) { try { ss = SpreadsheetApp.getActiveSpreadsheet(); } catch (e) { ss = null; } }
+  if (!ss && CONFIG.FILE_ID) {
+    try { if (DriveApp.getFileById(CONFIG.FILE_ID).getMimeType() === MimeType.GOOGLE_SHEETS) ss = SpreadsheetApp.openById(CONFIG.FILE_ID); } catch (e) { ss = null; }
+  }
+  if (!ss) {
+    const props = PropertiesService.getScriptProperties();
+    const id = props.getProperty('TRAZA_ID');
+    if (id) { try { ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; } }
+    if (!ss) { ss = SpreadsheetApp.create('Activo 360 · Traza (demo)'); props.setProperty('TRAZA_ID', ss.getId()); }
+  }
+  let sh = ss.getSheetByName(TRAZA.PESTANA);
+  if (!sh) {
+    sh = ss.insertSheet(TRAZA.PESTANA, ss.getNumSheets()); // al final: la primera pestaña sigue siendo el inventario
+    sh.getRange(1, 1, 1, TRAZA.COLS.length).setValues([TRAZA.COLS]).setFontWeight('bold');
+    sh.setFrozenRows(1);
+  }
+  return { ss: ss, sh: sh };
+}
+
+/** Agrega filas a la traza. rows: arreglo de arreglos de texto, sin la columna "Registrado". */
+function appendTraza(rows) {
+  if (!rows || !rows.length) return { ok: true, n: 0 };
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const t = trazaHoja_();
+    const now = Utilities.formatDate(new Date(), t.ss.getSpreadsheetTimeZone(), 'dd/MM/yyyy HH:mm:ss');
+    const n = TRAZA.COLS.length;
+    const vals = rows.map(r => [now].concat(r.slice(0, n - 1).map(v => String(v == null ? '' : v))).concat(Array(Math.max(0, n - 1 - r.length)).fill('')));
+    t.sh.getRange(t.sh.getLastRow() + 1, 1, vals.length, n).setValues(vals);
+    return { ok: true, n: vals.length, url: t.ss.getUrl() + '#gid=' + t.sh.getSheetId() };
+  } finally { lock.releaseLock(); }
+}
+
+/** Traza de un equipo (por ID activo) o de un folio. Devuelve solo texto. */
+function getTraza(id) {
+  const t = trazaHoja_();
+  const url = t.ss.getUrl() + '#gid=' + t.sh.getSheetId();
+  const last = t.sh.getLastRow();
+  if (last < 2) return { ok: true, url: url, rows: [] };
+  const tz = t.ss.getSpreadsheetTimeZone();
+  const vals = t.sh.getRange(2, 1, last - 1, TRAZA.COLS.length).getValues();
+  const key = String(id || '').trim();
+  const rows = vals.filter(r => !key || String(r[3]) === key || String(r[2]) === key)
+    .map(r => r.map(v => v instanceof Date ? Utilities.formatDate(v, tz, 'dd/MM/yyyy HH:mm:ss') : String(v)));
+  return { ok: true, url: url, rows: rows };
 }
