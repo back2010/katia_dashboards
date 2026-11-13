@@ -1,4 +1,4 @@
-<script>
+<script type="text/plain" id="a360-app2">
 /* Activo 360 · App2 */
 /* ================= INVENTARIO (formato AppSheet) ================= */
 const COLS=['ID_ACTIVO','NUM_SERIE','CLINICA','MUNICIPIO','ESTADO','ZONA','DIVISION','SERVICIO','UBICACION','TIPO_EQUIPO','MARCA','MODELO','PROCESADOR','GENERACION','RAM_GB','ALMACENAMIENTO','MONITOR','SO','FECHA_ADQUISICION','COSTO_ADQUISICION','VIDA_UTIL_ANIOS','INGENIERO','CORREO_INGENIERO'];
@@ -407,10 +407,10 @@ after.destruccion=()=>{
 function startDon(e,org,fecha){const r=S.reqs.find(x=>x.eq===e._i&&x.type==='DECISION'&&x.state==='Pendiente');if(r){closeReq(r,'Donar');r.res=fd(S.today)}
   if(e.p==='PUBLICADO'||e.p==='SUBASTA')log('DELETE','/products/'+e.ID_ACTIVO,'pub',null,'Retira el equipo del Bazar.');
   e.don={org,fecha};e.p='DONACION';H(e,`Activo Fijo decidió donarlo a ${org} · entrega el ${fd(fecha)}`,'AF','hmn');
-  mail(e.CORREO_INGENIERO||e.INGENIERO,`[Activo 360] Donación por entregar · ${e.ID_ACTIVO}`,`Activo Fijo decidió donar el equipo ${eqName(e)} (activo ${e.ID_ACTIVO}) a ${org}. Entrégalo el ${fd(fecha)} y regístralo aquí: https:\/\/activo360.salud-digna.interno/donaciones/${e.ID_ACTIVO}`,e)}
+  mail(e.CORREO_INGENIERO||e.INGENIERO,`[Activo 360] Donación por entregar · ${e.ID_ACTIVO}`,`Activo Fijo decidió donar el equipo ${eqName(e)} (activo ${e.ID_ACTIVO}) a ${org}. Entrégalo el ${fd(fecha)} y regístralo aquí: https://activo360.salud-digna.interno/donaciones/${e.ID_ACTIVO}`,e)}
 function deliverDon(e){e.don.d=S.today;e.p='DONADO_FACT';H(e,`Entregado a ${e.don.org} · sale del stock`,'SIS');log('PATCH','/inventario/'+e.ID_ACTIVO,'int',{estatus:'DONADO',baja:true},'Baja del activo en el inventario.');newReq('DONFACT',e,{dl:addD(S.today,C().plazo.donFact)})}
 function attachDonFact(e,file){closeReq(S.reqs.find(x=>x.eq===e._i&&x.type==='DONFACT'&&x.state==='Pendiente'),'Adjuntada');e.don.factura=file;e.p='DONADO';H(e,`Se adjuntó la factura de la donataria (${file})`,'AF');
-  log('POST','https:\/\/www.googleapis.com/upload/drive/v3/files','g',{carpeta:'Activo 360 / Donaciones / '+e.ID_ACTIVO,archivo:file},'Guarda la factura de la donataria en Drive.');newReq('REVFIS',e)}
+  log('POST','https://www.googleapis.com/upload/drive/v3/files','g',{carpeta:'Activo 360 / Donaciones / '+e.ID_ACTIVO,archivo:file},'Guarda la factura de la donataria en Drive.');newReq('REVFIS',e)}
 VIEWS.donacion=()=>{
   const cand=S.items.filter(e=>(['PUBLICADO','SUBASTA'].includes(e.p)&&diff(e.pub,S.today)>=C().plazo.sinVenta)||(e.p==='DESTRUCCION'&&e.dx?.enciende==='si'));
   const ent=S.items.filter(e=>e.p==='DONACION'),fac=S.items.filter(e=>e.p==='DONADO_FACT'),done=S.items.filter(e=>e.p==='DONADO');

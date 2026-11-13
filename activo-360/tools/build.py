@@ -59,20 +59,25 @@ files['Datos3'] = ('<script>\n/* Activo 360 · Datos3: vista AppSheet (parte 2) 
                    + '\n]);\nconst DATA={clinics:A360_CLIN,appsheet:{cols:' + J(ash['cols']) + ',rows:A360_ROWS}};' + OK('Datos3') + '</script>')
 files['Logo'] = ("<script>\n/* Activo 360 · Logo */\ndocument.querySelector('.navlogo').src='data:image/png;base64,'+[\n"
                  + ',\n'.join("'" + logo[k:k + 120] + "'" for k in range(0, len(logo), 120)) + "\n].join('');" + OK('Logo') + '</script>')
-# HtmlService corta las líneas en "://" (lo trata como comentario) y deja textos sin cerrar: se escribe ":\/\/", que en JS es igual.
-A = app.replace('://', ':\\/\\/').split('\n')
+# HtmlService "limpia" comentarios dentro de <script> con un análisis de texto que se confunde (corta "https://..." y
+# borra desde "image/*" hasta el siguiente "*/"). App1-3 van como texto (type="text/plain") y un cargador los ejecuta en orden.
+assert '</script' not in app.lower()
+A = app.split('\n')
 mk = lambda t: next(i for i, l in enumerate(A) if l.startswith(t))
 ac = [0, mk('/* ================= INVENTARIO (formato'), mk('/* ================= INVENTARIO TECNOL'), len(A)]
 for k in range(3):
-    files['App%d' % (k + 1)] = '<script>\n/* Activo 360 · App%d */\n' % (k + 1) + '\n'.join(A[ac[k]:ac[k + 1]]) + OK('App%d' % (k + 1)) + '</script>'
+    files['App%d' % (k + 1)] = ('<script type="text/plain" id="a360-app%d">\n/* Activo 360 · App%d */\n' % (k + 1, k + 1)
+                                + '\n'.join(A[ac[k]:ac[k + 1]]) + OK('App%d' % (k + 1)) + '</script>')
+ALOAD = ("<script>[1,2,3].forEach(function(k){var e=document.getElementById('a360-app'+k);if(!e)return;var s=document.createElement('script');"
+         "window.A360_SRC=s.text=e.textContent;document.head.appendChild(s)});window.A360_SRC=null;</script>")
 chk = """<script>(function(){var ok=window.A360_OK||[],need=['Xlsx','Datos1','Datos2','Datos3','Logo','App1','App2','App3'],m=need.filter(function(n){return ok.indexOf(n)<0});
 if(m.length){var d=document.createElement('div');d.setAttribute('style','position:fixed;left:16px;right:16px;top:16px;z-index:999;padding:16px 18px;border-radius:16px;background:#fde5e1;color:#7a1d12;border:1px solid #c0392b;font:14px/1.45 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.2)');
 d.innerHTML='<b>Activo 360 no cargó completo.</b> Vuelve a pegar completo (de principio a fin) y guarda: <b>'+m.map(function(n){return n==='Xlsx'?'Xlsx1 a Xlsx5':n}).join(', ')+'</b>. Después crea una nueva versión de la implementación.'+((window.A360_ERR||[]).length?'<br><small>Primer error: '+String(A360_ERR[0]).replace(/</g,'&lt;')+'</small>':'');document.body.appendChild(d)}})();</script>"""
-scripts = ("<script>window.A360_ERR=[];addEventListener('error',function(e){var s=document.scripts[document.scripts.length-1],l=s&&s.text?String(s.text.split('\\n')[(e.lineno||1)-1]||''):'',c=(e.colno||1)-1;"
+scripts = ("<script>window.A360_ERR=[];addEventListener('error',function(e){var s=document.scripts[document.scripts.length-1],x=window.A360_SRC||(s&&s.text)||'',l=String(x.split('\\n')[(e.lineno||1)-1]||''),c=(e.colno||1)-1;"
            "A360_ERR.push((e.message||'error')+' · línea '+(e.lineno||'?')+':'+(e.colno||'?')+' · '+JSON.stringify(l.slice(Math.max(0,c-60),c+60)))});</script>\n"
            "<script>window.A360_FEED=<?!= JSON.stringify(feedOn) ?>;window.A360_POLL=<?!= JSON.stringify(pollMin) ?>;window.A360_USER=<?!= JSON.stringify(userName) ?>;</script>\n"
            + "\n".join("<?!= include('Xlsx%d'); ?>" % k for k in range(1, 6)) + "\n" + XLOAD + OK('Xlsx') + "</script>\n"
-           + "\n".join("<?!= include('%s'); ?>" % n for n in ['Datos1', 'Datos2', 'Datos3', 'Logo', 'App1', 'App2', 'App3']) + "\n" + chk)
+           + "\n".join("<?!= include('%s'); ?>" % n for n in ['Datos1', 'Datos2', 'Datos3', 'Logo', 'App1', 'App2', 'App3']) + "\n" + ALOAD + "\n" + chk)
 files['Index'] = shell.replace('{{STYLES}}', "<?!= include('Estilos'); ?>").replace('{{LOGO}}', '').replace('{{SCRIPTS}}', scripts)
 for k, c in files.items():
     open(G + k + '.html', 'w', encoding='utf-8', newline='\n').write(c)
