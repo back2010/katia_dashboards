@@ -360,8 +360,9 @@ try{const t=localStorage.getItem(THK);if(t)document.documentElement.dataset.them
 $('#thm').onclick=()=>{const n=curTheme()==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem(THK,n)}catch(e){}paintThm()};paintThm();
 $('#d1').onclick=()=>{admT(false);tick(1)};$('#d30').onclick=()=>{admT(false);tick(30)};
 $('#reset').onclick=()=>{admT(false);init(true);save();render();toast('Datos restablecidos')};
+$('#sim').onclick=()=>{admT(false);if(simulate()){render();toast('Ventas de ejemplo agregadas sobre el inventario')}};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
-load();render();welcome();TRZ.live=true;
+load();if(window.A360_SIM&&S.feedStamp&&!S.simDone&&!/^Demo/.test(S.src||''))simulate();render();welcome();TRZ.live=true;
 if(GAS)google.script.run.withSuccessHandler(r=>{if(!r)return;if(r.rows&&r.rows.length)S.engs=r.rows.map(x=>({id:String(x[0]),nombre:String(x[1]),correo:String(x[2]),clinicas:String(x[3]).split('|').map(s=>s.trim()).filter(Boolean)}));
   const m=String(r.email||'').toLowerCase(),g=m&&engList().find(x=>String(x.correo).toLowerCase()===m);if(g){S.role='ing';S.asEng=g.id}save();render()}).getIngenieros();
 if(GAS&&window.A360_FEED){syncFeed(false);setInterval(()=>syncFeed(false),Math.max(1,+window.A360_POLL||5)*60000);addEventListener('focus',()=>syncFeed(false))}

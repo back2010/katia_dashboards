@@ -17,6 +17,7 @@
       <button id="d1">Ejecutar cierre del día (recordatorios)</button>
       <button id="d30">Ejecutar 30 cierres diarios</button>
       <button data-rep>Exportar reporte de trazabilidad</button>
+      <button id="sim">Simular ventas de ejemplo</button>
       <button id="reset">Restablecer datos iniciales</button></div></span>
   </div>
 </header>
@@ -28,7 +29,7 @@
 <div id="toast" hidden class="toast"></div>
 
 <script>window.A360_ERR=[];addEventListener('error',function(e){var s=document.scripts[document.scripts.length-1],x=window.A360_SRC||(s&&s.text)||'',l=String(x.split('\n')[(e.lineno||1)-1]||''),c=(e.colno||1)-1;A360_ERR.push((e.message||'error')+' · línea '+(e.lineno||'?')+':'+(e.colno||'?')+' · '+JSON.stringify(l.slice(Math.max(0,c-60),c+60)))});</script>
-<script>window.A360_FEED=<?!= JSON.stringify(feedOn) ?>;window.A360_POLL=<?!= JSON.stringify(pollMin) ?>;window.A360_USER=<?!= JSON.stringify(userName) ?>;</script>
+<script>window.A360_FEED=<?!= JSON.stringify(feedOn) ?>;window.A360_POLL=<?!= JSON.stringify(pollMin) ?>;window.A360_USER=<?!= JSON.stringify(userName) ?>;window.A360_SIM=<?!= JSON.stringify(simOn) ?>;</script>
 <?!= include('Xlsx1'); ?>
 <?!= include('Xlsx2'); ?>
 <?!= include('Xlsx3'); ?>

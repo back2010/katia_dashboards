@@ -9,7 +9,7 @@ G = R + 'dist/appscript/'
 # simula HtmlService: <?!= include('X') ?> y variables de plantilla
 idx = open(G + 'Index.html', encoding='utf-8').read()
 idx = re.sub(r"<\?!= include\('(\w+)'\); \?>", lambda m: open(G + m.group(1) + '.html', encoding='utf-8').read(), idx)
-idx = idx.replace('<?!= JSON.stringify(feedOn) ?>', 'false').replace('<?!= JSON.stringify(pollMin) ?>', '5').replace('<?!= JSON.stringify(userName) ?>', '"Prueba"')
+idx = idx.replace('<?!= JSON.stringify(feedOn) ?>', 'false').replace('<?!= JSON.stringify(pollMin) ?>', '5').replace('<?!= JSON.stringify(userName) ?>', '"Prueba"').replace('<?!= JSON.stringify(simOn) ?>', 'false')
 assert '<?' not in idx.split('<script>')[0]
 sim = R + 'dist/_appscript_sim.html'; open(sim, 'w', encoding='utf-8').write(idx)
 VIEWS = ['panel', 'alertas', 'clinicas', 'inventario', 'ingeniero', 'seguimiento', 'hgestion', 'facturacion', 'destruccion', 'donacion',

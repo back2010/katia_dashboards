@@ -75,7 +75,7 @@ if(m.length){var d=document.createElement('div');d.setAttribute('style','positio
 d.innerHTML='<b>Activo 360 no cargó completo.</b> Vuelve a pegar completo (de principio a fin) y guarda: <b>'+m.map(function(n){return n==='Xlsx'?'Xlsx1 a Xlsx5':n}).join(', ')+'</b>. Después crea una nueva versión de la implementación.'+((window.A360_ERR||[]).length?'<br><small>Primer error: '+String(A360_ERR[0]).replace(/</g,'&lt;')+'</small>':'');document.body.appendChild(d)}})();</script>"""
 scripts = ("<script>window.A360_ERR=[];addEventListener('error',function(e){var s=document.scripts[document.scripts.length-1],x=window.A360_SRC||(s&&s.text)||'',l=String(x.split('\\n')[(e.lineno||1)-1]||''),c=(e.colno||1)-1;"
            "A360_ERR.push((e.message||'error')+' · línea '+(e.lineno||'?')+':'+(e.colno||'?')+' · '+JSON.stringify(l.slice(Math.max(0,c-60),c+60)))});</script>\n"
-           "<script>window.A360_FEED=<?!= JSON.stringify(feedOn) ?>;window.A360_POLL=<?!= JSON.stringify(pollMin) ?>;window.A360_USER=<?!= JSON.stringify(userName) ?>;</script>\n"
+           "<script>window.A360_FEED=<?!= JSON.stringify(feedOn) ?>;window.A360_POLL=<?!= JSON.stringify(pollMin) ?>;window.A360_USER=<?!= JSON.stringify(userName) ?>;window.A360_SIM=<?!= JSON.stringify(simOn) ?>;</script>\n"
            + "\n".join("<?!= include('Xlsx%d'); ?>" % k for k in range(1, 6)) + "\n" + XLOAD + OK('Xlsx') + "</script>\n"
            + "\n".join("<?!= include('%s'); ?>" % n for n in ['Datos1', 'Datos2', 'Datos3', 'Logo', 'App1', 'App2', 'App3']) + "\n" + ALOAD + "\n" + chk)
 files['Index'] = shell.replace('{{STYLES}}', "<?!= include('Estilos'); ?>").replace('{{LOGO}}', '').replace('{{SCRIPTS}}', scripts)

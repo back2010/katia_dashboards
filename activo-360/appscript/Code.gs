@@ -13,7 +13,8 @@
 const CONFIG = {
   FILE_ID: '',      // ID del archivo en Drive; vacío = la hoja a la que está ligado este script
   SHEET_NAME: '',   // pestaña a leer; vacío = la primera (en "Activo 360 data" es INVENTARIO)
-  POLL_MIN: 5       // cada cuántos minutos revisa si el archivo cambió
+  POLL_MIN: 5,      // cada cuántos minutos revisa si el archivo cambió
+  SIMULAR_VENTAS: true  // demo: al cargar la hoja, agrega ventas de ejemplo sobre esos equipos para que el panel muestre números
 };
 
 /** Archivo del inventario: FILE_ID o, si está vacío, el Sheets que contiene este script. */
@@ -26,6 +27,7 @@ function doGet() {
   const t = HtmlService.createTemplateFromFile('Index');
   t.feedOn = !!feedId_();
   t.pollMin = CONFIG.POLL_MIN;
+  t.simOn = !!CONFIG.SIMULAR_VENTAS;
   t.userName = nombreUsuario_();
   return t.evaluate()
     .setTitle('Activo 360')

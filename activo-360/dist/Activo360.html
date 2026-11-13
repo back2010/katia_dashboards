@@ -492,6 +492,7 @@ body.rol-ing .viewas{border-color:var(--sd);color:var(--sd);font-weight:600}
       <button id="d1">Ejecutar cierre del día (recordatorios)</button>
       <button id="d30">Ejecutar 30 cierres diarios</button>
       <button data-rep>Exportar reporte de trazabilidad</button>
+      <button id="sim">Simular ventas de ejemplo</button>
       <button id="reset">Restablecer datos iniciales</button></div></span>
   </div>
 </header>
@@ -688,7 +689,7 @@ function mergeFeed(src){const byId={};S.items.forEach(e=>byId[e.ID_ACTIVO]=e);co
 function feedLoad(src,stamp,silent){
   if(!src.inv.length){toast('El archivo no tiene equipos vigentes (formato AppSheet o plantilla de Activo 360)');return}
   const first=!S.feedStamp||/^Demo/.test(S.src||'');let msg;
-  if(first){const ti={col:S.col,ast:S.ast,cartas:S.cartas,movs:S.movs,cfg:S.cfg};init(false,src);Object.assign(S,ti);msg=`${src.inv.length} equipos vigentes · ${src.prev.length} históricos`}
+  if(first){const ti={col:S.col,ast:S.ast,cartas:S.cartas,movs:S.movs,cfg:S.cfg};init(false,src);Object.assign(S,ti);msg=`${src.inv.length} equipos vigentes · ${src.prev.length} históricos`;if(window.A360_SIM&&simulate())msg+=' · con ventas de ejemplo'}
   else{const r=mergeFeed(src);msg=`+${r.nNew} nuevos · ${r.nCh} cambiaron estatus · ${r.nOut} salieron de vigentes`}
   S.feedStamp=stamp;(S.feedLog??=[]).unshift({t:'AppSheet actualizado desde Drive · '+fd(S.today),d:msg});S.feedLog.length=Math.min(S.feedLog.length,10);
   log('GET','Drive · '+src.name,'g',{filas:src.total,vigentes:src.inv.length,historicos:src.prev.length},'Activo 360 lee el archivo de AppSheet guardado en Drive.');
@@ -717,7 +718,7 @@ function init0(sample,src){
      col:[],ast:[],cartas:{},movs:[],emp:'102458',tiQ:'',tiTipo:'',tiEst:'',tiPage:0,mov:null,clinQ:''};
   applyAS(S.items);
   genTI();
-  if(sample)seed();
+  if(sample){seed();S.simDone=true}
 }
 function H(e,txt,area,kind){e.hist.push({d:S.today,t:txt,a:area,k:kind||''});
   if(TRZ.live&&GAS){TRZ.q.push(trzRow(e,dmy(S.today),ST[e.p]?.[0]||'',AREAS[area]||area||'',kind==='hmn'?'Humand':'',txt,'Demo en vivo'));clearTimeout(TRZ.h);TRZ.h=setTimeout(trzFlush,1500)}}
@@ -898,7 +899,7 @@ function seed(){
   let k=0;const take=n=>V.slice(k,k+=n);
   take(4).forEach((e,i)=>at(i===0?2:0,()=>{mk(e,i===3?{estetica:'B'}:{});e.p='PRECIO';const r=newReq('PRECIO',e,{amount:e.price.sug});if(i===0){r.rem=1;r.last=addD(S.today,1)}}));
   // publicados; los de más de 15 días ya tienen la pregunta en la bandeja de Activo Fijo
-  [2,5,9,12,16,21].forEach(dd=>{const[e]=take(1);at(dd,()=>{mk(e,dd>10?{estetica:'B'}:{});e.p='PUBLICADO';e.pub=S.today;H(e,'Precio autorizado por Activo Fijo y publicado en Bazar (Humand)','AF','hmn');
+  [2,5,9,12,16,21].forEach(dd=>{const[e]=take(1);if(!e)return;at(dd,()=>{mk(e,dd>10?{estetica:'B'}:{});e.p='PUBLICADO';e.pub=S.today;H(e,'Precio autorizado por Activo Fijo y publicado en Bazar (Humand)','AF','hmn');
     if(dd>=15){go_(15);const r=newReq('DECISION',e,{amount:e.price.aut});if(dd>18){r.rem=3;r.esc=true;r.last=addD(S.today,5)}}})});
   // precio ajustado por Activo Fijo hace 6 días
   take(1).forEach(e=>at(21,()=>{mk(e);e.p='PUBLICADO';e.pub=S.today;H(e,'Publicado en Bazar','AF','hmn');go_(15);pastReq('DECISION',e,S.today,0,e.price.aut);e.price.aut=r50(e.price.aut*.8);e.price.adj=true;e.pub=S.today;H(e,`Sin venta en 15 días · Activo Fijo bajó el precio 20 % (${money(e.price.aut)})`,'AF','hmn')}));
@@ -939,6 +940,9 @@ function seed(){
       if(i>1){go_(4);closeReq(r,'Adjuntada');e.don.factura='Factura_donataria_'+e.ID_ACTIVO+'.pdf';H(e,`Se adjuntó la factura de la donataria (${e.don.factura})`,'AF');e.p='DONADO';const rf=newReq('REVFIS',e);if(i>2){go_(3);closeReq(rf);e.don.fiscal='Revisada sin observaciones';H(e,'Fiscal revisó la factura de la donación: sin observaciones','FIS')}}}}));
   S.log=S.log.slice(0,25);S.mails=S.mails.slice(0,30);
 }
+/* Ventas simuladas sobre el inventario cargado de la hoja (demo): mismas que seed(), una sola vez. No escribe en la traza. */
+function simulate(){if(S.simDone){toast('Las ventas de ejemplo ya están aplicadas');return false}
+  const lv=TRZ.live;TRZ.live=false;try{seed()}finally{TRZ.live=lv}S.simDone=true;save();return true}
 
 /* ---------- Cierre diario: recordatorios, plazos, renovaciones ---------- */
 function tick(days){
@@ -2019,8 +2023,9 @@ try{const t=localStorage.getItem(THK);if(t)document.documentElement.dataset.them
 $('#thm').onclick=()=>{const n=curTheme()==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem(THK,n)}catch(e){}paintThm()};paintThm();
 $('#d1').onclick=()=>{admT(false);tick(1)};$('#d30').onclick=()=>{admT(false);tick(30)};
 $('#reset').onclick=()=>{admT(false);init(true);save();render();toast('Datos restablecidos')};
+$('#sim').onclick=()=>{admT(false);if(simulate()){render();toast('Ventas de ejemplo agregadas sobre el inventario')}};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
-load();render();welcome();TRZ.live=true;
+load();if(window.A360_SIM&&S.feedStamp&&!S.simDone&&!/^Demo/.test(S.src||''))simulate();render();welcome();TRZ.live=true;
 if(GAS)google.script.run.withSuccessHandler(r=>{if(!r)return;if(r.rows&&r.rows.length)S.engs=r.rows.map(x=>({id:String(x[0]),nombre:String(x[1]),correo:String(x[2]),clinicas:String(x[3]).split('|').map(s=>s.trim()).filter(Boolean)}));
   const m=String(r.email||'').toLowerCase(),g=m&&engList().find(x=>String(x.correo).toLowerCase()===m);if(g){S.role='ing';S.asEng=g.id}save();render()}).getIngenieros();
 if(GAS&&window.A360_FEED){syncFeed(false);setInterval(()=>syncFeed(false),Math.max(1,+window.A360_POLL||5)*60000);addEventListener('focus',()=>syncFeed(false))}
