@@ -21,7 +21,8 @@ const sum=(a,f)=>a.reduce((s,x)=>s+(f?f(x):x),0);
 
 /* ---------- Catálogos ---------- */
 const VIDA={'Escritorio':5,'Laptop':3,'Monitor':5,'Diadema':2,'Hub USB-C':3,'Memoria USB':2,'Divisor de pantalla':3};
-const defaultCfg=()=>({pmax:{'Escritorio':800,'Laptop':1000},ded:{i3:150,genOld:100,ram4:80,hdd:50,noDisk:150,monF:100,noMon:250,noPerif:50,noCharger:100,anio:50},piso:150,aptos:.4,
+const defaultCfg=()=>({tab:{opt:{A:{min:50,d:30,dc:20},B:{min:30,d:50,dc:30},C:{min:0,d:70,dc:40}},vb:{Escritorio:1384,Laptop:1384},resid:10,
+    pen:{lento:25,estB:20,estC:40,puertos:15,monF:15,noMon:25,perif:10,noDisk:20,cpu:10,gen:10,ram:10}},pmax:{'Escritorio':800,'Laptop':1000},ded:{i3:150,genOld:100,ram4:80,hdd:50,noDisk:150,monF:100,noMon:250,noPerif:50,noCharger:100,anio:50},piso:150,aptos:.4,
   acc:{'Monitor':250,'Diadema':50,'Hub USB-C':60,'Memoria USB':20,'Divisor de pantalla':80},est:{A:1,B:.85,C:.7},lento:.85,puertos:.9,
   meta:.7,sla:{SIS:3,AF:1,ING:2,FAC:2,FIS:5},prio:3,max:1,bloqDev:true,
   plazo:{firmas:1,pago:2,reintento:2,sinVenta:15,subasta:5,donFact:10},subastaMin:.5,
@@ -85,9 +86,10 @@ function mapAS(rows,name){
   const usr={};rows.forEach(r=>{const c=nkey(g(r,'CENTRO DE TRABAJO')),u=String(g(r,'USUARIO')).trim();if(u){(usr[c]??={})[u]=(usr[c][u]||0)+1}});
   const topU=c=>{const o=usr[c];return o?Object.entries(o).sort((a,b)=>b[1]-a[1])[0][0]:''};
   const inv=[],prev=[];let bad=0;const seen=new Set();
+  const mdy=isMDY(rows.flatMap(r=>[g(r,'INSTALACION'),g(r,'FIN DE GARANTIA'),g(r,'MODIFICADO EL:')]));
   rows.forEach(r=>{const raw={};AS_COLS().forEach(c=>raw[c]=String(g(r,c)??''));
     const st=nkey(raw['ESTATUS']),serie=raw['# DE SERIE'].trim(),clin=raw['CENTRO DE TRABAJO'].replace(/\s+/g,' ').trim();
-    let fa=normDate(g(r,'INSTALACION'));if(!fa||fa<'2000'){const gw=normDate(g(r,'FIN DE GARANTIA'));fa=gw&&gw>'2003'?addY(gw,-3):null}
+    let fa=normDate(g(r,'INSTALACION'),mdy);if(!fa||fa<'2000'){const gw=normDate(g(r,'FIN DE GARANTIA'),mdy);fa=gw&&gw>'2003'?addY(gw,-3):null}
     if(!serie||!clin||!fa){bad++;return}
     if(!AS_VIVOS.includes(st)||seen.has(serie)){prev.push(raw);return}seen.add(serie);
     const c=dir[nkey(clin)],t=tipoAS(raw['DISPOSITIVO']),cpu=raw['PROCESADOR'];
@@ -96,8 +98,8 @@ function mapAS(rows,name){
       SERVICIO:niceArea(raw['AREA']),UBICACION:'Estación '+(raw['UBICACIÓN']||'1'),TIPO_EQUIPO:t,MARCA:raw['MARCA'],MODELO:raw['MODELO'],PROCESADOR:cpu,GENERACION:genOf(cpu),
       RAM_GB:parseInt(raw['RAM(GB)'])||8,ALMACENAMIENTO:raw['DISCO DURO (HDD, SSD)']||'',MONITOR:t==='Escritorio'?'Monitor de la estación':'',SO:raw['SistemaOperativo']||'',
       FECHA_ADQUISICION:fa,COSTO_ADQUISICION:0,VIDA_UTIL_ANIOS:VIDA[t]||5,INGENIERO:ing,CORREO_INGENIERO:'',
-      AS_ESTATUS:st,_p0:st==='PLAN DE RENOVACION / ENVIADO A CSI'?'CONFIRMADO':null,_d0:normDate(String(raw['MODIFICADO EL:']).slice(0,10)),as:raw})});
-  return{inv,prev,bad,name:name||'AppSheet',total:rows.length}}
+      AS_ESTATUS:st,_p0:st==='PLAN DE RENOVACION / ENVIADO A CSI'?'CONFIRMADO':null,_d0:normDate(String(raw['MODIFICADO EL:']).slice(0,10),mdy),as:raw})});
+  return{inv,prev,bad,mdy,name:name||'AppSheet',total:rows.length}}
 let BASE0=null;const base0=()=>BASE0||(BASE0=mapAS(asObjs(DATA.appsheet),'Demo en formato AppSheet'));
 function applyAS(items){items.forEach(e=>{if(e._p0==='CONFIRMADO'&&!e.p){e.p='CONFIRMADO';const d=e._d0&&e._d0<=S.today&&diff(e._d0,S.today)<=30?e._d0:S.today;
   e.hist.push({d,t:'Reemplazo confirmado: AppSheet en "Plan de renovación / enviado a CSI"'+(e.as?.['# DE SERIE NUEVO EQUIPO']?' · equipo nuevo '+e.as['# DE SERIE NUEVO EQUIPO']:''),a:'SIS',k:''})}})}
@@ -142,7 +144,7 @@ function alerts(){if(!S)return[];const o=[],K=C(),add=(l,cat,t,d,act)=>o.push({l
   S.col.filter(c=>c.st==='Baja laboral'&&assignedTo(c.emp).some(a=>a.estado==='Pendiente de devolución')).forEach(c=>add('bad','Sistemas',`Baja laboral con equipo sin devolver · ${c.name}`,`${assignedTo(c.emp).length} activo(s) pendiente(s) de devolución`,{v:'ti'}));
   const pl=S.items.filter(e=>e.p==='CONFIRMADO'&&e.AS_ESTATUS==='PLAN DE RENOVACION / ENVIADO A CSI').length;if(pl)add('info','AppSheet',`${pl} equipos en plan de renovación`,'Vienen de AppSheet y esperan diagnóstico del ingeniero',{v:'ingeniero'});
   (S.feedLog||[]).slice(0,3).forEach(f=>add('info','AppSheet',f.t,f.d,{v:'inventario'}));
-  return o}
+  const g=engCur();return g?o.filter(a=>a.act&&(a.act.eq!=null?mine(S.items[a.act.eq]):a.act.eng?g.clinicas.includes(a.act.eng):false)):o}
 const LV={bad:['p-bad','Urgente'],warn:['p-warn','Por atender'],info:['p-info','Aviso']};
 function alertRow(a,i){return `<div class="alr ${a.l}"><span class="pill ${LV[a.l][0]}">${LV[a.l][1]}</span><div class="alt"><b>${esc(a.t)}</b><div class="note">${esc(a.cat)} · ${esc(a.d)}</div></div><button class="btn sm" data-alr="${i}">Ver</button></div>`}
 function bindAlerts(list){$$('[data-alr]').forEach(b=>b.onclick=()=>{const a=list[+b.dataset.alr].act;if(a.eq!=null)openEq(a.eq);else if(a.eng){S.engClinic=a.eng;go('ingeniero')}else go(a.v)})}
@@ -157,7 +159,7 @@ function mergeFeed(src){const byId={};S.items.forEach(e=>byId[e.ID_ACTIVO]=e);co
   S.items=out;S.prev=src.prev;S.src=src.name;S.dxId=null;S.buyId=null;applyAS(S.items);
   return{nNew,nCh,nOut:left.length-kept.length}}
 function feedLoad(src,stamp,silent){
-  if(!src.inv.length){toast('El archivo no tiene equipos vigentes con el formato AppSheet');return}
+  if(!src.inv.length){toast('El archivo no tiene equipos vigentes (formato AppSheet o plantilla de Activo 360)');return}
   const first=!S.feedStamp||/^Demo/.test(S.src||'');let msg;
   if(first){const ti={col:S.col,ast:S.ast,cartas:S.cartas,movs:S.movs,cfg:S.cfg};init(false,src);Object.assign(S,ti);msg=`${src.inv.length} equipos vigentes · ${src.prev.length} históricos`}
   else{const r=mergeFeed(src);msg=`+${r.nNew} nuevos · ${r.nCh} cambiaron estatus · ${r.nOut} salieron de vigentes`}
@@ -171,7 +173,7 @@ function syncFeed(force){if(!GAS){toast('Disponible al publicar en Apps Script')
     google.script.run.withSuccessHandler(res=>{try{let rows=res.rows;
         if(!rows){const bin=atob(res.b64);let wb;if(/csv|text/i.test(res.mime)||/\.csv$/i.test(res.name)){const u=Uint8Array.from(bin,c=>c.charCodeAt(0));wb=XLSX.read(new TextDecoder('utf-8').decode(u).replace(/^\uFEFF/,''),{type:'string',raw:true})}
           else wb=XLSX.read(bin,{type:'binary',cellDates:true});rows=XLSX.utils.sheet_to_json(wb.Sheets[res.sheet&&wb.Sheets[res.sheet]?res.sheet:wb.SheetNames[0]],{defval:'',raw:false,dateNF:'dd/mm/yyyy'})}
-        feedLoad(mapAS(rows,'Drive · '+res.name),info.updated)}catch(e){fail(e)}}).withFailureHandler(fail).getFeedData()}).withFailureHandler(fail).getFeedInfo()}
+        feedLoad(('ID_ACTIVO' in (rows[0]||{})?mapLegacy:mapAS)(rows,'Drive · '+res.name),info.updated)}catch(e){fail(e)}}).withFailureHandler(fail).getFeedData()}).withFailureHandler(fail).getFeedInfo()}
 function syncSheet(){syncFeed(true)}
 
 /* ---------- Estado ---------- */
@@ -182,14 +184,36 @@ const soon=e=>diff(S.today,due(e))<=90;
 const stOf=e=>e.p||baseSt(e);
 const tipo=e=>e.TIPO_EQUIPO||'Escritorio';
 function freshItems(inv){return inv.map((x,i)=>({...x,TIPO_EQUIPO:/escrit/i.test(x.TIPO_EQUIPO||'Escritorio')?'Escritorio':x.TIPO_EQUIPO,_i:i,p:null,dx:null,price:null,pub:null,buyer:null,pay:null,fac:null,destD:null,hist:[]}))}
-function init(sample=true,src){src=src||base0();
+function init(sample=true,src){src=src||base0();const lv=TRZ.live;TRZ.live=false;try{init0(sample,src)}finally{TRZ.live=lv}}
+function init0(sample,src){
   S={cfg:defaultCfg(),meClinic:null,today:sample?T0:new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),items:freshItems(src.inv),prev:src.prev||[],src:src.name||'AppSheet',invAs:'',mod:'venta',reqs:[],notifs:[],log:[],mails:[],mailTab:'',fisDraft:null,seq:1000,view:'panel',hmTab:'ALL',city:null,engClinic:null,dxId:null,dxDraft:null,buyId:null,invQ:'',invClin:'',invSt:'',invPage:0,segArea:'',sample,
      col:[],ast:[],cartas:{},movs:[],emp:'102458',tiQ:'',tiTipo:'',tiEst:'',tiPage:0,mov:null,clinQ:''};
   applyAS(S.items);
   genTI();
   if(sample)seed();
 }
-function H(e,txt,area,kind){e.hist.push({d:S.today,t:txt,a:area,k:kind||''})}
+function H(e,txt,area,kind){e.hist.push({d:S.today,t:txt,a:area,k:kind||''});
+  if(TRZ.live&&GAS){TRZ.q.push(trzRow(e,dmy(S.today),ST[e.p]?.[0]||'',AREAS[area]||area||'',kind==='hmn'?'Humand':'',txt,'Demo en vivo'));clearTimeout(TRZ.h);TRZ.h=setTimeout(trzFlush,1500)}}
+/* Traza en Google Sheets (pestaña "Traza", ver Code.gs). Solo con Apps Script; las filas viajan como texto. */
+const TRZ={live:false,q:[],h:0,url:'',view:null};
+const dmy=s=>s?s.split('-').reverse().join('/'):'';
+const trzRow=(e,fecha,etapa,resp,donde,evento,origen,folio)=>[fecha,folio||e.sale?.folio||'',e.ID_ACTIVO,eqName(e),e.CLINICA,etapa,resp,donde,evento,origen];
+function trzSend(rows,ok,fail){google.script.run.withSuccessHandler(r=>{if(r&&r.url)TRZ.url=r.url;ok&&ok(r)}).withFailureHandler(err=>fail&&fail(err&&err.message||String(err))).appendTraza(rows)}
+/* Perfiles: el administrador ve todo; el ingeniero solo las clínicas que le asignan en "Ingenieros y clínicas". */
+const tCase=s=>String(s||'').toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+const engMail=n=>{const p=String(n).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').split(/\s+/).filter(Boolean);return(p.length>=3?p[2]+'.'+p[0]:p.join('.'))+'@demo.activo360'};
+function engList(){if(!S.engs){const by={};S.items.forEach(e=>{const o=by[e.CLINICA]??={};o[e.INGENIERO]=(o[e.INGENIERO]||0)+1});const m={};
+    Object.entries(by).forEach(([c,o])=>{const u=Object.entries(o).sort((a,b)=>b[1]-a[1])[0][0];(m[u]??=[]).push(c)});
+    S.engs=Object.keys(m).sort().map((n,i)=>({id:'ING-'+String(i+1).padStart(3,'0'),nombre:n,correo:engMail(n),clinicas:m[n].sort()}))}return S.engs}
+const engCur=()=>S&&S.role==='ing'?engList().find(g=>g.id===S.asEng)||null:null;
+const ING=()=>!!engCur();
+const mine=e=>{const g=engCur();return!g||g.clinicas.includes(e.CLINICA)};
+const ING_V=['misequipos','alertas','ingeniero','recorrido'];
+function setRole(r,id){S.role=r;S.asEng=r==='ing'?id:null;S.engClinic=null;S.dxId=null;S.rec=null;closeDrawer();go(r==='ing'?'misequipos':'panel')}
+function paintViewAs(){const el=$('#viewas');if(!el)return;const L=engList(),v=ING()?S.asEng:'admin';
+  el.innerHTML=`<option value="admin">Ver como: Administrador</option><optgroup label="Ver como ingeniero">${L.map(g=>`<option value="${g.id}">${esc(tCase(g.nombre))} · ${g.clinicas.length} clínica${g.clinicas.length>1?'s':''}</option>`).join('')}</optgroup>`;el.value=v;
+  el.onchange=()=>setRole(el.value==='admin'?'admin':'ing',el.value)}
+function trzFlush(){if(!GAS||!TRZ.q.length)return;const rows=TRZ.q.splice(0);trzSend(rows,null,m=>{TRZ.q.unshift(...rows);toast('No se pudo escribir la traza: '+m)})}
 function log(m,ep,src,body,desc){S.log.unshift({d:S.today,m,ep,src,body,desc})}
 function notify(to,txt,kind){S.notifs.unshift({d:S.today,to,txt,kind:kind||'info'})}
 function newReq(type,e,extra){const t=RT[type];const r={id:'SOL-'+(++S.seq),type,eq:e._i,created:S.today,last:S.today,state:'Pendiente',rem:0,esc:false,res:null,amount:extra?.amount??null,dl:extra?.dl||null};S.reqs.unshift(r);
@@ -211,19 +235,33 @@ function addFile(e,name){if(!e.sale)return;e.sale.files.push({d:S.today,name});l
 
 /* ---------- Tabulador y diagnóstico ---------- */
 const DEFDX={enciende:'si',rend:'ok',monitor:'ok',estetica:'A',puertos:'ok',perif:'si',disco:'borrado',comp:[],obs:''};
+/* Tabulador de Activo Fijo (equipo de cómputo): el diagnóstico da el % de vida útil → opción A/B/C →
+   precio con descuento = valor en libros × (1 − % descuento) → precio colaborador = ese precio × (1 − % desc. colaborador). */
+const money2=n=>'$'+(+n||0).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+const numOf=v=>{const n=+String(v??'').replace(/[^0-9.]/g,'');return isFinite(n)?n:0};
+function valorLibros(e){const K=C().tab,t=tipo(e);const vl=numOf(e.VALOR_LIBROS||e.as?.['VALOR EN LIBROS']);if(vl>0)return{v:vl,src:'Valor en libros registrado'};
+  const c=numOf(e.COSTO_ADQUISICION);if(c>0){const vida=+e.VIDA_UTIL_ANIOS||VIDA[t]||5,anos=Math.max(0,diff(e.FECHA_ADQUISICION,S.today)/365.25);
+    return{v:Math.round(c*Math.max(K.resid/100,1-anos/vida)*100)/100,src:`Estimado: costo ${money(c)} depreciado en ${vida} años (mínimo ${K.resid}%)`}}
+  return{v:K.vb[t]||K.vb.Escritorio,src:'Valor de referencia del tabulador (sin valor en libros en el inventario)'}}
+function vidaPct(e,dx){const P=C().tab.pen,t=tipo(e),cpu=e.PROCESADOR||'';let v=100;const why=[];const m=(c,n,l)=>{if(c&&n){v-=n;why.push(`${l} −${n}`)}};
+  m(dx.rend==='lento',P.lento,'rendimiento lento');m(dx.estetica==='B',P.estB,'estética B');m(dx.estetica==='C',P.estC,'estética C');m(dx.puertos==='falla',P.puertos,'puertos');
+  m(t==='Escritorio'&&dx.monitor==='fallas',P.monF,'monitor con fallas');m(t==='Escritorio'&&dx.monitor==='no',P.noMon,'sin monitor');m(dx.perif!=='si',P.perif,t==='Laptop'?'sin cargador':'sin teclado y mouse');
+  m(dx.disco==='retirado',P.noDisk,'sin disco');m(!/i5|i7|i9|Ryzen [579]/.test(cpu),P.cpu,'procesador básico');m((+e.GENERACION||8)<8,P.gen,'generación antigua');m((+e.RAM_GB||8)<=4,P.ram,'RAM de 4 GB');
+  return{v:Math.max(0,Math.min(100,v)),why}}
 function priceCalc(e,dx){
-  const t=tipo(e),K=C(),D=K.ded,pc=t==='Escritorio'||t==='Laptop';let b,top;
-  if(pc){top=K.pmax[t]||800;b=top;const cpu=e.PROCESADOR||'';
-    if(!/i5|i7|Ryzen 5|Ryzen 7/.test(cpu))b-=D.i3;if((+e.GENERACION||8)<8)b-=D.genOld;if((+e.RAM_GB||8)<=4)b-=D.ram4;
-    if(dx.disco==='retirado')b-=D.noDisk;else if(/HDD/i.test(String(e.ALMACENAMIENTO)))b-=D.hdd;
-    if(t==='Escritorio'){if(dx.monitor==='fallas')b-=D.monF;else if(dx.monitor==='no')b-=D.noMon;if(dx.perif!=='si')b-=D.noPerif}
-    else if(dx.perif!=='si')b-=D.noCharger;
-    const extra=Math.floor(diff(due(e),S.today)/365);if(extra>0)b-=D.anio*extra}
+  const t=tipo(e),K=C(),pc=t==='Escritorio'||t==='Laptop';let b,top;
+  if(pc){const T=K.tab,vp=vidaPct(e,dx),opt=vp.v>=T.opt.A.min?'A':vp.v>=T.opt.B.min?'B':'C',o=T.opt[opt],vl=valorLibros(e);
+    const lista=Math.round(vl.v*(1-o.d/100)*100)/100,sug=Math.round(lista*(1-o.dc/100)*100)/100;
+    return{sug,min:sug,max:sug,lista,opt,vida:vp.v,why:vp.why,vl:vl.v,vlSrc:vl.src,d:o.d,dc:o.dc,tab:true}}
   else{top=K.acc[t]||100;b=top;if(dx.perif!=='si')b*=.85}
   let f=K.est[dx.estetica]||1;if(dx.rend==='lento')f*=K.lento;if(dx.puertos==='falla')f*=K.puertos;
   const fl=pc?K.piso:20,rr=n=>Math.max(fl,Math.round(n/50)*50||fl);const sug=Math.min(top,rr(b*f));
   return{sug,min:Math.min(sug,rr(sug*.88)),max:Math.min(top,rr(sug*1.12))};
 }
+const tabBox=pr=>`<div class="tb-box"><div class="tb-opt"><span class="tb-l">Opción</span><b>${pr.opt}</b><span class="note">${pr.vida}% de vida útil</span></div>
+  <div class="tb-st"><span class="note">Valor en libros</span><b>${money2(pr.vl)}</b></div><div class="tb-st"><span class="note">Con descuento (−${pr.d}%)</span><b>${money2(pr.lista)}</b></div>
+  <div class="tb-st fin"><span class="note">Precio colaborador (−${pr.dc}%)</span><b class="pr">${money2(pr.sug)}</b></div></div>
+  <div class="note">${pr.why.length?'Vida útil: 100 '+esc(pr.why.join(' · ')):'Vida útil 100%: sin fallas en el diagnóstico'} · ${esc(pr.vlSrc)}</div>`;
 const destino=dx=>dx.enciende==='no'?((dx.comp&&dx.comp.length)?'RECUP':'DEST'):'VENTA';
 const estValue=e=>e.price?.aut??priceCalc(e,e.dx&&e.dx.enciende==='si'?e.dx:DEFDX).sug;
 const estExp=e=>e.dx?(e.dx.enciende==='si'?estValue(e):0):estValue(e)*C().aptos; // sin diagnóstico: se pondera por % de equipos aptos para venta
@@ -405,9 +443,9 @@ function tick(days){
 }
 
 /* ---------- Persistencia ligera ---------- */
-const KEY='activo360-v9';
+const KEY='activo360-v10';
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.items&&s.ast&&s.cfg&&s.mails&&s.prev){S=s;invSeq=Math.max(40000,...S.ast.map(a=>+a.inv.slice(3)))}else init()}catch(e){init()}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.items&&s.ast&&s.cfg&&s.mails&&s.prev){S=s;if(!S.cfg.tab)S.cfg.tab=defaultCfg().tab;invSeq=Math.max(40000,...S.ast.map(a=>+a.inv.slice(3)))}else init()}catch(e){init()}}
 
 /* ---------- UI helpers ---------- */
 function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>el.hidden=true,2800)}
@@ -438,24 +476,27 @@ const legend=items=>`<div class="legend">${items.map(([c,l])=>`<span><i style="b
 
 /* ---------- Navegación ---------- */
 const NAVS={
- venta:[['h','Equipo de clínicas','mv'],['panel','Panel ejecutivo'],['alertas','Alertas'],['clinicas','Activos por clínica'],['inventario','Inventario AppSheet'],['ingeniero','Ingeniero de Sistemas'],['seguimiento','Seguimiento de ventas'],['hgestion','Aprobaciones (Activo Fijo e Ingresos)'],['facturacion','Facturación'],['destruccion','Destrucción certificada'],['donacion','Donación'],['fiscal','Fiscal'],['config','Tabulador y reglas'],
+ venta:[['h','Equipo de clínicas','mv'],['panel','Panel ejecutivo'],['recorrido','Recorrido de un equipo'],['alertas','Alertas'],['clinicas','Activos por clínica'],['inventario','Inventario AppSheet'],['ingeniero','Ingeniero de Sistemas'],['seguimiento','Seguimiento de ventas'],['hgestion','Aprobaciones (Activo Fijo e Ingresos)'],['facturacion','Facturación'],['destruccion','Destrucción certificada'],['donacion','Donación'],['fiscal','Fiscal'],['config','Tabulador y reglas'],['ingenieros','Ingenieros y clínicas'],
   ['h','Humand','hm'],['hbazar','Bazar de Activos'],['compra','Gestión de Servicios · compra'],['hfirma','Firma del formato de compra'],['hnotif','Notificaciones'],['h','Google'],['correos','Correos enviados'],['h','Para Humand'],['integracion','Integración técnica']],
+ ing:[['h','Mis clínicas','mv'],['misequipos','Mis equipos'],['alertas','Mis alertas'],['ingeniero','Diagnóstico y entregas'],['recorrido','Recorrido de un equipo']],
  ti:[['h','Inventario de Sistemas','mt'],['alertas','Alertas'],['ti','Activos por colaborador'],['carta','Carta responsiva'],
   ['h','Humand','hm'],['hfirma','Firma de carta responsiva'],['hnotif','Notificaciones'],['h','Para Humand'],['integracion','Integración técnica']]};
-const MODV={ti:['ti','carta'],venta:['panel','clinicas','inventario','ingeniero','seguimiento','compra','facturacion','destruccion','donacion','fiscal','config','hgestion','hbazar','correos']};
+const MODV={ti:['ti','carta'],venta:['panel','recorrido','misequipos','ingenieros','clinicas','inventario','ingeniero','seguimiento','compra','facturacion','destruccion','donacion','fiscal','config','hgestion','hbazar','correos']};
 const MODTAG={venta:['VENTA DE EQUIPO DE CLÍNICAS','Equipo de cómputo de las clínicas que cumplió su vida útil: venta local, destrucción o donación.'],ti:['INVENTARIO DE SISTEMAS','Equipo asignado a cada colaborador y su carta responsiva consolidada (SGC-N4-347).']};
 const HMV=['compra','hbazar','hfirma','hnotif'];
 const pendOf=(type)=>S.reqs.filter(r=>r.state==='Pendiente'&&(Array.isArray(type)?type.includes(r.type):r.type===type)).length;
 function counts(){return{alertas:alerts().filter(x=>x.l!=='info').length,hgestion:S.reqs.filter(r=>r.state==='Pendiente'&&RT[r.type].ch==='humand').length,hbazar:S.items.filter(e=>e.p==='PUBLICADO'||e.p==='SUBASTA').length,
-  ingeniero:S.items.filter(e=>(!e.p&&soon(e))||['CONFIRMADO','AGENDA','ENTREGA','DONACION'].includes(e.p)).length,seguimiento:S.items.filter(e=>e.p&&!['ENTREGADO',...DESTR].includes(e.p)).length,
+  misequipos:ING()?S.items.filter(e=>mine(e)&&!e.p&&soon(e)).length:null,
+  ingeniero:S.items.filter(e=>mine(e)&&((!e.p&&soon(e))||['CONFIRMADO','AGENDA','ENTREGA','DONACION'].includes(e.p))).length,seguimiento:S.items.filter(e=>e.p&&!['ENTREGADO',...DESTR].includes(e.p)).length,
   hnotif:S.notifs.filter(n=>n.d===S.today).length,donacion:S.items.filter(e=>['DONACION','DONADO_FACT'].includes(e.p)).length,
   hfirma:S.mod==='ti'?Object.values(S.cartas).filter(L=>L[L.length-1].st==='Pendiente de firma').length:pendOf(['FIRMA_COL','FIRMA_JEFE']),ti:S.ast.filter(tiSoon).length,
   facturacion:pendOf('FACTURA'),fiscal:pendOf('REVFIS'),correos:S.mails.filter(m=>m.d===S.today).length}}
 
-function renderNav(){const c=counts();$('#nav').innerHTML=NAVS[S.mod||'venta'].map(n=>n[0]==='h'?`<h6 class="${n[2]||''}">${n[1]}</h6>`:`<button data-v="${n[0]}" class="${HMV.includes(n[0])?'hmb ':''}${S.view===n[0]?'on':''}">${n[1]}${c[n[0]]!=null?`<span class="cnt ${['hgestion','hfirma','alertas'].includes(n[0])&&c[n[0]]?'hot':''}">${c[n[0]]}</span>`:''}</button>`).join('')}
+function renderNav(){const c=counts();$('#nav').innerHTML=NAVS[ING()?'ing':S.mod||'venta'].map(n=>n[0]==='h'?`<h6 class="${n[2]||''}">${n[1]}</h6>`:`<button data-v="${n[0]}" class="${HMV.includes(n[0])?'hmb ':''}${S.view===n[0]?'on':''}">${n[1]}${c[n[0]]!=null?`<span class="cnt ${['hgestion','hfirma','alertas'].includes(n[0])&&c[n[0]]?'hot':''}">${c[n[0]]}</span>`:''}</button>`).join('')}
 function go(v){if(MODV.ti.includes(v))S.mod='ti';else if(MODV.venta.includes(v))S.mod='venta';S.view=v;save();render();window.scrollTo(0,0)}
 function setMod(m){S.mod=m;S.view=m==='ti'?'ti':'panel';closeDrawer();save();render();window.scrollTo(0,0)}
-function render(){if(!S.mod)S.mod=MODV.ti.includes(S.view)?'ti':'venta';$('#today').textContent=fd(S.today);document.body.classList.toggle('mod-ti',S.mod==='ti');$$('#mods [data-modulo]').forEach(b=>{const on=b.dataset.modulo===S.mod;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});renderNav();const f=VIEWS[S.view]||VIEWS.panel;const t=MODTAG[S.mod];$('#main').innerHTML=`<div class="modtag"><b>${t[0]}</b><span>${t[1]}</span></div>`+f();after[S.view]?.();paintGreet()}
+function render(){if(ING()){S.mod='venta';if(!ING_V.includes(S.view))S.view='misequipos'}document.body.classList.toggle('rol-ing',ING());paintViewAs();
+  if(!S.mod)S.mod=MODV.ti.includes(S.view)?'ti':'venta';$('#today').textContent=fd(S.today);document.body.classList.toggle('mod-ti',S.mod==='ti');$$('#mods [data-modulo]').forEach(b=>{const on=b.dataset.modulo===S.mod;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});renderNav();const f=VIEWS[S.view]||VIEWS.panel;const t=MODTAG[S.mod];$('#main').innerHTML=`<div class="modtag"><b>${t[0]}</b><span>${t[1]}</span></div>`+f();after[S.view]?.();paintGreet()}
 const after={},VIEWS={};
 
 /* ================= PANEL EJECUTIVO ================= */

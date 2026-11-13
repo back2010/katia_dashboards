@@ -49,10 +49,10 @@ after.ti=()=>{
   $('#tiexp').onclick=()=>xlsxOut(S.ast.map(a=>{const c=colOf(a.emp);return{NUM_EMPLEADO:a.emp||'',NOMBRE_COLABORADOR:c?.name||'',AREA:c?.area||'',UBICACION:c?.ubi||'',TIPO_ACTIVO:a.tipo,MARCA:a.marca,MODELO:a.modelo,NUM_SERIE:a.serie,NUM_INVENTARIO:a.inv,FECHA_ENTREGA:a.entrega||'',ESTADO:a.estado,RESPONSABLE_ENTREGA:a.resp}}),'inventario_tecnologico_Activo360.xlsx');
   $('#tifile').onchange=e=>{const f=e.target.files[0];f&&readRows(f,rows=>{
     if(!('NUM_EMPLEADO' in rows[0])||!('TIPO_ACTIVO' in rows[0]))throw new Error('Faltan columnas NUM_EMPLEADO o TIPO_ACTIVO.');
-    S.col=[];S.ast=[];S.cartas={};S.movs=[];let n=0;
+    S.col=[];S.ast=[];S.cartas={};S.movs=[];let n=0;const mdy=isMDY(rows.map(r=>r.FECHA_ENTREGA));
     rows.forEach(r=>{const emp=String(r.NUM_EMPLEADO||'').trim();if(emp&&!colOf(emp))S.col.push({emp,name:r.NOMBRE_COLABORADOR||emp,area:r.AREA||'',ubi:r.UBICACION||'',st:'Activo'});
       const t=Object.keys(VIDA).find(k=>k.toLowerCase()===String(r.TIPO_ACTIVO).trim().toLowerCase())||String(r.TIPO_ACTIVO||'Accesorio');
-      S.ast.push({inv:r.NUM_INVENTARIO||'TI-'+(++invSeq),tipo:t,marca:r.MARCA||'',modelo:r.MODELO||'',serie:r.NUM_SERIE||'',entrega:normDate(r.FECHA_ENTREGA),alta:S.today,estado:emp?(r.ESTADO&&/devol/i.test(r.ESTADO)?'Devuelto':'Asignado'):'En almacén',emp:emp||null,resp:r.RESPONSABLE_ENTREGA||'Sistemas',hist:[]});n++});
+      S.ast.push({inv:r.NUM_INVENTARIO||'TI-'+(++invSeq),tipo:t,marca:r.MARCA||'',modelo:r.MODELO||'',serie:r.NUM_SERIE||'',entrega:normDate(r.FECHA_ENTREGA,mdy),alta:S.today,estado:emp?(r.ESTADO&&/devol/i.test(r.ESTADO)?'Devuelto':'Asignado'):'En almacén',emp:emp||null,resp:r.RESPONSABLE_ENTREGA||'Sistemas',hist:[]});n++});
     S.col.forEach(c=>newCarta(c.emp,'Carga inicial desde Excel',{st:'Firmada',signed:S.today,silent:true}));S.emp=S.col[0]?.emp;save();render();
     $('#tires').innerHTML=`<div class="result"><b>${n} activos</b> de ${S.col.length} colaboradores cargados.</div>`},'#tires')};
 };
@@ -232,7 +232,7 @@ VIEWS.hbazar=()=>{
    <p class="note" style="margin:-4px 0 10px">Reglas: solo colaboradores · ${C().max?`máximo ${C().max} equipo(s) por colaborador al año · `:''}prioridad de ${C().prio} días para el personal de la clínica donde está el equipo${C().bloqDev?' · no pueden comprar colaboradores con devoluciones pendientes':''}.</p>
    <div class="prods">${list.map(e=>{if(FROZEN.includes(e.p))return `<div class="prod frozen"><div class="row"><span class="pill p-warn">En proceso de compra</span></div><b>${esc(eqName(e))}</b><div class="spec">${esc(e.ID_ACTIVO)} · ${esc(e.CLINICA)}</div><div class="price">${money(e.pay?.amount)}</div><div class="spec">Congelado mientras se completa la compra. Si no se concreta, vuelve a estar disponible.</div><button class="btn" disabled>No disponible</button></div>`;
      const cp=curPrice(e);return `<div class="prod"><div class="row"><span class="pill ${cp.auction?'p-bad':e.price.adj?'p-warn':'p-sd'}">${cp.auction?'Subasta · cierra '+fd(e.auc.end):e.price.adj?'Bajó de precio':'Precio autorizado'}</span></div><b>${esc(eqName(e))}</b><div class="spec">${e.PROCESADOR?esc(e.PROCESADOR)+' · '+e.RAM_GB+' GB · '+(e.dx?.disco==='retirado'?'sin disco':esc(e.ALMACENAMIENTO))+'<br>':''}${tipo(e)==='Escritorio'?(e.dx?.monitor==='no'?'Sin monitor':esc(e.MONITOR))+' · ':''}estética ${e.dx?.estetica||'A'}</div>
-     <div><span class="price">${cp.auction?(cp.bids?'mejor oferta '+money(cp.v):'desde '+money(e.auc.min)):money(cp.v)}</span></div><div class="spec">Recoger en <b>${esc(e.CLINICA)}</b> · ${esc(e.ID_ACTIVO)}</div>${(()=>{const cb=canBuy(e);return cb.ok?`<button class="btn h" data-buy="${e._i}">${cp.auction?'Ofertar':'Comprar'}</button>`:`<button class="btn" disabled>${esc(cb.msg)}</button>`})()}</div>`}).join('')||'<p class="note">No hay equipos publicados en esta ciudad.</p>'}</div>
+     <div>${!cp.auction&&e.price?.lista>cp.v?`<span class="list-pr">${money2(e.price.lista)}</span> `:''}<span class="price">${cp.auction?(cp.bids?'mejor oferta '+money(cp.v):'desde '+money(e.auc.min)):money2(cp.v)}</span>${!cp.auction&&e.price?.lista>cp.v?`<div class="note">Precio colaborador · opción ${e.price.opt} (−${e.price.dc}% adicional)</div>`:''}</div><div class="spec">Recoger en <b>${esc(e.CLINICA)}</b> · ${esc(e.ID_ACTIVO)}</div>${(()=>{const cb=canBuy(e);return cb.ok?`<button class="btn h" data-buy="${e._i}">${cp.auction?'Ofertar':'Comprar'}</button>`:`<button class="btn" disabled>${esc(cb.msg)}</button>`})()}</div>`}).join('')||'<p class="note">No hay equipos publicados en esta ciudad.</p>'}</div>
    <p class="note" style="margin-top:14px">Si un equipo no se vende en ${C().plazo.sinVenta} días, Activo Fijo decide si baja el precio, lo subasta ${C().plazo.subasta} días hábiles, lo dona o lo destruye.</p>`,'Vista: colaborador')}`;
 };
 after.hbazar=()=>{$('#city')&&($('#city').onchange=e=>{S.city=e.target.value;S.meClinic=null;render()});$('#mecl')&&($('#mecl').onchange=e=>{S.meClinic=e.target.value;render()});$$('[data-buy]').forEach(b=>b.onclick=()=>{S.buyId=+b.dataset.buy;S.fisDraft=null;go('compra')})};
@@ -361,7 +361,9 @@ $('#thm').onclick=()=>{const n=curTheme()==='dark'?'light':'dark';document.docum
 $('#d1').onclick=()=>{admT(false);tick(1)};$('#d30').onclick=()=>{admT(false);tick(30)};
 $('#reset').onclick=()=>{admT(false);init(true);save();render();toast('Datos restablecidos')};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
-load();render();welcome();
+load();render();welcome();TRZ.live=true;
+if(GAS)google.script.run.withSuccessHandler(r=>{if(!r)return;if(r.rows&&r.rows.length)S.engs=r.rows.map(x=>({id:String(x[0]),nombre:String(x[1]),correo:String(x[2]),clinicas:String(x[3]).split('|').map(s=>s.trim()).filter(Boolean)}));
+  const m=String(r.email||'').toLowerCase(),g=m&&engList().find(x=>String(x.correo).toLowerCase()===m);if(g){S.role='ing';S.asEng=g.id}save();render()}).getIngenieros();
 if(GAS&&window.A360_FEED){syncFeed(false);setInterval(()=>syncFeed(false),Math.max(1,+window.A360_POLL||5)*60000);addEventListener('focus',()=>syncFeed(false))}
 
 
