@@ -19,7 +19,8 @@ const sum=(a,f)=>a.reduce((s,x)=>s+(f?f(x):x),0);
 
 /* ---------- Catálogos ---------- */
 const VIDA={'Escritorio':5,'Laptop':3,'Monitor':5,'Diadema':2,'Hub USB-C':3,'Memoria USB':2,'Divisor de pantalla':3};
-const defaultCfg=()=>({pmax:{'Escritorio':800,'Laptop':1000},ded:{i3:150,genOld:100,ram4:80,hdd:50,noDisk:150,monF:100,noMon:250,noPerif:50,noCharger:100,anio:50},piso:150,aptos:.4,
+const defaultCfg=()=>({tab:{opt:{A:{min:50,d:30,dc:20},B:{min:30,d:50,dc:30},C:{min:0,d:70,dc:40}},vb:{Escritorio:1384,Laptop:1384},resid:10,
+    pen:{lento:25,estB:20,estC:40,puertos:15,monF:15,noMon:25,perif:10,noDisk:20,cpu:10,gen:10,ram:10}},pmax:{'Escritorio':800,'Laptop':1000},ded:{i3:150,genOld:100,ram4:80,hdd:50,noDisk:150,monF:100,noMon:250,noPerif:50,noCharger:100,anio:50},piso:150,aptos:.4,
   acc:{'Monitor':250,'Diadema':50,'Hub USB-C':60,'Memoria USB':20,'Divisor de pantalla':80},est:{A:1,B:.85,C:.7},lento:.85,puertos:.9,
   meta:.7,sla:{SIS:3,AF:1,ING:2,FAC:2,FIS:5},prio:3,max:1,bloqDev:true,
   plazo:{firmas:1,pago:2,reintento:2,sinVenta:15,subasta:5,donFact:10},subastaMin:.5,
@@ -156,7 +157,7 @@ function mergeFeed(src){const byId={};S.items.forEach(e=>byId[e.ID_ACTIVO]=e);co
   S.items=out;S.prev=src.prev;S.src=src.name;S.dxId=null;S.buyId=null;applyAS(S.items);
   return{nNew,nCh,nOut:left.length-kept.length}}
 function feedLoad(src,stamp,silent){
-  if(!src.inv.length){toast('El archivo no tiene equipos vigentes con el formato AppSheet');return}
+  if(!src.inv.length){toast('El archivo no tiene equipos vigentes (formato AppSheet o plantilla de Activo 360)');return}
   const first=!S.feedStamp||/^Demo/.test(S.src||'');let msg;
   if(first){const ti={col:S.col,ast:S.ast,cartas:S.cartas,movs:S.movs,cfg:S.cfg};init(false,src);Object.assign(S,ti);msg=`${src.inv.length} equipos vigentes · ${src.prev.length} históricos`}
   else{const r=mergeFeed(src);msg=`+${r.nNew} nuevos · ${r.nCh} cambiaron estatus · ${r.nOut} salieron de vigentes`}
@@ -170,7 +171,7 @@ function syncFeed(force){if(!GAS){toast('Disponible al publicar en Apps Script')
     google.script.run.withSuccessHandler(res=>{try{let rows=res.rows;
         if(!rows){const bin=atob(res.b64);let wb;if(/csv|text/i.test(res.mime)||/\.csv$/i.test(res.name)){const u=Uint8Array.from(bin,c=>c.charCodeAt(0));wb=XLSX.read(new TextDecoder('utf-8').decode(u).replace(/^\uFEFF/,''),{type:'string',raw:true})}
           else wb=XLSX.read(bin,{type:'binary',cellDates:true});rows=XLSX.utils.sheet_to_json(wb.Sheets[res.sheet&&wb.Sheets[res.sheet]?res.sheet:wb.SheetNames[0]],{defval:'',raw:false,dateNF:'dd/mm/yyyy'})}
-        feedLoad(mapAS(rows,'Drive · '+res.name),info.updated)}catch(e){fail(e)}}).withFailureHandler(fail).getFeedData()}).withFailureHandler(fail).getFeedInfo()}
+        feedLoad(('ID_ACTIVO' in (rows[0]||{})?mapLegacy:mapAS)(rows,'Drive · '+res.name),info.updated)}catch(e){fail(e)}}).withFailureHandler(fail).getFeedData()}).withFailureHandler(fail).getFeedInfo()}
 function syncSheet(){syncFeed(true)}
 
 /* ---------- Estado ---------- */
@@ -232,19 +233,33 @@ function addFile(e,name){if(!e.sale)return;e.sale.files.push({d:S.today,name});l
 
 /* ---------- Tabulador y diagnóstico ---------- */
 const DEFDX={enciende:'si',rend:'ok',monitor:'ok',estetica:'A',puertos:'ok',perif:'si',disco:'borrado',comp:[],obs:''};
+/* Tabulador de Activo Fijo (equipo de cómputo): el diagnóstico da el % de vida útil → opción A/B/C →
+   precio con descuento = valor en libros × (1 − % descuento) → precio colaborador = ese precio × (1 − % desc. colaborador). */
+const money2=n=>'$'+(+n||0).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+const numOf=v=>{const n=+String(v??'').replace(/[^0-9.]/g,'');return isFinite(n)?n:0};
+function valorLibros(e){const K=C().tab,t=tipo(e);const vl=numOf(e.VALOR_LIBROS||e.as?.['VALOR EN LIBROS']);if(vl>0)return{v:vl,src:'Valor en libros registrado'};
+  const c=numOf(e.COSTO_ADQUISICION);if(c>0){const vida=+e.VIDA_UTIL_ANIOS||VIDA[t]||5,anos=Math.max(0,diff(e.FECHA_ADQUISICION,S.today)/365.25);
+    return{v:Math.round(c*Math.max(K.resid/100,1-anos/vida)*100)/100,src:`Estimado: costo ${money(c)} depreciado en ${vida} años (mínimo ${K.resid}%)`}}
+  return{v:K.vb[t]||K.vb.Escritorio,src:'Valor de referencia del tabulador (sin valor en libros en el inventario)'}}
+function vidaPct(e,dx){const P=C().tab.pen,t=tipo(e),cpu=e.PROCESADOR||'';let v=100;const why=[];const m=(c,n,l)=>{if(c&&n){v-=n;why.push(`${l} −${n}`)}};
+  m(dx.rend==='lento',P.lento,'rendimiento lento');m(dx.estetica==='B',P.estB,'estética B');m(dx.estetica==='C',P.estC,'estética C');m(dx.puertos==='falla',P.puertos,'puertos');
+  m(t==='Escritorio'&&dx.monitor==='fallas',P.monF,'monitor con fallas');m(t==='Escritorio'&&dx.monitor==='no',P.noMon,'sin monitor');m(dx.perif!=='si',P.perif,t==='Laptop'?'sin cargador':'sin teclado y mouse');
+  m(dx.disco==='retirado',P.noDisk,'sin disco');m(!/i5|i7|i9|Ryzen [579]/.test(cpu),P.cpu,'procesador básico');m((+e.GENERACION||8)<8,P.gen,'generación antigua');m((+e.RAM_GB||8)<=4,P.ram,'RAM de 4 GB');
+  return{v:Math.max(0,Math.min(100,v)),why}}
 function priceCalc(e,dx){
-  const t=tipo(e),K=C(),D=K.ded,pc=t==='Escritorio'||t==='Laptop';let b,top;
-  if(pc){top=K.pmax[t]||800;b=top;const cpu=e.PROCESADOR||'';
-    if(!/i5|i7|Ryzen 5|Ryzen 7/.test(cpu))b-=D.i3;if((+e.GENERACION||8)<8)b-=D.genOld;if((+e.RAM_GB||8)<=4)b-=D.ram4;
-    if(dx.disco==='retirado')b-=D.noDisk;else if(/HDD/i.test(String(e.ALMACENAMIENTO)))b-=D.hdd;
-    if(t==='Escritorio'){if(dx.monitor==='fallas')b-=D.monF;else if(dx.monitor==='no')b-=D.noMon;if(dx.perif!=='si')b-=D.noPerif}
-    else if(dx.perif!=='si')b-=D.noCharger;
-    const extra=Math.floor(diff(due(e),S.today)/365);if(extra>0)b-=D.anio*extra}
+  const t=tipo(e),K=C(),pc=t==='Escritorio'||t==='Laptop';let b,top;
+  if(pc){const T=K.tab,vp=vidaPct(e,dx),opt=vp.v>=T.opt.A.min?'A':vp.v>=T.opt.B.min?'B':'C',o=T.opt[opt],vl=valorLibros(e);
+    const lista=Math.round(vl.v*(1-o.d/100)*100)/100,sug=Math.round(lista*(1-o.dc/100)*100)/100;
+    return{sug,min:sug,max:sug,lista,opt,vida:vp.v,why:vp.why,vl:vl.v,vlSrc:vl.src,d:o.d,dc:o.dc,tab:true}}
   else{top=K.acc[t]||100;b=top;if(dx.perif!=='si')b*=.85}
   let f=K.est[dx.estetica]||1;if(dx.rend==='lento')f*=K.lento;if(dx.puertos==='falla')f*=K.puertos;
   const fl=pc?K.piso:20,rr=n=>Math.max(fl,Math.round(n/50)*50||fl);const sug=Math.min(top,rr(b*f));
   return{sug,min:Math.min(sug,rr(sug*.88)),max:Math.min(top,rr(sug*1.12))};
 }
+const tabBox=pr=>`<div class="tb-box"><div class="tb-opt"><span class="tb-l">Opción</span><b>${pr.opt}</b><span class="note">${pr.vida}% de vida útil</span></div>
+  <div class="tb-st"><span class="note">Valor en libros</span><b>${money2(pr.vl)}</b></div><div class="tb-st"><span class="note">Con descuento (−${pr.d}%)</span><b>${money2(pr.lista)}</b></div>
+  <div class="tb-st fin"><span class="note">Precio colaborador (−${pr.dc}%)</span><b class="pr">${money2(pr.sug)}</b></div></div>
+  <div class="note">${pr.why.length?'Vida útil: 100 '+esc(pr.why.join(' · ')):'Vida útil 100%: sin fallas en el diagnóstico'} · ${esc(pr.vlSrc)}</div>`;
 const destino=dx=>dx.enciende==='no'?((dx.comp&&dx.comp.length)?'RECUP':'DEST'):'VENTA';
 const estValue=e=>e.price?.aut??priceCalc(e,e.dx&&e.dx.enciende==='si'?e.dx:DEFDX).sug;
 const estExp=e=>e.dx?(e.dx.enciende==='si'?estValue(e):0):estValue(e)*C().aptos; // sin diagnóstico: se pondera por % de equipos aptos para venta
@@ -426,9 +441,9 @@ function tick(days){
 }
 
 /* ---------- Persistencia ligera ---------- */
-const KEY='activo360-v9';
+const KEY='activo360-v10';
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.items&&s.ast&&s.cfg&&s.mails&&s.prev){S=s;invSeq=Math.max(40000,...S.ast.map(a=>+a.inv.slice(3)))}else init()}catch(e){init()}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.items&&s.ast&&s.cfg&&s.mails&&s.prev){S=s;if(!S.cfg.tab)S.cfg.tab=defaultCfg().tab;invSeq=Math.max(40000,...S.ast.map(a=>+a.inv.slice(3)))}else init()}catch(e){init()}}
 
 /* ---------- UI helpers ---------- */
 function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>el.hidden=true,2800)}
@@ -664,13 +679,16 @@ function isMDY(vals){let md=0,dm=0;vals.forEach(v=>{const m=String(v??'').trim()
 function normDate(v,mdy){if(v instanceof Date)return iso(new Date(Date.UTC(v.getFullYear(),v.getMonth(),v.getDate())));if(typeof v==='number'){const d=new Date(Date.UTC(1899,11,30));d.setUTCDate(d.getUTCDate()+Math.floor(v));return iso(d)}const s=String(v||'').trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);if(m&&mdy)m=[m[0],m[2],m[1],m[3]];if(m&&+m[2]<=12&&+m[1]<=31)return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;return null}
 const normK=k=>String(k).trim().toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Z0-9]+/g,'_').replace(/^_|_$/g,'');
 function readRows(f,cb,out,asText){const rd=new FileReader();const csv=/\.csv$/i.test(f.name);rd.onload=ev=>{try{const wb=csv?XLSX.read(String(ev.target.result).replace(/^\uFEFF/,''),{type:'string',raw:!!asText}):XLSX.read(new Uint8Array(ev.target.result),{type:'array',cellDates:true});const raw=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],asText?{defval:'',raw:false,dateNF:'dd/mm/yyyy'}:{defval:''});if(!raw.length)throw new Error('El archivo no tiene filas.');cb(raw.map(r=>{const o={};for(const k in r)o[normK(k)]=r[k];return o}),raw)}catch(err){$(out).innerHTML=`<div class="result bad"><b>No se pudo cargar.</b> ${esc(err.message)}</div>`}};csv?rd.readAsText(f,'utf-8'):rd.readAsArrayBuffer(f)}
+/* Plantilla anterior de Activo 360 (ID_ACTIVO, CLINICA, COSTO_ADQUISICION…): archivo cargado o pestaña INVENTARIO del Sheets. */
+function mapLegacy(rows,name){
+  const miss=REQ.filter(c=>!(c in rows[0]));if(miss.length)throw new Error('Faltan columnas obligatorias: '+miss.join(', '));
+  let bad=0;const inv=[];const mdy=isMDY(rows.map(r=>r.FECHA_ADQUISICION));rows.forEach(r=>{const fa=normDate(r.FECHA_ADQUISICION,mdy);if(!fa||!r.ID_ACTIVO){bad++;return}
+    const o={};COLS.forEach(c=>o[c]=r[c]??'');o.VALOR_LIBROS=r.VALOR_LIBROS??r['VALOR EN LIBROS']??'';o.FECHA_ADQUISICION=fa;o.TIPO_EQUIPO=o.TIPO_EQUIPO||'Escritorio';o.VIDA_UTIL_ANIOS=+r.VIDA_UTIL_ANIOS||VIDA[o.TIPO_EQUIPO]||5;o.GENERACION=+r.GENERACION||genOf(r.PROCESADOR);o.RAM_GB=+r.RAM_GB||8;o.MUNICIPIO=o.MUNICIPIO||o.CLINICA;inv.push(o)});
+  return{inv,prev:[],bad,mdy,name,total:rows.length}}
 function readFile(f){readRows(f,(rows,raw)=>{
   let src;
   if('ID_ACTIVO' in rows[0]){ // compatibilidad con la plantilla anterior de Activo 360
-    const miss=REQ.filter(c=>!(c in rows[0]));if(miss.length)throw new Error('Faltan columnas obligatorias: '+miss.join(', '));
-    let bad=0;const inv=[];const mdy=isMDY(rows.map(r=>r.FECHA_ADQUISICION));rows.forEach(r=>{const fa=normDate(r.FECHA_ADQUISICION,mdy);if(!fa||!r.ID_ACTIVO){bad++;return}
-      const o={};COLS.forEach(c=>o[c]=r[c]??'');o.FECHA_ADQUISICION=fa;o.TIPO_EQUIPO=o.TIPO_EQUIPO||'Escritorio';o.VIDA_UTIL_ANIOS=+r.VIDA_UTIL_ANIOS||VIDA[o.TIPO_EQUIPO]||5;o.GENERACION=+r.GENERACION||genOf(r.PROCESADOR);o.RAM_GB=+r.RAM_GB||8;o.MUNICIPIO=o.MUNICIPIO||o.CLINICA;inv.push(o)});
-    src={inv,prev:[],bad,mdy,name:f.name,total:rows.length};
+    src=mapLegacy(rows,f.name);
   }else{
     const miss=AS_REQ.filter(c=>!(normK(c) in rows[0]));if(miss.length)throw new Error('No es la vista de AppSheet. Faltan columnas: '+miss.join(', '));
     src=mapAS(raw,f.name);
@@ -737,7 +755,7 @@ function dxForm(e){const d=S.dxDraft||(S.dxDraft={...DEFDX,comp:[],fotos:''});co
   </form>
   <div class="${dest==='VENTA'&&!(needDisk&&d.disco==='pend')?'result':'result bad'}" style="margin-top:12px">
    ${dest==='VENTA'?(needDisk&&d.disco==='pend'?`<b>Falta el borrado seguro.</b> Para enviarlo a venta, el almacenamiento debe estar borrado o retirado.`:
-   `<div class="row"><div><div class="note">Destino: <b>Venta local en ${esc(e.MUNICIPIO)}</b></div><div class="pr">${money(pr.sug)}</div><div class="note">Rango sugerido ${money(pr.min)} – ${money(pr.max)} · tabulador de Activo Fijo</div></div><span class="sp"></span><button class="btn h" id="dxsend">Enviar a Activo Fijo por Humand</button></div>`)
+   `<div class="row"><div><div class="note">Destino: <b>Venta local en ${esc(e.MUNICIPIO)}</b></div>${pr.tab?tabBox(pr):`<div class="pr">${money(pr.sug)}</div><div class="note">Rango sugerido ${money(pr.min)} – ${money(pr.max)} · tabulador de Activo Fijo</div>`}</div><span class="sp"></span><button class="btn h" id="dxsend">Enviar a Activo Fijo por Humand</button></div>`)
    :`<div class="row"><div><div class="note">Destino</div><b>${dest==='RECUP'?'Recuperar componentes ('+d.comp.join(', ')+') y destruir el remanente':'Destrucción certificada'}</b></div><span class="sp"></span><button class="btn" id="dxsend">Enviar a destrucción</button></div>`}
   </div></div>`}
 after.ingeniero=()=>{
@@ -798,7 +816,7 @@ function recEx(){const R=S.rec||{};if(R.eq!=null&&S.items[R.eq]&&mine(S.items[R.
   const pcs=S.items.filter(x=>mine(x)&&!x.p&&['Escritorio','Laptop'].includes(tipo(x)));const l=pcs.filter(x=>baseSt(x)==='ALERTA');const pool=l.length?l:pcs.length?pcs:S.items.filter(mine).length?S.items.filter(mine):S.items;
   return pool[(R.pick||0)%pool.length]}
 function recSteps(e,R){const K=C(),P=K.plazo,sla=K.sla,ing=e.INGENIERO||'Ingeniero de Sistemas',buyer=(e.buyer||BUYERS[0]).split(' · ')[0],jefe=e.sale?.jefe||JEFES[2],folio0=R.folio;
-  const price=r50(e.price?.aut??estValue(e)),low=r50(price*.85),mun=e.MUNICIPIO||e.CLINICA,fac=R.fac,folio=e.sale?.folio||folio0||'VTA-'+S.today.slice(0,4)+'-00123';
+  const price=+(e.price?.aut??estValue(e)),low=Math.round(price*.85*100)/100,mun=e.MUNICIPIO||e.CLINICA,fac=R.fac,folio=e.sale?.folio||folio0||'VTA-'+S.today.slice(0,4)+'-00123';
   const mk=(k,ph,who,ch,t,what,o={})=>({k,ph,who,ch,t,what,...o});
   const pre=[
    mk('det','det','A360','a360','Cumple 5 años: Activo 360 lo detecta',`Se instaló el ${fd(e.FECHA_ADQUISICION)} y cumple su vida útil el ${fd(due(e))}. Tres meses antes aparece en Alertas y en la bandeja de ${esc(ing)}.`,{notif:'Correo al ingeniero de Sistemas de la clínica',mock:`<div class="rx-alr"><b>⚠ Cumple 5 años en ≤3 meses</b><span>${esc(eqName(e))} · ${esc(e.CLINICA)}</span></div>`}),
@@ -1050,16 +1068,18 @@ after.correos=()=>$$('[data-mt]').forEach(b=>b.onclick=()=>{S.mailTab=b.dataset.
 
 /* ================= TABULADOR Y REGLAS ================= */
 VIEWS.config=()=>{const K=C();const n=(id,v,step,suf)=>`<input type="number" id="${id}" data-cfg="${id}" value="${v}" step="${step||1}" style="width:110px">${suf?` <span class="note">${suf}</span>`:''}`;
-  const sample=S.items.find(e=>e.p==='CONFIRMADO')||S.items[0];const pr=priceCalc(sample,DEFDX);
-  const row=(l,inp)=>`<div class="fld"><label>${l}</label><div>${inp}</div></div>`;
+  const sample=S.items.find(e=>e.p==='CONFIRMADO'&&['Escritorio','Laptop'].includes(tipo(e)))||S.items.find(e=>['Escritorio','Laptop'].includes(tipo(e)))||S.items[0];const pr=priceCalc(sample,DEFDX);
+  const row=(l,inp)=>`<div class="fld"><label>${l}</label><div>${inp}</div></div>`;const T=K.tab,ex=T.vb.Escritorio,pn=(id,v)=>`<input type="number" data-cfg="tab.${id}" value="${v}" step="1" min="0" max="100" style="width:64px"> %`;
   return `<div class="row"><div><h1>Tabulador y reglas</h1><p class="sub">Activo Fijo ajusta aquí precios, descuentos, tiempos meta y reglas de venta sin depender de Sistemas. Los cambios aplican a los diagnósticos nuevos.</p></div><span class="sp"></span><button class="btn" id="cfgreset">Restablecer valores</button></div>
-  <div class="card result"><div class="row"><div><div class="note">Vista previa con ${esc(sample.ID_ACTIVO)} · ${esc(eqName(sample))} · ${esc(sample.PROCESADOR||'')} · estética A</div><div class="pr">${money(pr.sug)}</div><div class="note">Rango ${money(pr.min)} – ${money(pr.max)}</div></div></div></div>
+  <div class="card"><h2>Tabulador de precios · equipo de cómputo</h2><p class="note">El diagnóstico del ingeniero da el % de vida útil del equipo; con eso se elige la opción. El precio con descuento sale del valor en libros y el colaborador recibe un descuento adicional sobre ese precio. El Bazar muestra los dos.</p>
+   <div class="tbl" style="margin-top:10px"><table class="tb-tab"><tr><th>Opción</th><th>% de vida útil</th><th>% de descuento</th><th>% desc. colaborador</th><th class="n">Precio con dcto.</th><th class="n">Precio con dcto. colaborador</th></tr>
+   ${['A','B','C'].map((k,i)=>{const o=T.opt[k],hi=i?T.opt[['A','B'][i-1]].min-1:null,l=Math.round(ex*(1-o.d/100)*100)/100;return `<tr><td><b>${k}</b></td><td>${k==='C'?`≤ ${hi}`:`${k==='A'?'≥':''} <input type="number" data-cfg="tab.opt.${k}.min" value="${o.min}" step="1" min="1" max="100" style="width:58px">${k==='B'?` – ${hi}`:''}`}</td><td>${pn('opt.'+k+'.d',o.d)}</td><td>${pn('opt.'+k+'.dc',o.dc)}</td><td class="n mono">${money2(l)}</td><td class="n mono"><b>${money2(Math.round(l*(1-o.dc/100)*100)/100)}</b></td></tr>`}).join('')}
+   <tr class="tb-ex"><td colspan="4" class="n"><b>VALOR DEL ACTIVO</b> <span class="note">(ejemplo y valor de referencia sin valor en libros)</span></td><td colspan="2"><input type="number" data-cfg="tab.vb.Escritorio" value="${ex}" step="0.01" min="0" style="width:120px"></td></tr></table></div>
+   <div class="result" style="margin-top:12px"><div class="note">Vista previa con ${esc(sample.ID_ACTIVO)} · ${esc(eqName(sample))} · ${esc(sample.PROCESADOR||'')} · sin fallas en el diagnóstico</div>${pr.tab?tabBox(pr):`<div class="pr">${money(pr.sug)}</div>`}</div></div>
   <div class="grid g2">
-   <div class="card"><h2>Precio máximo y descuentos por falla</h2><p class="note">Se parte del precio máximo y se resta por cada condición. Nunca supera el máximo ni baja del piso.</p><div class="form" style="margin-top:10px">
-    ${row('Precio máximo · escritorio',n('pmax.Escritorio',K.pmax['Escritorio'],50,'$'))}${row('Precio máximo · laptop',n('pmax.Laptop',K.pmax['Laptop'],50,'$'))}${row('Precio piso',n('piso',K.piso,50,'$'))}
-    ${row('Procesador Core i3 o inferior',n('ded.i3',K.ded.i3,50,'− $'))}${row('Generación anterior a la 8.ª',n('ded.genOld',K.ded.genOld,50,'− $'))}${row('RAM de 4 GB',n('ded.ram4',K.ded.ram4,50,'− $'))}
-    ${row('Disco HDD (no SSD)',n('ded.hdd',K.ded.hdd,50,'− $'))}${row('Sin disco',n('ded.noDisk',K.ded.noDisk,50,'− $'))}${row('Monitor con fallas',n('ded.monF',K.ded.monF,50,'− $'))}${row('Sin monitor',n('ded.noMon',K.ded.noMon,50,'− $'))}
-    ${row('Sin teclado y mouse',n('ded.noPerif',K.ded.noPerif,50,'− $'))}${row('Laptop sin cargador',n('ded.noCharger',K.ded.noCharger,50,'− $'))}${row('Por año después de vida útil',n('ded.anio',K.ded.anio,50,'− $'))}
+   <div class="card"><h2>Cómo se calcula el % de vida útil</h2><p class="note">El diagnóstico parte de 100% y resta por cada condición. Con ≥${T.opt.A.min}% es opción A; de ${T.opt.B.min}% a ${T.opt.A.min-1}%, B; de ${T.opt.B.min-1}% o menos, C.</p><div class="form" style="margin-top:10px">
+    ${[['lento','Rendimiento lento'],['estB','Estética B (detalles)'],['estC','Estética C (golpes)'],['puertos','Algún puerto falla'],['monF','Monitor con fallas'],['noMon','Sin monitor'],['perif','Sin teclado y mouse / sin cargador'],['noDisk','Sin disco'],['cpu','Procesador Core i3 o inferior'],['gen','Generación anterior a la 8.ª'],['ram','RAM de 4 GB']].map(([k,l])=>row(l,`<input type="number" data-cfg="tab.pen.${k}" value="${T.pen[k]}" step="1" min="0" max="100" style="width:64px"> <span class="note">− puntos</span>`)).join('')}
+    ${row('Valor en libros mínimo (si se estima con el costo)',n('tab.resid',T.resid,1,'% del costo'))}${row('Valor de referencia · laptop',n('tab.vb.Laptop',T.vb.Laptop,1,'$'))}
     ${row('Equipos aptos para venta (proyección)',n('aptos',K.aptos,.05,'0 a 1'))}</div></div>
    <div class="card"><h2>Accesorios (precio máximo) y factores</h2><div class="form" style="margin-top:10px">
     ${Object.keys(K.acc).map(t=>row(t,n('acc.'+t,K.acc[t],10))).join('')}
@@ -1342,7 +1362,7 @@ VIEWS.hbazar=()=>{
    <p class="note" style="margin:-4px 0 10px">Reglas: solo colaboradores · ${C().max?`máximo ${C().max} equipo(s) por colaborador al año · `:''}prioridad de ${C().prio} días para el personal de la clínica donde está el equipo${C().bloqDev?' · no pueden comprar colaboradores con devoluciones pendientes':''}.</p>
    <div class="prods">${list.map(e=>{if(FROZEN.includes(e.p))return `<div class="prod frozen"><div class="row"><span class="pill p-warn">En proceso de compra</span></div><b>${esc(eqName(e))}</b><div class="spec">${esc(e.ID_ACTIVO)} · ${esc(e.CLINICA)}</div><div class="price">${money(e.pay?.amount)}</div><div class="spec">Congelado mientras se completa la compra. Si no se concreta, vuelve a estar disponible.</div><button class="btn" disabled>No disponible</button></div>`;
      const cp=curPrice(e);return `<div class="prod"><div class="row"><span class="pill ${cp.auction?'p-bad':e.price.adj?'p-warn':'p-sd'}">${cp.auction?'Subasta · cierra '+fd(e.auc.end):e.price.adj?'Bajó de precio':'Precio autorizado'}</span></div><b>${esc(eqName(e))}</b><div class="spec">${e.PROCESADOR?esc(e.PROCESADOR)+' · '+e.RAM_GB+' GB · '+(e.dx?.disco==='retirado'?'sin disco':esc(e.ALMACENAMIENTO))+'<br>':''}${tipo(e)==='Escritorio'?(e.dx?.monitor==='no'?'Sin monitor':esc(e.MONITOR))+' · ':''}estética ${e.dx?.estetica||'A'}</div>
-     <div><span class="price">${cp.auction?(cp.bids?'mejor oferta '+money(cp.v):'desde '+money(e.auc.min)):money(cp.v)}</span></div><div class="spec">Recoger en <b>${esc(e.CLINICA)}</b> · ${esc(e.ID_ACTIVO)}</div>${(()=>{const cb=canBuy(e);return cb.ok?`<button class="btn h" data-buy="${e._i}">${cp.auction?'Ofertar':'Comprar'}</button>`:`<button class="btn" disabled>${esc(cb.msg)}</button>`})()}</div>`}).join('')||'<p class="note">No hay equipos publicados en esta ciudad.</p>'}</div>
+     <div>${!cp.auction&&e.price?.lista>cp.v?`<span class="list-pr">${money2(e.price.lista)}</span> `:''}<span class="price">${cp.auction?(cp.bids?'mejor oferta '+money(cp.v):'desde '+money(e.auc.min)):money2(cp.v)}</span>${!cp.auction&&e.price?.lista>cp.v?`<div class="note">Precio colaborador · opción ${e.price.opt} (−${e.price.dc}% adicional)</div>`:''}</div><div class="spec">Recoger en <b>${esc(e.CLINICA)}</b> · ${esc(e.ID_ACTIVO)}</div>${(()=>{const cb=canBuy(e);return cb.ok?`<button class="btn h" data-buy="${e._i}">${cp.auction?'Ofertar':'Comprar'}</button>`:`<button class="btn" disabled>${esc(cb.msg)}</button>`})()}</div>`}).join('')||'<p class="note">No hay equipos publicados en esta ciudad.</p>'}</div>
    <p class="note" style="margin-top:14px">Si un equipo no se vende en ${C().plazo.sinVenta} días, Activo Fijo decide si baja el precio, lo subasta ${C().plazo.subasta} días hábiles, lo dona o lo destruye.</p>`,'Vista: colaborador')}`;
 };
 after.hbazar=()=>{$('#city')&&($('#city').onchange=e=>{S.city=e.target.value;S.meClinic=null;render()});$('#mecl')&&($('#mecl').onchange=e=>{S.meClinic=e.target.value;render()});$$('[data-buy]').forEach(b=>b.onclick=()=>{S.buyId=+b.dataset.buy;S.fisDraft=null;go('compra')})};

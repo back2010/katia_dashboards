@@ -11,14 +11,20 @@
  * Si FILE_ID queda vacío, funciona con los datos demo de Datos.html.
  */
 const CONFIG = {
-  FILE_ID: '',      // ID del archivo en Drive
-  SHEET_NAME: '',   // pestaña a leer; vacío = la primera
+  FILE_ID: '',      // ID del archivo en Drive; vacío = la hoja a la que está ligado este script
+  SHEET_NAME: '',   // pestaña a leer; vacío = la primera (en "Activo 360 data" es INVENTARIO)
   POLL_MIN: 5       // cada cuántos minutos revisa si el archivo cambió
 };
 
+/** Archivo del inventario: FILE_ID o, si está vacío, el Sheets que contiene este script. */
+function feedId_() {
+  if (CONFIG.FILE_ID) return CONFIG.FILE_ID;
+  try { const ss = SpreadsheetApp.getActiveSpreadsheet(); return ss ? ss.getId() : ''; } catch (e) { return ''; }
+}
+
 function doGet() {
   const t = HtmlService.createTemplateFromFile('Index');
-  t.feedOn = !!CONFIG.FILE_ID;
+  t.feedOn = !!feedId_();
   t.pollMin = CONFIG.POLL_MIN;
   t.userName = nombreUsuario_();
   return t.evaluate()
@@ -42,12 +48,12 @@ function nombreUsuario_() {
 
 /** Datos del archivo para saber si cambió (se consulta cada POLL_MIN minutos). */
 function getFeedInfo() {
-  if (!CONFIG.FILE_ID) return { ok: false, msg: 'Configura FILE_ID en Code.gs con el ID del archivo de AppSheet en Drive' };
-  const f = DriveApp.getFileById(CONFIG.FILE_ID);
+  if (!feedId_()) return { ok: false, msg: 'Configura FILE_ID en Code.gs con el ID del archivo de AppSheet en Drive' };
+  const f = DriveApp.getFileById(feedId_());
   const mime = f.getMimeType();
   if (mime === MimeType.GOOGLE_SHEETS) {
     // Huella solo de la pestaña del inventario: escribir en "Traza" no debe recargar el inventario.
-    const ss = SpreadsheetApp.openById(CONFIG.FILE_ID);
+    const ss = SpreadsheetApp.openById(feedId_());
     const sh = CONFIG.SHEET_NAME ? ss.getSheetByName(CONFIG.SHEET_NAME) : ss.getSheets()[0];
     const dig = Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, JSON.stringify(sh ? sh.getDataRange().getValues() : []));
     return { ok: true, name: f.getName(), mime: mime, updated: Utilities.base64Encode(dig) };
@@ -57,10 +63,10 @@ function getFeedInfo() {
 
 /** Contenido del archivo: Google Sheets -> filas; Excel/CSV -> archivo en base64 (lo lee el navegador). */
 function getFeedData() {
-  const f = DriveApp.getFileById(CONFIG.FILE_ID);
+  const f = DriveApp.getFileById(feedId_());
   const mime = f.getMimeType();
   if (mime === MimeType.GOOGLE_SHEETS) {
-    const ss = SpreadsheetApp.openById(CONFIG.FILE_ID);
+    const ss = SpreadsheetApp.openById(feedId_());
     const sh = CONFIG.SHEET_NAME ? ss.getSheetByName(CONFIG.SHEET_NAME) : ss.getSheets()[0];
     if (!sh) throw new Error('No existe la pestaña "' + CONFIG.SHEET_NAME + '"');
     const tz = ss.getSpreadsheetTimeZone();

@@ -457,3 +457,18 @@ body.rol-ing .viewas{border-color:var(--sd);color:var(--sd);font-weight:600}
 .eg-pick label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;cursor:pointer;color:var(--fg)}
 .eg-pick label.on{border-color:var(--sd);background:var(--sd-soft)}
 .eg-pick label>span{display:flex;flex-direction:column}
+
+/* ---------- Tabulador A/B/C ---------- */
+.list-pr{text-decoration:line-through;color:var(--muted);font-family:var(--f-num);font-size:14px}
+.tb-box{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin:6px 0}
+.tb-box>div{display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:12px;background:var(--surface2);border:1px solid var(--line);min-width:120px}
+.tb-box b{font-family:var(--f-num);font-size:15px}
+.tb-opt{align-items:center;text-align:center}
+.tb-opt b{font-size:26px!important;color:var(--sd);line-height:1}
+.tb-l{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
+.tb-st.fin{border-color:var(--sd);background:var(--sd-soft)}
+.tb-st.fin .pr{font-size:20px;color:var(--sd)}
+.tb-tab td,.tb-tab th{text-align:center}
+.tb-tab .n{text-align:right}
+.tb-ex td{background:var(--amber-soft)}
+.tb-tab td{white-space:nowrap}

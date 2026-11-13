@@ -21,6 +21,7 @@ Demo funcional del proyecto LAI (Líderes de Alto Impacto) de Salud Digna. Su ob
 | Recorrido | Vista "Recorrido de un equipo": diagrama por bloques (Detección → Diagnóstico → Precio → Bazar → Compra y firmas → Pago → Ingresos → Facturación → Entrega, y ramal sin venta: subasta, destrucción, donación). Modo ejemplo con escenarios para presentar; botón "Ver recorrido" en cada equipo muestra su etapa real. No modifica el inventario. |
 | Traza | Solo en Apps Script: cada evento de la bitácora se agrega como fila en la pestaña "Traza" del mismo Sheets del inventario (`appendTraza` / `getTraza` en `Code.gs`). En Recorrido: "Generar venta de ejemplo en la hoja", "Volcar ventas simuladas del demo" y, por equipo, "Ver traza de este equipo". Restablecer el demo no escribe filas. Con Sheets, el aviso de cambios del inventario usa una huella de su pestaña, así que escribir la traza no lo recarga. |
 | Perfiles | Selector "Ver como" en la barra: Administrador (todo) o un ingeniero (solo sus clínicas: Mis equipos, Mis alertas, Diagnóstico y entregas, Recorrido). Vista "Ingenieros y clínicas" para dar de alta, editar o quitar ingenieros y asignar clínicas; en Apps Script se guarda en la pestaña "Ingenieros" del Sheets y quien entra con un correo registrado abre en su perfil. Sin datos en la hoja, se arma con el ingeniero más frecuente de cada clínica. |
+| Hoja de pruebas | Si el script está ligado a un Sheets y `FILE_ID` queda vacío, lee ese mismo Sheets. Acepta la vista de AppSheet o la plantilla anterior de Activo 360 (`ID_ACTIVO`, `CLINICA`, `COSTO_ADQUISICION`…), como la pestaña INVENTARIO de "Activo 360 data". |
 | Alertas | Vista propia, campana con contador y recuadro en el panel. Urgentes, por atender y avisos. |
 | Interfaz | Estilo cristal, modo claro y oscuro, menú lateral izquierdo con logo sin fondo, saludo al abrir con nombre y hora. |
 | Simulación | Fecha demo fija `T0 = 2026-10-13` y botón de cierre del día. Con datos reales, la fecha es la de hoy. |
@@ -28,6 +29,7 @@ Demo funcional del proyecto LAI (Líderes de Alto Impacto) de Salud Digna. Su ob
 ## Reglas de negocio que no deben cambiarse sin consultarlo
 
 - **Vida útil:** `INSTALACION + 5 años` (CPU). Alerta 3 meses antes.
+- **Tabulador de precios (equipo de cómputo, v10):** el diagnóstico da el % de vida útil (100 menos puntos por cada falla, editables). Opción A ≥50% (30% de descuento, 20% adicional al colaborador), B 30–49% (50% y 30%), C ≤29% (70% y 40%). Precio con dcto. = valor en libros × (1 − %); precio colaborador = ese precio × (1 − % colaborador). El Bazar muestra ambos y se cobra el de colaborador. Valor en libros: columna `VALOR_LIBROS` si existe; si no, `COSTO_ADQUISICION` depreciado en línea recta (mínimo 10%); si tampoco hay costo, valor de referencia ($1,384). Accesorios siguen con su precio máximo. La clave de `localStorage` subió a `activo360-v10`.
 - **Estatus de AppSheet al cargar:**
   - ACTIVO y RESGUARDO entran al ciclo normal.
   - PLAN DE RENOVACION / ENVIADO A CSI entra como "Por diagnosticar" (CONFIRMADO).
