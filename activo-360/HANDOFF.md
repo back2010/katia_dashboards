@@ -18,6 +18,7 @@ Demo funcional del proyecto LAI (Líderes de Alto Impacto) de Salud Digna. Su ob
 | Carga | Arrastrar el CSV o XLSX exportado de AppSheet, o leer un archivo de Drive desde Apps Script, con revisión cada 5 min y al volver a la pestaña. La actualización conserva el proceso de venta en curso. |
 | Exportar | XLSX en formato AppSheet, con ESTATUS actualizado según la etapa (vendido → VENDIDO, etc.) y las columnas ESTATUS ACTIVO 360, PRECIO AUTORIZADO y FOLIO VENTA. |
 | Flujo | Diagnóstico del ingeniero → precio (tabulador) → Bazar en Humand → compra, firma, depósito, factura y entrega. Si no se vende en 15 días: baja de precio, subasta, destrucción o donación. |
+| Recorrido | Vista "Recorrido de un equipo": diagrama por bloques (Detección → Diagnóstico → Precio → Bazar → Compra y firmas → Pago → Ingresos → Facturación → Entrega, y ramal sin venta: subasta, destrucción, donación). Modo ejemplo con escenarios para presentar; botón "Ver recorrido" en cada equipo muestra su etapa real. No modifica el inventario. |
 | Alertas | Vista propia, campana con contador y recuadro en el panel. Urgentes, por atender y avisos. |
 | Interfaz | Estilo cristal, modo claro y oscuro, menú lateral izquierdo con logo sin fondo, saludo al abrir con nombre y hora. |
 | Simulación | Fecha demo fija `T0 = 2026-10-13` y botón de cierre del día. Con datos reales, la fecha es la de hoy. |
