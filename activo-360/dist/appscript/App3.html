@@ -1,0 +1,369 @@
+<script>
+/* Activo 360 · App3 */
+/* ================= INVENTARIO TECNOLÓGICO ================= */
+const TI_COLS=['NUM_EMPLEADO','NOMBRE_COLABORADOR','AREA','UBICACION','TIPO_ACTIVO','MARCA','MODELO','NUM_SERIE','NUM_INVENTARIO','FECHA_ENTREGA','ESTADO','RESPONSABLE_ENTREGA'];
+VIEWS.ti=()=>{
+  const A=S.ast,asg=A.filter(a=>a.estado==='Asignado'),ren=A.filter(tiSoon),pdev=A.filter(a=>a.estado==='Pendiente de devolución'),alm=A.filter(a=>a.estado==='En almacén');
+  const pendF=Object.values(S.cartas).filter(L=>L[L.length-1].st==='Pendiente de firma').length;
+  const tipos=Object.keys(TI_MOD);const ubiK=a=>{const u=colOf(a.emp)?.ubi||'';return u.startsWith('Campus')?'Campus':u.startsWith('Corporativo')?'Corporativo':'Clínicas'};
+  const mm={};asg.forEach(a=>{const k=a.marca+' '+a.modelo;mm[k]=(mm[k]||0)+1});
+  const q=S.tiQ.toLowerCase();const rows=A.filter(a=>(!S.tiTipo||a.tipo===S.tiTipo)&&(!S.tiEst||a.estado===S.tiEst||(S.tiEst==='Por renovar'&&tiSoon(a)))&&(!q||(a.inv+a.serie+a.modelo+(colOf(a.emp)?.name||'')+(a.emp||'')).toLowerCase().includes(q)));
+  const per=40,pages=Math.max(1,Math.ceil(rows.length/per));S.tiPage=Math.min(S.tiPage,pages-1);
+  return `<div class="row"><div><h1>Activos por colaborador</h1><p class="sub">Laptops, monitores, diademas, hubs, memorias y accesorios asignados a personal de Campus, Corporativo y clínicas.</p></div><span class="sp"></span><button class="btn p" data-go="carta">Registrar movimiento</button></div>
+  <div class="grid g4">
+   <div class="card kpi"><div class="l">Activos registrados</div><div class="v">${A.length}</div><div class="s">${S.col.length} colaboradores</div></div>
+   <div class="card kpi"><div class="l">Asignados</div><div class="v">${asg.length}</div><div class="s">${(asg.length/Math.max(1,S.col.filter(c=>c.st==='Activo').length)).toFixed(1)} por colaborador</div></div>
+   <div class="card kpi"><div class="l">Por renovar ≤3 meses</div><div class="v" style="color:var(--warn)">${ren.length}</div><div class="s">colaborador y Sistemas notificados</div></div>
+   <div class="card kpi"><div class="l">Pendientes de devolución</div><div class="v" style="color:var(--bad)">${pdev.length}</div><div class="s">${S.col.filter(c=>c.st==='Baja laboral').length} colaboradores con baja laboral</div></div>
+   <div class="card kpi"><div class="l">Cartas pendientes de firma</div><div class="v" style="color:var(--hm)">${pendF}</div><div class="s">recordatorio diario en Humand</div></div>
+   <div class="card kpi"><div class="l">En almacén</div><div class="v">${alm.length}</div><div class="s">disponibles para alta o sustitución</div></div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>Asignados por tipo</h2>${hbars(tipos.map(t=>({l:t,v:[asg.filter(a=>a.tipo===t).length,ren.filter(a=>a.tipo===t).length]})).map(r=>({l:r.l,v:[r.v[0]-r.v[1],r.v[1]]})),{lw:150,vw:40,c:['var(--sd)','var(--amber)']})}${legend([['var(--sd)','Vigente'],['var(--amber)','Por renovar']])}</div>
+   <div class="card"><h2>Por ubicación</h2>${hbars(['Campus','Corporativo','Clínicas'].map(u=>({l:u,v:[asg.filter(a=>ubiK(a)===u).length]})),{lw:110,vw:40,c:['var(--info)']})}
+    <h3 style="margin-top:14px">Marca y modelo</h3><div class="tbl" style="margin-top:6px"><table>${Object.entries(mm).sort((a,b)=>b[1]-a[1]).slice(0,7).map(([k,v])=>`<tr><td>${esc(k)}</td><td class="n">${v}</td></tr>`).join('')}</table></div></div>
+  </div>
+  ${ren.length||pdev.length?`<div class="grid g2">
+   <div class="card"><h2>Próximos a renovación</h2><div class="tbl" style="margin-top:8px;max-height:280px"><table>${ren.map(a=>`<tr><td><b>${esc(a.tipo)}</b> ${esc(a.modelo)}<div class="note mono">${a.inv}</div></td><td>${esc(colOf(a.emp)?.name)}<div class="note">${a.emp}</div></td><td class="mono note">${fd(tiDue(a))}</td><td><button class="btn sm" data-sus="${a.inv}">Programar sustitución</button></td></tr>`).join('')||'<tr><td class="note">Sin renovaciones próximas.</td></tr>'}</table></div></div>
+   <div class="card"><h2>Pendientes de devolución</h2><div class="tbl" style="margin-top:8px;max-height:280px"><table>${pdev.map(a=>{const c=colOf(a.emp);return `<tr><td><b>${esc(a.tipo)}</b> ${esc(a.modelo)}<div class="note mono">${a.inv}</div></td><td>${esc(c?.name)}<div class="note">Baja laboral ${fd(c?.bajaD)}</div></td><td><button class="btn sm r" data-ret="${a.inv}">Registrar devolución</button></td></tr>`}).join('')||'<tr><td class="note">Sin pendientes.</td></tr>'}</table></div></div>
+  </div>`:''}
+  <div class="card"><div class="row"><h2>Inventario tecnológico</h2><span class="sp"></span><input type="text" id="tq" placeholder="Empleado, nombre, serie, inventario…" value="${esc(S.tiQ)}" style="flex:1 1 200px">
+   <select id="tt"><option value="">Todos los tipos</option>${tipos.map(t=>`<option ${t===S.tiTipo?'selected':''}>${t}</option>`).join('')}</select>
+   <select id="te"><option value="">Todos los estados</option>${['Asignado','Por renovar','Pendiente de devolución','En almacén','Devuelto','Baja','Baja · Activo 360','Baja (extravío)'].map(t=>`<option ${t===S.tiEst?'selected':''}>${t}</option>`).join('')}</select></div>
+   <div class="tbl" style="margin-top:10px;max-height:520px"><table><tr><th>Inventario / serie</th><th>Activo</th><th>Colaborador</th><th>Entrega</th><th>Renovación</th><th>Estado</th></tr>
+   ${rows.slice(S.tiPage*per,S.tiPage*per+per).map(a=>{const c=colOf(a.emp);return `<tr ${a.emp?`data-emp="${a.emp}" style="cursor:pointer"`:''}><td><b class="mono">${a.inv}</b><div class="note mono">${a.serie}</div></td><td>${esc(a.tipo)}<div class="note">${esc(a.marca)} ${esc(a.modelo)}</div></td><td>${c?esc(c.name)+`<div class="note">${a.emp} · ${esc(c.ubi)}</div>`:'—'}</td><td class="mono">${fd(a.entrega)}</td><td class="mono">${a.entrega&&['Asignado','Pendiente de devolución'].includes(a.estado)?fd(tiDue(a)):'—'}</td><td>${tpill(a.estado)}${tiSoon(a)?' <span class="pill p-warn">Por renovar</span>':''}</td></tr>`}).join('')}</table></div>
+   <div class="row" style="margin-top:8px"><button class="btn sm" id="tp" ${S.tiPage?'':'disabled'}>Anterior</button><span class="note">Página ${S.tiPage+1} de ${pages} · ${rows.length} activos</span><button class="btn sm" id="tn" ${S.tiPage<pages-1?'':'disabled'}>Siguiente</button></div></div>
+  <div class="grid g2">
+   <div class="card"><h2>Historial de movimientos</h2><div class="tbl" style="margin-top:8px;max-height:340px"><table><tr><th>Fecha</th><th>Movimiento</th><th>Colaborador</th><th>Activo</th></tr>${S.movs.slice(0,40).map(m=>`<tr><td class="mono note">${fd(m.d)}</td><td><span class="pill ${m.tipo==='Alta'?'p-sd':m.tipo==='Baja'?'p-bad':m.tipo==='Sustitución'?'p-warn':'p-info'}">${m.tipo}</span><div class="note">${esc(m.motivo)}</div></td><td>${esc(colOf(m.emp)?.name||m.emp)}</td><td>${esc(m.activo)}<div class="note mono">${m.inv} · ${esc(m.resp)}</div></td></tr>`).join('')}</table></div></div>
+   <div class="card"><h2>Cargar asignaciones</h2><p class="note">Migración desde el Excel de Drive. Una fila por activo.</p><div class="row" style="gap:6px;margin:8px 0">${TI_COLS.map(c=>`<span class="pill p-mut">${c}</span>`).join('')}</div>
+    <input type="file" id="tifile" accept=".xlsx,.xls,.csv"><div id="tires" style="margin-top:8px"></div><div class="row" style="margin-top:8px"><button class="btn sm" id="tiexp">Exportar inventario tecnológico</button></div></div>
+  </div>`;
+};
+after.ti=()=>{
+  $('#tq').oninput=e=>{S.tiQ=e.target.value;S.tiPage=0;const p=e.target.selectionStart;render();const q=$('#tq');q.focus();q.setSelectionRange(p,p)};
+  $('#tt').onchange=e=>{S.tiTipo=e.target.value;S.tiPage=0;render()};$('#te').onchange=e=>{S.tiEst=e.target.value;S.tiPage=0;render()};
+  $('#tp').onclick=()=>{S.tiPage--;render()};$('#tn').onclick=()=>{S.tiPage++;render()};
+  $$('[data-emp]').forEach(r=>r.onclick=()=>{S.emp=r.dataset.emp;go('carta')});
+  $$('[data-sus]').forEach(b=>b.onclick=()=>{const a=S.ast.find(x=>x.inv===b.dataset.sus);S.emp=a.emp;S.mov={tipo:'Sustitución',inv:a.inv,dest:'a360',motivo:'Fin de vida útil'};go('carta')});
+  $$('[data-ret]').forEach(b=>b.onclick=()=>{const a=S.ast.find(x=>x.inv===b.dataset.ret);S.emp=a.emp;S.mov={tipo:'Baja',inv:a.inv,dest:'almacen',motivo:'Devolución por baja laboral'};go('carta')});
+  $('#tiexp').onclick=()=>xlsxOut(S.ast.map(a=>{const c=colOf(a.emp);return{NUM_EMPLEADO:a.emp||'',NOMBRE_COLABORADOR:c?.name||'',AREA:c?.area||'',UBICACION:c?.ubi||'',TIPO_ACTIVO:a.tipo,MARCA:a.marca,MODELO:a.modelo,NUM_SERIE:a.serie,NUM_INVENTARIO:a.inv,FECHA_ENTREGA:a.entrega||'',ESTADO:a.estado,RESPONSABLE_ENTREGA:a.resp}}),'inventario_tecnologico_Activo360.xlsx');
+  $('#tifile').onchange=e=>{const f=e.target.files[0];f&&readRows(f,rows=>{
+    if(!('NUM_EMPLEADO' in rows[0])||!('TIPO_ACTIVO' in rows[0]))throw new Error('Faltan columnas NUM_EMPLEADO o TIPO_ACTIVO.');
+    S.col=[];S.ast=[];S.cartas={};S.movs=[];let n=0;
+    rows.forEach(r=>{const emp=String(r.NUM_EMPLEADO||'').trim();if(emp&&!colOf(emp))S.col.push({emp,name:r.NOMBRE_COLABORADOR||emp,area:r.AREA||'',ubi:r.UBICACION||'',st:'Activo'});
+      const t=Object.keys(VIDA).find(k=>k.toLowerCase()===String(r.TIPO_ACTIVO).trim().toLowerCase())||String(r.TIPO_ACTIVO||'Accesorio');
+      S.ast.push({inv:r.NUM_INVENTARIO||'TI-'+(++invSeq),tipo:t,marca:r.MARCA||'',modelo:r.MODELO||'',serie:r.NUM_SERIE||'',entrega:normDate(r.FECHA_ENTREGA),alta:S.today,estado:emp?(r.ESTADO&&/devol/i.test(r.ESTADO)?'Devuelto':'Asignado'):'En almacén',emp:emp||null,resp:r.RESPONSABLE_ENTREGA||'Sistemas',hist:[]});n++});
+    S.col.forEach(c=>newCarta(c.emp,'Carga inicial desde Excel',{st:'Firmada',signed:S.today,silent:true}));S.emp=S.col[0]?.emp;save();render();
+    $('#tires').innerHTML=`<div class="result"><b>${n} activos</b> de ${S.col.length} colaboradores cargados.</div>`},'#tires')};
+};
+
+/* ---- Colaborador y carta responsiva ---- */
+const DIAS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'],MESL=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const fdl=s=>{const d=pd(s);return `${DIAS[d.getUTCDay()]}, ${d.getUTCDate()} de ${MESL[d.getUTCMonth()]} de ${d.getUTCFullYear()}`};
+const COSTO={'Laptop':23862,'Monitor':3450,'Diadema':890,'Hub USB-C':1250,'Memoria USB':180,'Divisor de pantalla':640};
+const PUESTO_N=['Analista','Coordinador(a)','Auxiliar','Especialista','Jefe(a)'];
+const puestoOf=c=>c.puesto||`${PUESTO_N[(+c.emp)%PUESTO_N.length]} de ${c.area}`;
+const mailOf=c=>{const n=c.name.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().split(' ');return `${n[0]}.${n[1]||''}@salud-digna.org`};
+const estadoCarta=m=>/sustitu|renova/i.test(m)?'Sustitución':/reasign/i.test(m)?'Reasignado':/inicial|ingreso|entrega de equipo/i.test(m)?'Nuevo':'Actualización de resguardo';
+function cartaDoc(c,v){const lap=v.items.find(a=>a.tipo==='Laptop');const full=lap&&S.ast.find(a=>a.inv===lap.inv);const nad=!v.items.length&&c.st!=='Activo';
+  const ing=(S.movs.find(m=>m.emp===c.emp&&m.d<=v.d)||{}).resp||STAFF[0];
+  const head=pg=>`<table class="sgc"><tr><td rowspan="2" style="width:31%"><div class="lg">SaludDigna<small>La salud es para todos</small></div></td><td rowspan="2" class="ttl">Salud Digna A.C.<br>Documento del Sistema de Gestión de la Calidad</td><td style="width:19%;text-align:center;white-space:nowrap"><b>Clave:</b><br>SGC-N4-347</td><td style="width:9%;text-align:center;white-space:nowrap"><b>Rev.:</b><br>3</td></tr><tr><td colspan="2"><b>Referencias:</b> <span class="mono">${v.folio}</span></td></tr><tr><td colspan="4" class="fm">${nad?'CONSTANCIA DE NO ADEUDO DE EQUIPO DE CÓMPUTO':'FORMATO DE CARTA RESPONSIVA DE EQUIPO DE CÓMPUTO'}</td></tr></table>`;
+  const rows=v.items.map(a=>`<tr><td>${esc(a.tipo==='Laptop'?a.marca.toUpperCase():a.tipo+' '+a.marca)}</td><td>${esc(a.modelo)}</td><td class="mono">${esc(a.serie)}</td><td class="mono">${a.tipo==='Laptop'?'CRG-'+esc(a.serie.slice(-6)):'N/A'}</td><td>${money(COSTO[a.tipo]||0)}.00</td></tr>`).join('');
+  return `<div class="carta">${head()}
+  <p style="text-align:right;margin:10px 0">${fdl(v.d)}</p>
+  <p style="margin:0">Ticket: <span class="mono">${esc(v.ticket||'TCK-'+v.folio.replace(/\D/g,'').slice(-6))}</span><br>${nad?'Constancia de no adeudo':'Carta responsiva de equipo de cómputo'}<br>Salud Digna A.C · versión ${v.v}</p>
+  ${nad?`<p class="cl">Por medio de la presente se hace constar que <b>${esc(c.name)}</b> entregó a Salud Digna A.C. la totalidad del equipo de cómputo que tenía bajo su resguardo, por lo que no tiene adeudo de activos tecnológicos a la fecha.</p>`:
+  `<p style="margin-top:12px">Estado del Equipo: <b>${estadoCarta(v.motivo)}</b><br>Por medio de la presente hago constar que recibí de Salud Digna A.C. el siguiente equipo para uso exclusivo del desempeño de mis actividades laborales asignadas y consta de las siguientes características</p>`}
+  <div class="cdat"><b>Correo:</b><span>${esc(mailOf(c))}</span><b>ID:</b><span>${esc(c.emp)}</span><b>Nombre:</b><span>${esc(c.name.toUpperCase())}</span><b>Sucursal:</b><span>${esc(c.ubi)}</span><b>Puesto:</b><span>${esc(puestoOf(c).toUpperCase())}</span><b>Departamento:</b><span>${esc(c.area.toUpperCase())}</span></div>
+  ${nad?'':`${lap?`<h4>Hardware</h4><div class="cdat"><b>Procesador:</b><span>${esc(full?.cpu||'—')}</span><b>Memoria RAM:</b><span>16 GB</span><b>Disco Duro:</b><span>256 GB SSD</span></div>
+  <h4>Software</h4><div class="cdat"><b>Licencias:</b><span>Windows 11, ANTIVIRUS TRELLIX, SONIC WALL VPN</span><b>Licencias adicionales:</b><span>0</span></div>`:''}
+  <table class="ctab"><tr><th>MARCA</th><th>MODELO</th><th>NÚMERO DE SERIE</th><th>NÚMERO DE CARGADOR</th><th>COSTO</th></tr>${rows}</table>
+  <p style="margin-top:12px"><b>Comentarios:</b> ${esc(v.motivo)}. Esta versión sustituye a las anteriores y refleja la totalidad del equipo bajo resguardo.</p>
+  <p class="cl">Así mismo, declaro conocer las políticas internas de Salud Digna A.C relacionada con el uso de este equipo y estar de acuerdo con las mismas, por lo que mediante la suscripción de esta carta me obligo a resguardar, proteger, conservar y ser sujeto a las sanciones internas y/o externas que pudieran surgir por el incumplimiento de lo aquí pactado.</p>
+  <p class="cl">El suscrito, se obliga a informar de manera inmediata cualquier perdida, robo, extravío y/o cualquier vulneración que pudiera sufrir física o virtualmente el equipo. Lo anterior a fin de que Salud Digna A.C. pueda tomar medidas de seguridad pertinentes.</p>
+  <p class="cl">Los daños ocasionados por el mal manejo y/o imprudencia, serán mi responsabilidad y en caso de ser necesario pagando el costo por reposición vía nomina o sustituirse por un modelo similar.</p>
+  <p class="cl">Me comprometo a que no sea revisado por personal ajeno al área de soporte de infraestructura de Salud Digna.</p>`}
+  <div class="firma"><div><div class="sig">${v.signed?esc(c.name):''}</div>Recibe<br>Colaborador<br><span class="note">${v.signed?'Firmado electrónicamente en Humand · '+fd(v.signed):nad?'':'Pendiente de firma en Humand'}</span></div><div><div class="sig">${esc(ing)}</div>Entrega<br>Ingeniero de Infraestructura</div></div></div>`}
+VIEWS.carta=()=>{
+  const c=colOf(S.emp)||S.col[0];if(!c)return '<div class="card">Sin colaboradores cargados.</div>';S.emp=c.emp;
+  const L=S.cartas[c.emp]||[],v=L[L.length-1],mine=assignedTo(c.emp),hist=S.ast.filter(a=>a.hist.some(h=>true)&&S.movs.some(m=>m.emp===c.emp&&m.inv===a.inv)&&!mine.includes(a));
+  const movs=S.movs.filter(m=>m.emp===c.emp);
+  return `<div class="row"><div><h1>Carta responsiva</h1><p class="sub">Una sola carta vigente por colaborador. Cada alta, baja, sustitución o reasignación genera una nueva versión para firma; las anteriores se conservan.</p></div></div>
+  <div class="card row"><label for="es" class="note">Buscar por número de empleado o nombre</label><input type="text" id="es" list="eml" placeholder="102458" style="flex:1 1 220px"><datalist id="eml">${S.col.map(x=>`<option value="${x.emp}">${esc(x.name)}</option>`).join('')}</datalist><button class="btn" id="esb">Buscar</button></div>
+  <div class="card"><div class="prof"><div class="avatar">${esc(c.name.split(' ').slice(0,2).map(s=>s[0]).join(''))}</div><div style="flex:1 1 220px;min-width:0"><h2>${esc(c.name)}</h2><div class="note">Empleado ${c.emp} · ${esc(c.area)} · ${esc(c.ubi)}${c.st!=='Activo'?` · <span class="pill p-bad">${c.st} ${fd(c.bajaD)}</span>`:''}</div></div>
+   <div class="grid" style="grid-template-columns:repeat(3,minmax(90px,1fr));flex:1 1 300px"><div class="kpi"><div class="v">${mine.length}</div><div class="l">Asignados</div></div><div class="kpi"><div class="v" style="color:var(--warn)">${mine.filter(tiSoon).length}</div><div class="l">Por renovar</div></div><div class="kpi"><div class="v" style="font-size:16px;padding-top:6px">${v?cpill(v.st):'—'}</div><div class="l">Carta v${v?.v||0}</div></div></div></div></div>
+  ${S.mov?movForm(c):`<div class="row"><button class="btn p" data-mv="Alta">Alta de activo</button><button class="btn" data-mv="Baja">Baja / devolución</button><button class="btn" data-mv="Sustitución">Sustitución</button><button class="btn" data-mv="Reasignación">Reasignación</button></div>`}
+  <div class="grid g2">
+   <div class="card"><h2>Activos bajo resguardo</h2><div class="tbl" style="margin-top:8px"><table><tr><th>Activo</th><th>Entrega</th><th>Renovación</th><th>Estado</th></tr>${mine.map(a=>`<tr><td><b>${esc(a.tipo)}</b> ${esc(a.marca)} ${esc(a.modelo)}<div class="note mono">${a.inv} · ${a.serie}</div></td><td class="mono">${fd(a.entrega)}</td><td class="mono">${fd(tiDue(a))}</td><td>${tpill(a.estado)}${tiSoon(a)?' <span class="pill p-warn">Por renovar</span>':''}</td></tr>`).join('')||'<tr><td class="note">Sin activos asignados.</td></tr>'}</table></div>
+    ${hist.length?`<h3 style="margin-top:12px">Activos anteriores</h3><div class="tbl" style="margin-top:6px"><table>${hist.map(a=>`<tr><td>${esc(a.tipo)} ${esc(a.modelo)}<div class="note mono">${a.inv}</div></td><td>${tpill(a.estado)}</td></tr>`).join('')}</table></div>`:''}</div>
+   <div class="card"><div class="row"><h2>Carta vigente</h2><span class="sp"></span>${v?cpill(v.st):''}</div><div style="margin-top:10px">${v?cartaDoc(c,v):'<p class="note">Sin carta.</p>'}</div></div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>Versiones</h2>${L.slice().reverse().map(x=>`<div class="ver"><b class="mono">${x.folio}</b>${cpill(x.st)}<span class="note">${fd(x.d)} · ${x.items.length} activos · ${esc(x.motivo)}${x.signed?' · firmada '+fd(x.signed):''}${x.st==='Pendiente de firma'&&x.rem?' · '+x.rem+' recordatorio(s)':''}</span><span class="sp"></span><button class="btn sm" data-cv="${x.v}">Ver</button></div>`).join('')}<p class="note" style="margin-top:8px">Las cartas firmadas no se modifican; se resguardan en el expediente del colaborador en Humand y en el repositorio institucional.</p></div>
+   <div class="card"><h2>Historial de movimientos</h2><ul class="tl" style="margin-top:10px">${movs.map(m=>`<li><span class="mono note">${fd(m.d)}</span><span class="dot"></span><span><b>${m.tipo}</b> · ${esc(m.activo)} <span class="mono note">${m.inv}</span><div class="note">${esc(m.det)} · ${esc(m.motivo)} · ${esc(m.resp)}</div></span></li>`).join('')}</ul></div>
+  </div>`;
+};
+function movForm(c){const m=S.mov;const mine=assignedTo(c.emp);const alm=S.ast.filter(a=>a.estado==='En almacén');
+  const seg=(k,opts)=>`<div class="seg">${opts.map(([v,l])=>`<label><input type="radio" name="${k}" value="${v}" ${m[k]===v?'checked':''}>${l}</label>`).join('')}</div>`;
+  const out=m.tipo!=='Alta',inn=m.tipo==='Alta'||m.tipo==='Sustitución';const old=S.ast.find(a=>a.inv===m.inv);
+  const almF=alm.filter(a=>m.tipo!=='Sustitución'||!old||a.tipo===old.tipo);
+  return `<div class="card" style="border-color:var(--sd)"><div class="row"><h2>Registrar movimiento</h2><span class="sp"></span><button class="btn sm" id="mvx">Cancelar</button></div>
+  <form id="mvf" class="form" style="margin-top:10px">
+   <div class="fld"><span class="lb">Tipo de movimiento</span>${seg('tipo',[['Alta','Alta'],['Baja','Baja / devolución'],['Sustitución','Sustitución'],['Reasignación','Reasignación']])}</div>
+   ${out?`<div class="fld"><label for="mvinv">${m.tipo==='Reasignación'?'Activo a reasignar':'Activo que se devuelve'}</label><select id="mvinv" name="inv"><option value="">Selecciona…</option>${mine.map(a=>`<option value="${a.inv}" ${a.inv===m.inv?'selected':''}>${a.tipo} · ${a.modelo} · ${a.inv}</option>`).join('')}</select></div>`:''}
+   ${m.tipo==='Baja'||m.tipo==='Sustitución'?`<div class="fld"><span class="lb">Destino del equipo devuelto</span>${seg('dest',[['almacen','Almacén (reutilizar)'],['a360','Activo 360 (venta o destrucción)'],['danio','Baja por daño'],['extravio','Robo / extravío']])}</div>`:''}
+   ${m.tipo==='Reasignación'?`<div class="fld"><label for="mvto">Nuevo responsable</label><select id="mvto" name="to"><option value="">Selecciona…</option>${S.col.filter(x=>x.emp!==c.emp&&x.st==='Activo').map(x=>`<option value="${x.emp}" ${x.emp===m.to?'selected':''}>${x.emp} · ${esc(x.name)}</option>`).join('')}</select></div>`:''}
+   ${inn?`<div class="fld"><label for="mvnew">Activo que se entrega</label><select id="mvnew" name="nw"><option value="">Selecciona…</option>${almF.map(a=>`<option value="${a.inv}" ${a.inv===m.nw?'selected':''}>${a.tipo} · ${a.marca} ${a.modelo} · ${a.inv}</option>`).join('')}<option value="NEW" ${m.nw==='NEW'?'selected':''}>+ Registrar equipo nuevo (compra)</option></select></div>
+    ${m.nw==='NEW'?`<div class="fld"><label for="mvt">Tipo de activo nuevo</label><select id="mvt" name="nt">${Object.keys(TI_MOD).map(t=>`<option ${t===(m.nt||old?.tipo)?'selected':''}>${t}</option>`).join('')}</select></div>`:''}`:''}
+   <div class="fld"><label for="mvm">Motivo</label><input type="text" id="mvm" name="motivo" value="${esc(m.motivo||'')}" placeholder="Ej. renovación, nuevo ingreso, daño"></div>
+   <div class="fld"><label for="mvr">Responsable de Sistemas</label><select id="mvr" name="resp">${STAFF.map(s=>`<option ${s===m.resp?'selected':''}>${s}</option>`).join('')}</select></div>
+  </form>
+  <div class="row" style="margin-top:12px"><span class="note" style="flex:1 1 260px">Al guardar se genera la versión ${(S.cartas[c.emp]||[]).length+1} de la carta${m.tipo==='Reasignación'?' de ambos colaboradores':''} y se envía a firma en Humand.</span><button class="btn p" id="mvok">Guardar y generar carta</button></div></div>`}
+after.carta=()=>{
+  const find=()=>{const v=$('#es').value.trim().toLowerCase();const c=S.col.find(x=>x.emp===v)||S.col.find(x=>x.name.toLowerCase().includes(v));if(c){S.emp=c.emp;S.mov=null;render()}else toast('No se encontró el colaborador')};
+  $('#esb').onclick=find;$('#es').onkeydown=e=>{if(e.key==='Enter')find()};
+  $$('[data-mv]').forEach(b=>b.onclick=()=>{S.mov={tipo:b.dataset.mv,dest:'almacen',resp:STAFF[0]};render()});
+  $$('[data-cv]').forEach(b=>b.onclick=()=>{const c=colOf(S.emp),v=S.cartas[S.emp].find(x=>x.v==b.dataset.cv);$('#drawer').innerHTML=`<div class="drawer"><div><div class="row"><h2>${v.folio}</h2>${cpill(v.st)}<span class="sp"></span><button class="btn sm" data-close>Cerrar</button></div>${cartaDoc(c,v)}</div></div>`;bindClose()});
+  if(!$('#mvf'))return;
+  $('#mvx').onclick=()=>{S.mov=null;render()};
+  $('#mvf').onchange=ev=>{const t=ev.target;if(t.name){S.mov[t.name]=t.value;if(t.name==='tipo'){S.mov.inv='';S.mov.nw=''}}render()};
+  $('#mvf').oninput=ev=>{if(ev.target.name==='motivo')S.mov.motivo=ev.target.value};
+  $('#mvok').onclick=()=>{const m=S.mov,c=colOf(S.emp);m.resp=$('#mvr').value;m.motivo=$('#mvm').value.trim()||m.tipo;
+    const out=m.tipo!=='Alta',inn=m.tipo==='Alta'||m.tipo==='Sustitución';
+    if(out&&!m.inv)return toast('Selecciona el activo');if(inn&&!m.nw)return toast('Selecciona el activo que se entrega');if(m.tipo==='Reasignación'&&!m.to)return toast('Selecciona el nuevo responsable');
+    const old=S.ast.find(a=>a.inv===m.inv);
+    if(m.tipo==='Baja'||m.tipo==='Sustitución'){const d=m.dest||'almacen';old.devD=S.today;
+      if(d==='almacen'){old.estado='En almacén';old.emp=null}else if(d==='a360'){old.estado='Baja · Activo 360';old.emp=null;toA360(old,c)}else{old.estado=d==='danio'?'Baja':'Baja (extravío)';old.emp=null}
+      addMov(c.emp,m.tipo==='Sustitución'?'Sustitución':'Baja',old,m.tipo==='Sustitución'?'Devolución del equipo anterior':'Devolución / baja · destino '+({almacen:'almacén',a360:'Activo 360',danio:'baja por daño',extravio:'robo o extravío'}[d]),m.motivo,m.resp)}
+    if(inn){let a=m.nw==='NEW'?newAsset(m.nt||old?.tipo||'Laptop',{}):S.ast.find(x=>x.inv===m.nw);a.estado='Asignado';a.emp=c.emp;a.entrega=S.today;a.resp=m.resp;addMov(c.emp,m.tipo,a,m.tipo==='Sustitución'?'Entrega del equipo nuevo':'Entrega de equipo',m.motivo,m.resp)}
+    if(m.tipo==='Reasignación'){old.emp=m.to;old.entrega=S.today;addMov(c.emp,'Reasignación',old,'Devuelve para reasignar a '+m.to,m.motivo,m.resp);addMov(m.to,'Reasignación',old,'Recibe de '+c.emp,m.motivo,m.resp);newCarta(m.to,'Reasignación de '+old.tipo.toLowerCase())}
+    if(c.st!=='Activo'&&!assignedTo(c.emp).length)toast('Colaborador sin activos pendientes de devolución');
+    if(c.st!=='Activo'){const L=S.cartas[c.emp]||(S.cartas[c.emp]=[]);const pv=L[L.length-1];if(pv&&pv.st==='Firmada')pv.st='Histórica';if(pv&&pv.st==='Pendiente de firma')pv.st='Cancelada (reemplazada antes de firmar)';
+      const left=assignedTo(c.emp).length;L.push({v:L.length+1,folio:`CD-${c.emp}-${String(L.length+1).padStart(2,'0')}`,d:S.today,motivo:'Devolución por baja laboral',items:snap(c.emp),st:left?'Devolución parcial':'Constancia de no adeudo',signed:S.today,rem:0,last:S.today});
+      log('POST','/users/{employeeInternalId}/documents/files','pub',{employeeInternalId:c.emp,name:`CD-${c.emp}.pdf`,signatureStatus:'SIGNATURE_NOT_NEEDED'},'Constancia de devolución (no se envía a firma: el colaborador ya no está activo).');
+      S.mov=null;save();render();toast(left?`Devolución registrada · faltan ${left} activo(s)`:'Constancia de no adeudo generada');return}
+    const v=newCarta(c.emp,`${m.tipo}${old?' de '+old.tipo.toLowerCase():''}${inn&&m.tipo==='Alta'?' de '+S.ast.find(a=>a.emp===c.emp&&a.entrega===S.today)?.tipo.toLowerCase():''}`);
+    S.mov=null;save();render();toast(`Carta ${v.folio} generada y enviada a firma en Humand`)};
+};
+function toA360(a,c){const ubi=c.ubi||'Campus Culiacán';const cl=DATA.clinics.find(x=>x.n===ubi);
+  const e={ID_ACTIVO:a.inv,NUM_SERIE:a.serie,CLINICA:cl?ubi:ubi,MUNICIPIO:cl?cl.m:ubi.includes('Culiac')?'CULIACAN':'CIUDAD DE MEXICO',ESTADO:cl?cl.e:ubi.includes('Culiac')?'SINALOA':'CDMX',ZONA:cl?.z||'CAMPUS',DIVISION:cl?.dv||'CAMPUS',SERVICIO:'Asignado a personal',UBICACION:'',TIPO_EQUIPO:a.tipo,MARCA:a.marca,MODELO:a.modelo,PROCESADOR:a.cpu||'',GENERACION:a.gen||0,RAM_GB:a.tipo==='Laptop'?16:0,ALMACENAMIENTO:a.tipo==='Laptop'?'SSD 256GB':'',MONITOR:'',SO:a.tipo==='Laptop'?'Windows 11 Pro':'',FECHA_ADQUISICION:a.entrega||S.today,COSTO_ADQUISICION:0,VIDA_UTIL_ANIOS:VIDA[a.tipo]||3,INGENIERO:a.resp,CORREO_INGENIERO:''};
+  const it=freshItems([e])[0];it._i=S.items.length;it.p='CONFIRMADO';H(it,`Devuelto por ${c.name} (${c.emp}) · enviado a diagnóstico de Activo 360`,'SIS');S.items.push(it);
+  log('POST','/inventario','int',{id:a.inv,tipo:a.tipo,origen:'Inventario tecnológico'},'El equipo devuelto entra a Activo 360 para venta o destrucción.')}
+
+/* ================= HUMAND ================= */
+function hmFrame(inner,tag){const n=S.notifs.filter(x=>x.d===S.today).length;
+  return `<div class="hm-frame"><div class="hm-bar"><div class="hm-logo">SaludDigna<small>LA SALUD ES PARA TODOS</small></div><span class="hm-tag">Integrado con Activo 360</span><span class="sp"></span><span class="note">${tag||''}</span><button class="btn sm o" data-go="hnotif">Notificaciones ${n?`<span class="cnt hot">${n}</span>`:''}</button></div><div class="hm-body">${inner}</div></div>`}
+VIEWS.hgestion=()=>{
+  const tabs=[['ALL','Todas'],['AF','Activo Fijo'],['ING','Ingresos']];const isH=r=>RT[r.type].ch==='humand';
+  const rs=S.reqs.filter(r=>isH(r)&&(S.hmTab==='ALL'||RT[r.type].a===S.hmTab));const pend=rs.filter(r=>r.state==='Pendiente'),done=rs.filter(r=>r.state!=='Pendiente').slice(0,30);
+  const types=Object.entries(RT).filter(([k,t])=>t.ch==='humand'&&(S.hmTab==='ALL'||t.a===S.hmTab));
+  const row=r=>{const e=S.items[r.eq];const age=diff(r.created,S.today);return `<tr><td><b>${RT[r.type].n}</b><div class="mono note">${r.id}</div></td>
+   <td>${r.state==='Pendiente'?`<span class="pill p-warn">Pendiente</span>${r.esc?' <span class="pill p-bad">Escalada</span>':''}`:`<span class="pill ${['Rechazada','Destruir'].includes(r.state)?'p-bad':'p-ok'}">${r.state}</span>`}</td>
+   <td class="mono">${fd(r.created)}</td><td>${eqLine(e)}${e.buyer&&r.type==='DEPOSITO'?`<div class="note">Colaborador: ${esc(e.buyer)} · ${esc(e.sale?.folio||'')}</div>`:''}${r.type==='DECISION'&&e.pub?`<div class="note">${diff(e.pub,S.today)} días publicado sin venta</div>`:''}</td>
+   <td class="n">${r.amount!=null?money(r.amount):'—'}${r.type==='PRECIO'&&e.price?`<div class="note">rango ${money(e.price.min)}–${money(e.price.max)}</div>`:''}${r.type==='DONFACT'&&e.don?`<div class="note">${esc(e.don.org)}</div>`:''}${r.type==='DEPOSITO'&&e.pay?.file?`<div class="note">${esc(e.pay.file)}<br>concepto ${esc(e.sale?.folio||'')}</div>`:''}</td>
+   <td class="n">${r.state==='Pendiente'?`${age} d${r.rem?`<div class="note">${r.rem} recordat.</div>`:''}`:esc(r.res||'')}<div style="margin-top:4px">${slaPill(r)}</div></td>
+   <td>${r.state==='Pendiente'?actions(r):''}</td></tr>`};
+  return `<div><h1>Aprobaciones de Activo Fijo e Ingresos</h1><p class="sub">Humand no permite que un sistema externo cree solicitudes de aprobación, así que Activo Fijo e Ingresos aprueban aquí, en Activo 360. El aviso les llega en Humand por un mensaje del bot de Activo 360 con la liga directa a su pendiente.</p></div>
+  <div class="card"><div class="tabs">${tabs.map(([k,l])=>`<button data-ht="${k}" class="${S.hmTab===k?'on':''}">${l}</button>`).join('')}</div>
+   <h2 style="margin:18px 0 10px;font-size:20px">Tipos de solicitudes</h2>
+   <div class="types">${types.map(([k,t])=>{const n=S.reqs.filter(r=>r.type===k&&r.state==='Pendiente').length;return `<div class="type ${n?'on':''}"><b>${t.n}</b><div class="big">${n} <span style="font-size:13px;font-weight:600">pendientes</span></div><div class="who"><b>${AREAS[t.a]}</b> · ${t.d}</div></div>`}).join('')}</div>
+   <h2 style="margin:22px 0 10px;font-size:20px">Solicitudes por resolver</h2>
+   <div class="tbl"><table><tr><th>Tipo de solicitud</th><th>Estado</th><th>Solicitado en</th><th>Equipo</th><th class="n">Monto</th><th class="n">Antigüedad</th><th>Acción</th></tr>${pend.map(row).join('')||'<tr><td colspan="7" class="note">Bandeja al día.</td></tr>'}</table></div>
+   <details style="margin-top:16px"><summary>Resueltas recientemente (${done.length})</summary><div class="tbl" style="margin-top:8px"><table><tr><th>Tipo</th><th>Estado</th><th>Solicitado en</th><th>Equipo</th><th class="n">Monto</th><th class="n">Resolución</th><th></th></tr>${done.map(row).join('')}</table></div></details></div>`;
+};
+function actions(r){const id=r.id,e=S.items[r.eq];switch(r.type){
+  case'PRECIO':return `<div class="row" style="gap:4px"><button class="btn sm h" data-ap="${id}">Aprobar</button><input type="number" step="50" min="50" id="m-${id}" placeholder="Nuevo $" style="width:90px"><button class="btn sm o" data-mod="${id}">Modificar</button><button class="btn sm r" data-rej="${id}">Rechazar</button></div>`;
+  case'DECISION':{const L=t=>`<span class="note" style="white-space:nowrap">${t}</span>`;return `<div style="display:grid;grid-template-columns:auto auto auto;gap:6px 6px;align-items:center;min-width:300px">
+   ${L('Bajar')}<span class="row" style="gap:4px;flex-wrap:nowrap"><input type="number" min="1" max="90" step="5" value="20" id="pc-${id}" style="width:58px">%</span><button class="btn sm o" data-dpc="${id}">Aplicar</button>
+   ${L('Nuevo precio')}<input type="number" step="50" min="50" id="pa-${id}" placeholder="$" style="width:90px"><button class="btn sm o" data-dpa="${id}">Aplicar</button>
+   ${L('Subasta desde')}<input type="number" step="50" min="50" value="${r50(e.price.aut*C().subastaMin)}" id="sm-${id}" style="width:90px"><button class="btn sm h" data-dau="${id}">Iniciar</button>
+   ${L('Donar a')}<span class="row" style="gap:4px;flex-wrap:nowrap"><select id="do-${id}" style="max-width:130px">${C().donatarias.map(d=>`<option>${esc(d)}</option>`).join('')}</select><input type="date" id="df-${id}" value="${addBiz(S.today,2)}" min="${S.today}" style="width:130px"></span><button class="btn sm" data-ddo="${id}">Donar</button>
+   ${L('Sin valor')}<span></span><button class="btn sm r" data-dde="${id}">Destruir</button></div>`}
+  case'DEPOSITO':return `<div class="row" style="gap:4px"><button class="btn sm h" data-ap="${id}">Depósito recibido</button><button class="btn sm r" data-rej="${id}">No se encuentra</button></div>`;
+  case'DONFACT':return `<label class="btn sm h">Adjuntar factura<input type="file" data-dfac="${r.eq}" hidden accept=".pdf,.xml"></label>`;}}
+function clinicStock(c){const l=S.items.filter(e=>e.CLINICA===c);return{disp:l.filter(e=>['PUBLICADO','SUBASTA'].includes(e.p)).length,cong:l.filter(e=>FROZEN.includes(e.p)).length,vend:l.filter(e=>SOLD.includes(e.p)).length}}
+function resolve(id,act,val){const r=S.reqs.find(x=>x.id===id);const e=S.items[r.eq];const area=RT[r.type].a;
+  r.state={rej:'Rechazada',mod:'Modificada',pct:'Bajar precio',amt:'Bajar precio',auc:'Subasta',dest:'Destruir',don:'Donar'}[act]||'Aprobada';r.res=fd(S.today);r.resD=S.today;
+  log('PATCH','/activo360/aprobaciones/'+id,'int',{type:RT[r.type].n,decision:r.state.toUpperCase(),amount:typeof val==='number'?val:r.amount,resolvedBy:AREAS[area],resolvedAt:S.today},'El área resolvió dentro de Activo 360 y el flujo avanza al siguiente paso.');
+  if(r.type==='PRECIO'){
+    if(act==='rej'){e.p='DESTRUCCION';e.destD=S.today;H(e,'Activo Fijo rechazó la venta · enviado a destrucción certificada','AF','hmn')}
+    else{if(act==='mod'){e.price.aut=r50(val);r.amount=e.price.aut;H(e,`Activo Fijo modificó el precio a ${money(e.price.aut)}`,'AF','hmn')}else H(e,`Activo Fijo autorizó ${money(e.price.aut)}`,'AF','hmn');
+      e.p='PUBLICADO';e.pub=S.today;H(e,`Publicado en Bazar de Activos · solo colaboradores de ${e.MUNICIPIO}`,'AF','hmn');
+      log('POST','/products','pub',{sku:e.ID_ACTIVO,name:eqName(e),price:e.price.aut,stock:1,audience:{segmentation:'Ciudad',items:[e.MUNICIPIO]},pickup:e.CLINICA,buyUrl:'https://activo360.salud-digna.interno/comprar/'+e.ID_ACTIVO},'Alta del equipo en el Bazar, visible solo para su ciudad.');
+      log('POST','/posts','pub',{body:`Nuevo en el Bazar de Activos: ${eqName(e)} en ${e.CLINICA}`,audience:{segmentation:'Ciudad',items:[e.MUNICIPIO]},pinnedUntil:addD(S.today,7)},'Publicación en el muro de la ciudad, fijada 7 días.');
+      notify('Colaboradores de '+e.MUNICIPIO,`Nuevo en el Bazar de Activos: ${eqName(e)} · ${money(e.price.aut)}`)}}
+  if(r.type==='DECISION'){
+    if(act==='pct'||act==='amt'){const nv=act==='pct'?r50(e.price.aut*(1-val/100)):r50(val);e.price.aut=nv;e.price.adj=true;e.pub=S.today;r.amount=nv;H(e,`Sin venta · Activo Fijo bajó el precio a ${money(nv)}${act==='pct'?` (−${val} %)`:''}`,'AF','hmn');
+      log('PUT','/products/'+e.ID_ACTIVO,'pub',{price:nv},'Actualiza el precio en el Bazar.');notify('Colaboradores de '+e.MUNICIPIO,`Bajó de precio en el Bazar: ${eqName(e)} · ${money(nv)}`)}
+    if(act==='auc')startAuction(e,val);
+    if(act==='dest'){e.p='DESTRUCCION';e.destD=S.today;e.price=null;H(e,'Sin venta · Activo Fijo decidió destruirlo','AF','hmn');log('DELETE','/products/'+e.ID_ACTIVO,'pub',null,'Retira el equipo del Bazar.')}
+    if(act==='don'){r.state='Pendiente';startDon(e,val.org,val.fecha)}}
+  if(r.type==='DEPOSITO'){if(act==='rej'){e.p='PAGO';e.pay.rej=(e.pay.rej||0)+1;e.pay.dl=addD(S.today,C().plazo.reintento);H(e,`Ingresos no encontró el depósito · el colaborador tiene ${C().plazo.reintento} días naturales para corregir`,'ING','hmn');notify(e.buyer,`Ingresos no encontró tu depósito de ${e.sale.folio}. Revisa tu váucher y vuelve a subirlo antes del ${fd(e.pay.dl)}.`,'req')}
+    else{e.pay.ok=true;e.p='FACTURA';H(e,'Ingresos confirmó el depósito · el equipo sale del stock','ING','hmn');const st=clinicStock(e.CLINICA);notify(e.buyer,`Ingresos confirmó tu pago de ${e.sale.folio}. Facturación prepara tu factura.`,'info');
+      log('PUT','/products/'+e.ID_ACTIVO,'pub',{status:'VENDIDO',clinicStock:{clinic:e.CLINICA,available:st.disp,frozen:st.cong,sold:st.vend}},'Actualiza el stock del Bazar de la clínica.');
+      log('DELETE','/products/'+e.ID_ACTIVO,'pub',null,'Retira el equipo vendido del Bazar.');newReq('FACTURA',e,{amount:e.pay.amount})}}
+  save();render();toast(`${r.id} ${r.state.toLowerCase()} · ${ST[e.p][0]}`)}
+after.hgestion=()=>{
+  $$('[data-ht]').forEach(b=>b.onclick=()=>{S.hmTab=b.dataset.ht;render()});
+  $$('[data-ap]').forEach(b=>b.onclick=()=>resolve(b.dataset.ap,'ap'));
+  $$('[data-rej]').forEach(b=>b.onclick=()=>resolve(b.dataset.rej,'rej'));
+  $$('[data-mod]').forEach(b=>b.onclick=()=>{const v=+$('#m-'+b.dataset.mod).value;if(!(v>=50)){toast('Escribe el nuevo precio (mínimo $50)');return}resolve(b.dataset.mod,'mod',v)});
+  $$('[data-dpc]').forEach(b=>b.onclick=()=>{const v=+$('#pc-'+b.dataset.dpc).value;if(!(v>0&&v<100)){toast('Escribe un porcentaje entre 1 y 99');return}resolve(b.dataset.dpc,'pct',v)});
+  $$('[data-dpa]').forEach(b=>b.onclick=()=>{const v=+$('#pa-'+b.dataset.dpa).value;if(!(v>=50)){toast('Escribe el nuevo precio (mínimo $50)');return}resolve(b.dataset.dpa,'amt',v)});
+  $$('[data-dau]').forEach(b=>b.onclick=()=>{const v=+$('#sm-'+b.dataset.dau).value;if(!(v>=50)){toast('El precio mínimo de subasta es $50');return}resolve(b.dataset.dau,'auc',v)});
+  $$('[data-dde]').forEach(b=>b.onclick=()=>resolve(b.dataset.dde,'dest'));
+  $$('[data-ddo]').forEach(b=>b.onclick=()=>{const id=b.dataset.ddo,f=$('#df-'+id).value;if(!f||f<S.today){toast('Elige una fecha a partir de hoy');return}resolve(id,'don',{org:$('#do-'+id).value,fecha:f})});
+  $$('[data-dfac]').forEach(inp=>inp.onchange=()=>{if(!inp.files[0])return;attachDonFact(S.items[+inp.dataset.dfac],inp.files[0].name);save();render();toast('Factura adjunta · Fiscal recibió el correo')});
+};
+VIEWS.hbazar=()=>{
+  const vis=S.items.filter(e=>['PUBLICADO','SUBASTA'].includes(e.p)||FROZEN.includes(e.p));const cs=[...new Set(vis.map(e=>e.MUNICIPIO))].sort();
+  if(!S.city||!cs.includes(S.city))S.city=cs.slice().sort((a,b)=>vis.filter(e=>e.MUNICIPIO===b).length-vis.filter(e=>e.MUNICIPIO===a).length)[0]||'';
+  const list=vis.filter(e=>e.MUNICIPIO===S.city).sort((a,b)=>(FROZEN.includes(a.p)?1:0)-(FROZEN.includes(b.p)?1:0));
+  const clins=[...new Set(S.items.filter(e=>e.MUNICIPIO===S.city).map(e=>e.CLINICA))];
+  const disp=list.filter(e=>!FROZEN.includes(e.p)).length;
+  if(!S.meClinic||!clins.includes(S.meClinic))S.meClinic=clins.slice().sort((x,y)=>clinicStock(y).disp-clinicStock(x).disp)[0];
+  return `<div><h1>Bazar de Activos</h1><p class="sub">Publicación automática en Humand, segmentada por ciudad. Al dar “Comprar”, el equipo se congela a nombre del colaborador; cuando Ingresos confirma el depósito, sale del stock de la clínica.</p></div>
+  ${hmFrame(`<div class="post" style="margin-bottom:14px"><div class="avatar">SD</div><div style="min-width:0"><div class="row"><b>Comunicación Interna</b><span class="pill p-hm">Fijado en el muro</span></div><p style="margin:4px 0">¡El Bazar de Activos de <b>${esc(S.city||'tu ciudad')}</b> tiene ${disp} equipos de cómputo disponibles! Precios especiales para colaboradores. Se recogen en la clínica indicada.</p><span class="note">Publicado automáticamente por Activo 360 · audiencia: colaboradores de ${esc(S.city)}</span></div></div>
+   <div class="hm-frame"><div class="bazar-hero"><div><h2>Bazar de<br>activos</h2></div><div class="pc-art" aria-hidden="true"><div></div></div></div>
+   <div style="padding:16px;text-align:center"><p style="margin:0 0 6px">Bienvenido a nuestro <b style="color:var(--sd)">Bazar de Activos</b></p><p style="margin:0"><span class="hl">Revisa que el artículo esté en tu ciudad y te sea fácil recogerlo en el centro de trabajo indicado.</span></p><p style="margin:8px 0 0"><span class="hl">Recuerda que no se generan envíos.</span></p></div></div>
+   <div class="row" style="margin:16px 0 10px"><h2>Stock por clínica</h2><span class="sp"></span><label class="note" for="city">Ciudad</label><select id="city">${cs.map(c=>`<option ${c===S.city?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
+   <div class="tbl"><table><tr><th>Clínica</th><th class="n">Disponibles</th><th class="n">Congelados</th><th class="n">Vendidos</th></tr>${clins.map(c=>{const s=clinicStock(c);return `<tr><td>${esc(c)}</td><td class="n"><b>${s.disp}</b></td><td class="n">${s.cong}</td><td class="n">${s.vend}</td></tr>`}).join('')}</table></div>
+   <div class="row" style="margin:16px 0 10px"><h2>Artículos</h2><span class="sp"></span><label class="note" for="mecl">Tu clínica</label><select id="mecl">${clins.map(c=>`<option ${c===S.meClinic?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
+   <p class="note" style="margin:-4px 0 10px">Reglas: solo colaboradores · ${C().max?`máximo ${C().max} equipo(s) por colaborador al año · `:''}prioridad de ${C().prio} días para el personal de la clínica donde está el equipo${C().bloqDev?' · no pueden comprar colaboradores con devoluciones pendientes':''}.</p>
+   <div class="prods">${list.map(e=>{if(FROZEN.includes(e.p))return `<div class="prod frozen"><div class="row"><span class="pill p-warn">En proceso de compra</span></div><b>${esc(eqName(e))}</b><div class="spec">${esc(e.ID_ACTIVO)} · ${esc(e.CLINICA)}</div><div class="price">${money(e.pay?.amount)}</div><div class="spec">Congelado mientras se completa la compra. Si no se concreta, vuelve a estar disponible.</div><button class="btn" disabled>No disponible</button></div>`;
+     const cp=curPrice(e);return `<div class="prod"><div class="row"><span class="pill ${cp.auction?'p-bad':e.price.adj?'p-warn':'p-sd'}">${cp.auction?'Subasta · cierra '+fd(e.auc.end):e.price.adj?'Bajó de precio':'Precio autorizado'}</span></div><b>${esc(eqName(e))}</b><div class="spec">${e.PROCESADOR?esc(e.PROCESADOR)+' · '+e.RAM_GB+' GB · '+(e.dx?.disco==='retirado'?'sin disco':esc(e.ALMACENAMIENTO))+'<br>':''}${tipo(e)==='Escritorio'?(e.dx?.monitor==='no'?'Sin monitor':esc(e.MONITOR))+' · ':''}estética ${e.dx?.estetica||'A'}</div>
+     <div><span class="price">${cp.auction?(cp.bids?'mejor oferta '+money(cp.v):'desde '+money(e.auc.min)):money(cp.v)}</span></div><div class="spec">Recoger en <b>${esc(e.CLINICA)}</b> · ${esc(e.ID_ACTIVO)}</div>${(()=>{const cb=canBuy(e);return cb.ok?`<button class="btn h" data-buy="${e._i}">${cp.auction?'Ofertar':'Comprar'}</button>`:`<button class="btn" disabled>${esc(cb.msg)}</button>`})()}</div>`}).join('')||'<p class="note">No hay equipos publicados en esta ciudad.</p>'}</div>
+   <p class="note" style="margin-top:14px">Si un equipo no se vende en ${C().plazo.sinVenta} días, Activo Fijo decide si baja el precio, lo subasta ${C().plazo.subasta} días hábiles, lo dona o lo destruye.</p>`,'Vista: colaborador')}`;
+};
+after.hbazar=()=>{$('#city')&&($('#city').onchange=e=>{S.city=e.target.value;S.meClinic=null;render()});$('#mecl')&&($('#mecl').onchange=e=>{S.meClinic=e.target.value;render()});$$('[data-buy]').forEach(b=>b.onclick=()=>{S.buyId=+b.dataset.buy;S.fisDraft=null;go('compra')})};
+VIEWS.hfirma=()=>{const pend=Object.entries(S.cartas).map(([emp,L])=>[emp,L[L.length-1]]).filter(([e,v])=>v.st==='Pendiente de firma');
+  const firm=Object.entries(S.cartas).flatMap(([emp,L])=>L.filter(v=>v.signed).map(v=>[emp,v])).sort((a,b)=>a[1].signed<b[1].signed?1:-1).slice(0,12);
+  const fr=S.reqs.filter(r=>['FIRMA_COL','FIRMA_JEFE'].includes(r.type)&&r.state==='Pendiente');
+  const TI=S.mod==='ti';
+  return `<div><h1>${TI?'Firma de carta responsiva':'Firma del formato de compra'}</h1><p class="sub">${TI?'Cada colaborador recibe en Humand su carta responsiva consolidada (SGC-N4-347) para firma electrónica. Al firmar, se resguarda y la anterior queda como histórica.':`En Humand se firma el formato de compra SGC-N4-60: primero el colaborador y luego su jefe inmediato, en ${C().plazo.firmas} día hábil. Al firmar, el colaborador recibe los datos bancarios.`}</p></div>
+  ${hmFrame(`${TI?'':`<h2 style="margin:0 0 10px">Formatos de compra por firmar</h2><div class="tbl"><table><tr><th>Firma</th><th>Documento</th><th>Enviado</th><th>Vence</th><th>Acción</th></tr>${fr.map(r=>{const e=S.items[r.eq];return `<tr><td><b>${esc(r.type==='FIRMA_COL'?e.buyer.split(' · ')[0]:e.sale.jefe)}</b><div class="note">${r.type==='FIRMA_COL'?'Colaborador':'Jefe inmediato de '+esc(e.buyer.split(' · ')[0])}</div></td><td>Formato SGC-N4-60<div class="note mono">${e.sale.folio}</div><div class="note">${esc(eqName(e))} · ${money(e.pay.amount)}</div></td><td class="mono">${fd(r.created)}</td><td class="mono">${fd(e.sale.firmDl)}</td><td><div class="row" style="gap:4px"><button class="btn sm" data-fsee="${r.id}">Ver</button><button class="btn sm h" data-fsig="${r.id}">Firmar</button></div></td></tr>`}).join('')||'<tr><td colspan="5" class="note">No hay formatos pendientes.</td></tr>'}</table></div>`}
+   ${TI?`<h2 style="margin:0 0 10px">Cartas responsivas pendientes</h2><div class="tbl"><table><tr><th>Colaborador</th><th>Documento</th><th>Enviado</th><th class="n">Recordatorios</th><th>Acción</th></tr>${pend.map(([emp,v])=>{const c=colOf(emp);return `<tr><td><b>${esc(c?.name)}</b><div class="note">${emp} · ${esc(c?.area)}</div></td><td>Carta responsiva v${v.v}<div class="note mono">${v.folio} · ${v.items.length} activos</div><div class="note">${esc(v.motivo)}</div></td><td class="mono">${fd(v.d)}</td><td class="n">${v.rem}${v.rem>=3?' <span class="pill p-bad">Escalado</span>':''}</td><td><div class="row" style="gap:4px"><button class="btn sm" data-see="${emp}">Ver</button><button class="btn sm h" data-sign="${emp}">Firmar</button></div></td></tr>`}).join('')||'<tr><td colspan="5" class="note">No hay documentos pendientes.</td></tr>'}</table></div>
+   <details style="margin-top:16px"><summary>Cartas firmadas recientemente</summary><div class="tbl" style="margin-top:8px"><table>${firm.map(([emp,v])=>`<tr><td>${esc(colOf(emp)?.name)}</td><td class="mono">${v.folio}</td><td>${cpill(v.st)}</td><td class="mono note">${fd(v.signed)}</td></tr>`).join('')}</table></div></details>`:''}`,'Vista: colaborador')}`};
+function signForm(id){const r=S.reqs.find(x=>x.id===id),e=S.items[r.eq];
+  log('GET','/documents/{id} (estado de firma)','req',{document:e.sale.folio,signer:r.type==='FIRMA_COL'?'colaborador':'jefe',signatureStatus:'SIGNED'},'Activo 360 consulta si el formato ya se firmó. Por confirmar con Humand: hoy no hay un GET de documentos.');
+  if(r.type==='FIRMA_COL'){signCol(e);toast('Formato firmado · se envió a tu jefe inmediato')}else{signJefe(e);toast('Formato firmado · el colaborador recibió los datos bancarios')}save();render()}
+after.hfirma=()=>{
+  $$('[data-see]').forEach(b=>b.onclick=()=>{const c=colOf(b.dataset.see),v=curCarta(c.emp);$('#drawer').innerHTML=`<div class="drawer"><div><div class="row"><h2>${v.folio}</h2>${cpill(v.st)}<span class="sp"></span><button class="btn sm" data-close>Cerrar</button></div>${cartaDoc(c,v)}<button class="btn h" id="sgn">Firmar electrónicamente</button></div></div>`;bindClose();$('#sgn').onclick=()=>{sign(c.emp);closeDrawer()}});
+  $$('[data-sign]').forEach(b=>b.onclick=()=>sign(b.dataset.sign));
+  $$('[data-fsee]').forEach(b=>b.onclick=()=>{const r=S.reqs.find(x=>x.id===b.dataset.fsee),e=S.items[r.eq];$('#drawer').innerHTML=`<div class="drawer"><div><div class="row"><h2>${e.sale.folio}</h2><span class="sp"></span><button class="btn sm" data-close>Cerrar</button></div>${formatoDoc(e)}<button class="btn h" id="fsgn">Firmar electrónicamente</button></div></div>`;bindClose();$('#fsgn').onclick=()=>{closeDrawer();signForm(r.id)}});
+  $$('[data-fsig]').forEach(b=>b.onclick=()=>signForm(b.dataset.fsig));
+};
+
+function sign(emp){const L=S.cartas[emp],v=L[L.length-1];v.st='Firmada';v.signed=S.today;
+  log('GET','/documents/{id} (estado de firma)','req',{employeeInternalId:emp,document:v.folio,signatureStatus:'SIGNED'},'Activo 360 consulta si la carta ya se firmó. Por confirmar con Humand: hoy no hay un GET de documentos.');
+  log('POST','https://www.googleapis.com/upload/drive/v3/files','g',{carpeta:'Activo 360 / Cartas responsivas / '+emp,archivo:v.folio+'_firmada.pdf'},'Resguardo de la carta firmada; las versiones anteriores se conservan.');
+  notify('Sistemas · Mesa de servicio',`${colOf(emp)?.name} firmó su carta ${v.folio}`);save();render();toast(`Carta ${v.folio} firmada y resguardada`)}
+VIEWS.hnotif=()=>`<div><h1>Notificaciones</h1><p class="sub">Lo que cada persona o área recibe en Humand: mensajes del bot de Activo 360 (pendientes, recordatorios, citas, escalamientos), publicaciones del muro y documentos por firmar.</p></div>
+ ${hmFrame(`<div class="log">${S.notifs.slice(0,150).map(n=>`<div class="logi row"><span class="pill ${n.kind==='rem'?'p-warn':n.kind==='esc'?'p-bad':n.kind==='req'?'p-hm':'p-info'}">${n.kind==='rem'?'Recordatorio':n.kind==='esc'?'Escalamiento':n.kind==='req'?'Solicitud':'Aviso'}</span><span style="flex:1 1 260px;min-width:0">${esc(n.txt)}<div class="note">Para: ${esc(n.to)}</div></span><span class="mono note">${fd(n.d)}</span></div>`).join('')||'<p class="note">Sin notificaciones.</p>'}</div>`,'Bandeja de notificaciones')}`;
+
+/* ================= INTEGRACIÓN ================= */
+VIEWS.integracion=()=>{
+  const src={pub:['API pública hoy','p-ok'],req:['Por confirmar con Humand','p-warn'],int:['Activo 360','p-info'],g:['Google Workspace','p-ok']};
+  const T=(rows)=>`<div class="tbl" style="margin-top:8px"><table><tr><th>Necesidad</th><th>Cómo se resuelve</th></tr>${rows.map(([a,b])=>`<tr><td>${a}</td><td class="mono" style="font-size:12px">${b}</td></tr>`).join('')}</table></div>`;
+  return `<div><h1>Integración técnica</h1><p class="sub">Basada en la API pública de Humand (v1, autenticación <span class="mono">Authorization: Basic {api_key}</span>, lista de IPs permitidas y límite de consultas por minuto) y en la respuesta del equipo de Humand. Activo 360 es un desarrollo interno de Salud Digna.</p></div>
+  <div class="card"><h2>Cómo se conecta</h2>
+   <div class="flow" style="margin-top:10px"><span class="h">Humand: Bazar, formulario de compra, firmas y avisos</span><em>⇄ API pública ⇄</em><span>Activo 360 (servidor interno + BD)</span><em>⇄ Gmail y Drive ⇄</em><span class="g">Sistemas, Facturación y Fiscal</span></div>
+   <p class="note" style="margin-top:10px">Lo que hace el colaborador ocurre en Humand: ve el Bazar, llena el formulario de compra en Gestión de Servicios, firma documentos y recibe avisos. Las aprobaciones de Activo Fijo e Ingresos se hacen en Activo 360, porque Humand no permite que un sistema externo cree solicitudes a nombre de alguien. Como Humand no envía webhooks, Activo 360 consulta cada pocos minutos el estado de los formularios y documentos.</p></div>
+  <div class="grid g2">
+   <div class="card"><h2>Disponible hoy en la API de Humand</h2>${T([
+    ['Publicar, congelar y retirar equipo del Bazar','POST · PUT · DELETE /products'],
+    ['Publicación en el muro por ciudad','POST /posts (segmentation, sendNotification)'],
+    ['Leer la compra que inicia el colaborador','GET /service-management/service-items/{sid}/tasks · GET /service-management/tasks/{taskId} (formAnswer)'],
+    ['Leer el váucher adjunto en el formulario','formAnswer.fileAnswerSources'],
+    ['Formato y carta responsiva a firma electrónica','POST /documents (signatureStatus: PENDING, signatureCoordinates)'],
+    ['Avisos y recordatorios a una persona','Bot de Activo 360 por chat 1 a 1 (API Marty) · POST /posts con segmentationUsers'],
+    ['Prellenar el formato con datos del colaborador','GET /users/{employeeInternalId} · /departments · /job-positions'],
+    ['Encuesta de satisfacción','GET /forms/{id}/answers'],
+    ['Constancia de no adeudo al expediente','POST /users/{employeeInternalId}/documents/files']])}</div>
+   <div class="card"><h2>Lo que Humand confirmó que no es posible</h2><ul style="margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+    <li><b>Crear o autocompletar solicitudes</b> desde un sistema externo: por seguridad, el sistema actuaría a nombre de un colaborador. <span class="note">Solución: Activo Fijo e Ingresos aprueban en Activo 360 y la compra la inicia el colaborador en Humand.</span></li>
+    <li><b>Webhooks</b>: Humand no avisa cuando algo cambia. <span class="note">Solución: Activo 360 consulta el estado cada pocos minutos.</span></li>
+    <li><b>Aprobar o rechazar desde fuera</b>: hoy solo existe para vacaciones (<span class="mono">PUT /time-off/requests/{id}/state</span>). Producto evalúa endpoints nuevos, sin fecha comprometida.</li></ul>
+    <h2 style="margin-top:16px">Por confirmar con Humand</h2><ol style="margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+    <li>¿<span class="mono">/products</span> maneja precio en pesos o solo puntos de canje?</li>
+    <li>¿Hay o habrá un GET para saber si un documento ya se firmó? Mientras tanto, la persona confirma la firma en Activo 360.</li>
+    <li>¿Podemos tener un usuario bot para mensajes 1 a 1 (API Marty)?</li>
+    <li>¿El jefe inmediato viene en el perfil del usuario?</li></ol></div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>Google Workspace</h2>${T([
+    ['Avisos y recordatorios a Sistemas, Facturación ('+MAIL_FAC+') y Fiscal','Gmail API · users.messages.send'],
+    ['Carpeta por venta con folio y sus documentos','Drive API · files.create'],
+    ['Acceso de las áreas a Activo 360','Inicio de sesión con Google (OIDC)']])}</div>
+   <div class="card"><h2>Lo que debe incluir el desarrollo interno</h2><ul style="margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:5px">
+    <li>Servidor y base de datos internos, con inventario de clínicas y de personal.</li>
+    <li>Consulta periódica a Humand (formularios y documentos) respetando el límite de consultas.</li>
+    <li>Cierre diario: alertas a 3 meses, recordatorios, escalamientos, liberación de equipos sin firmas o sin depósito, pregunta a Activo Fijo a los 15 días sin venta y cierre de subastas.</li>
+    <li>Generador de PDF del formato SGC-N4-60 y de la carta SGC-N4-347, con versiones.</li>
+    <li>Pantallas de aprobación (Activo Fijo, Ingresos), Facturación, Sistemas y Fiscal.</li>
+    <li>API key institucional con IPs permitidas y rotación periódica (<span class="mono">/api-keys/rotate</span>).</li></ul></div>
+  </div>
+  <div class="card"><div class="row"><h2>Bitácora de integración</h2><span class="note">Llamadas que haría Activo 360 a Humand y Google</span></div>
+   <div class="log" style="margin-top:10px">${S.log.slice(0,60).map(l=>`<div class="logi"><div class="row"><span class="meth">${l.m}</span><span class="mono" style="min-width:0;overflow-wrap:anywhere">${esc(l.ep)}</span><span class="sp"></span><span class="pill ${(src[l.src]||src.int)[1]}">${(src[l.src]||src.int)[0]}</span><span class="mono note">${fd(l.d)}</span></div><div class="note" style="margin-top:4px">${esc(l.desc)}</div>${l.body?`<pre>${esc(JSON.stringify(l.body,null,2))}</pre>`:''}</div>`).join('')}</div></div>`;
+};
+
+/* ================= REPORTE DE TRAZABILIDAD ================= */
+function exportReport(){try{
+  const M=metrics(),wb=XLSX.utils.book_new(),Y=M.Y;
+  const add=(name,rows,widths)=>{const ws=Array.isArray(rows[0])?XLSX.utils.aoa_to_sheet(rows):XLSX.utils.json_to_sheet(rows.length?rows:[{Sin_datos:''}]);if(widths)ws['!cols']=widths.map(w=>({wch:w}));XLSX.utils.book_append_sheet(wb,ws,name)};
+  const lostT=M.perdidoDest+M.perdidoSinSeg+M.perdidoEst;const pendR=S.reqs.filter(r=>r.state==='Pendiente'),resR=S.reqs.filter(r=>r.resD);
+  const tiA=S.ast;const pendF=Object.values(S.cartas).filter(L=>L[L.length-1].st==='Pendiente de firma').length;
+  const ciclo=M.sold.filter(e=>e.p==='ENTREGADO').map(e=>diff(e.hist[0].d,e.hist[e.hist.length-1].d));
+  add('Resumen',[['Activo 360 · Reporte de trazabilidad'],['Corte',fd(S.today)],['Generado por','Activo 360'],[],
+   ['VENTA LOCAL DE EQUIPO SUSTITUIDO','Valor'],
+   ['Clínicas en directorio',DATA.clinics.length],['Equipos en inventario de clínicas',S.items.length],
+   [`Equipos a disponer ${Y} (cumplen vida útil)`,M.yearItems.length],[`Valor potencial ${Y}`,Math.round(M.potencial)],[`Meta de recuperación ${Y} (${META*100}%)`,Math.round(M.meta)],
+   [`Recuperado ${Y}`,Math.round(M.recuperado)],['Avance vs meta',+(M.meta?M.recuperado/M.meta:0).toFixed(3)],['En proceso de venta',Math.round(M.proceso)],
+   ['Equipos vendidos',M.sold.length],['Equipos destruidos',M.destr.length],['Destruidos estando funcionales',M.destFunc.length],
+   ['Dinero no recuperado · destrucción de funcionales',Math.round(M.perdidoDest)],['Dinero no recuperado · sin seguimiento',Math.round(M.perdidoSinSeg)],[`Valor detenido · Bazar +${C().plazo.sinVenta} días`,Math.round(M.perdidoEst)],['Dinero no recuperado · total',Math.round(lostT)],
+   ['Equipos sin seguimiento',M.sinSeg.length],['Equipos donados',M.donados.length],['Valor donado estimado',Math.round(M.valDon)],['Cumplimiento de tiempos meta',+M.slaPct.toFixed(3)],['Solicitudes fuera de tiempo hoy',M.fuera],['Residuo electrónico reutilizado (kg)',Math.round(M.kgReus)],['Residuo enviado a destrucción (kg)',Math.round(M.kgDest)],['Tasa de reutilización',+M.tasaReus.toFixed(3)],['Satisfacción promedio (1-5)',+M.sat.toFixed(2)],['Encuestas respondidas',M.surv.length],['Ciclo promedio diagnóstico→entrega (días)',ciclo.length?+(sum(ciclo)/ciclo.length).toFixed(1):''],
+   ['Solicitudes pendientes (Humand y correo)',pendR.length],['Correos enviados',S.mails.length],['Solicitudes escaladas',pendR.filter(r=>r.esc).length],
+   ['Horas-hombre ahorradas (acumulado)',Math.round(M.hhAhorro)],['Horas por venta · proceso actual',+HHM.toFixed(2)],['Horas por venta · Activo 360',+HHA.toFixed(2)],
+   [`Proyección red ${+Y+1} · escritorios`,M.redY1],[`Proyección red ${+Y+1} · recuperación esperada`,Math.round(M.redPot1)],[`Proyección red ${+Y+1} · horas-hombre ahorradas`,Math.round(M.hhAnual)],[],
+   ['INVENTARIO TECNOLÓGICO','Valor'],['Activos registrados',tiA.length],['Asignados',tiA.filter(a=>a.estado==='Asignado').length],['Por renovar ≤3 meses',tiA.filter(tiSoon).length],
+   ['Pendientes de devolución',tiA.filter(a=>a.estado==='Pendiente de devolución').length],['En almacén',tiA.filter(a=>a.estado==='En almacén').length],['Cartas pendientes de firma',pendF],['Versiones de carta generadas',M.cartasGen]],[52,18]);
+  const yrs=[0,1,2,3,4,5].map(k=>String(+Y+k));
+  add('Proyección',yrs.map(y=>({Año:+y,Escritorios_que_cumplen_5_años:M.proj[y]||0,Clínicas:DATA.clinics.filter(c=>[5,10].some(k=>addY(c.acq,k).startsWith(y))).length,Aptos_para_venta:Math.round((M.proj[y]||0)*C().aptos),Precio_promedio:Math.round(M.avgDesk),Recuperación_esperada:Math.round((M.proj[y]||0)*M.avgDesk*C().aptos),Horas_hombre_ahorradas:Math.round((M.proj[y]||0)*C().aptos*(HHM-HHA))})),[8,30,10,16,22,22]);
+  add('Trazabilidad equipos',S.items.map(e=>{const r=curReq(e),last=e.hist[e.hist.length-1];return{ID_ACTIVO:e.ID_ACTIVO,SERIE:e.NUM_SERIE,TIPO:tipo(e),EQUIPO:`${e.MARCA} ${e.MODELO}`,CLINICA:e.CLINICA,CIUDAD:e.MUNICIPIO,DIVISION:e.DIVISION,SERVICIO:e.SERVICIO,ADQUISICION:e.FECHA_ADQUISICION,FIN_VIDA_UTIL:due(e),ESTATUS:ST[stOf(e)][0],FOLIO_VENTA:e.sale?.folio||'',RESPONSABLE_ACTUAL:e.p&&ownerOf(e)?(ownerOf(e)==='JEFE'?e.sale.jefe:ownerOf(e)==='COL'&&e.buyer?e.buyer:AREAS[ownerOf(e)]):'',SOLICITUD:r?.id||'',DIAS_EN_ETAPA:r?diff(r.created,S.today):last?diff(last.d,S.today):'',RECORDATORIOS:r?.rem??'',DESTINO:e.dx?(destino(e.dx)==='VENTA'?'Venta local':destino(e.dx)==='RECUP'?'Recuperación + destrucción':'Destrucción'):'',VALOR_ESTIMADO:estValue(e),PRECIO_SUGERIDO:e.price?.sug??'',PRECIO_AUTORIZADO:e.price?.aut??'',PRECIO_VENTA:SOLD.includes(e.p)?e.pay?.amount:'',COMPRADOR:e.buyer||'',DATOS_FISCALES:e.sale?fiscalTxt(e.sale.fiscal):'',VAUCHER:e.pay?.file||'',FACTURA:e.fac||'',CITA_ENTREGA:e.cita?e.cita.d+' '+e.cita.h:'',ULTIMO_MOVIMIENTO:last?.d||'',DETALLE:last?.t||''}}));
+  add('Bitácora de eventos',S.items.flatMap(e=>e.hist.map(h=>({FECHA:h.d,ID_ACTIVO:e.ID_ACTIVO,CLINICA:e.CLINICA,AREA:AREAS[h.a]||h.a,TIPO:h.k==='rem'?'Recordatorio/escalamiento':h.k==='hmn'?'Acción en Humand':'Registro',EVENTO:h.t}))).sort((a,b)=>a.FECHA<b.FECHA?1:-1));
+  add('Solicitudes',S.reqs.map(r=>({FOLIO:r.id,TIPO:RT[r.type].n,AREA:AREAS[RT[r.type].a],CANAL:RT[r.type].ch==='correo'?'Activo 360 · correo':RT[r.type].ch==='firma'?'Firma en Humand':'Activo 360 · bot de Humand',ID_ACTIVO:S.items[r.eq].ID_ACTIVO,CLINICA:S.items[r.eq].CLINICA,MONTO:r.amount??'',CREADA:r.created,ESTADO:r.state,RESUELTA:r.resD||'',DIAS:diff(r.created,r.resD||S.today),RECORDATORIOS:r.rem,ESCALADA:r.esc?'Sí':'No'})));
+  add('Tiempos por área',['AF','ING','FAC','SIS','FIS'].map(a=>{const rs=S.reqs.filter(r=>RT[r.type].a===a),done=rs.filter(r=>r.resD),p=rs.filter(r=>r.state==='Pendiente');return{AREA:AREAS[a],RESUELTAS:done.length,DIAS_PROMEDIO_RESOLUCION:done.length?+(sum(done,r=>diff(r.created,r.resD))/done.length).toFixed(1):'',PENDIENTES:p.length,DIAS_PROMEDIO_PENDIENTES:p.length?+(sum(p,r=>diff(r.created,S.today))/p.length).toFixed(1):'',RECORDATORIOS:sum(rs,r=>r.rem),ESCALADAS:rs.filter(r=>r.esc).length}}));
+  const g={};S.items.forEach(e=>(g[e.CLINICA]??=[]).push(e));
+  add('Por clínica',Object.entries(g).map(([c,l])=>{const n=k=>l.filter(e=>stOf(e)===k).length;return{CLINICA:c,CIUDAD:l[0].MUNICIPIO,DIVISION:l[0].DIVISION,EQUIPOS:l.length,VIGENTES:n('VIGENTE'),ALERTA_3M:n('ALERTA'),CUMPLIERON:n('VENCIDO'),EN_BAZAR:n('PUBLICADO'),CONGELADOS:l.filter(e=>FROZEN.includes(e.p)).length,VENDIDOS:l.filter(e=>SOLD.includes(e.p)).length,DESTRUIDOS:l.filter(e=>DESTR.includes(e.p)).length,ESPERADO:Math.round(sum(l.filter(e=>due(e)<=Y+'-12-31'||SOLD.includes(e.p)||DESTR.includes(e.p)||DON.includes(e.p)),estExp)*META),RECUPERADO:sum(l.filter(e=>SOLD.includes(e.p)),e=>e.pay?.amount||0)}}));
+  add('Destrucción',M.destr.map(e=>({ID_ACTIVO:e.ID_ACTIVO,CLINICA:e.CLINICA,CIUDAD:e.MUNICIPIO,TIPO:tipo(e),FECHA:e.destD||'',ESTATUS:ST[e.p][0],FUNCIONAL:e.dx?.enciende==='si'?'Sí':'No',COMPONENTES_RECUPERADOS:(e.dx?.comp||[]).join(', '),VALOR_PERDIDO:e.dx?.enciende==='si'?priceCalc(e,e.dx).sug:0,CERTIFICADO:(e.hist.find(h=>/certificado/i.test(h.t))?.t||'').replace(/.*certificado /,'').split(' ')[0]})));
+  add('Inventario tecnológico',S.ast.map(a=>{const c=colOf(a.emp);return{NUM_INVENTARIO:a.inv,TIPO:a.tipo,MARCA:a.marca,MODELO:a.modelo,SERIE:a.serie,NUM_EMPLEADO:a.emp||'',COLABORADOR:c?.name||'',AREA:c?.area||'',UBICACION:c?.ubi||'',ENTREGA:a.entrega||'',RENOVACION:a.entrega&&a.emp?tiDue(a):'',ESTADO:a.estado,POR_RENOVAR:tiSoon(a)?'Sí':'',RESPONSABLE_ENTREGA:a.resp}}));
+  add('Cartas responsivas',Object.entries(S.cartas).flatMap(([emp,L])=>L.map(v=>({FOLIO:v.folio,NUM_EMPLEADO:emp,COLABORADOR:colOf(emp)?.name||'',VERSION:v.v,EMITIDA:v.d,MOTIVO:v.motivo,ACTIVOS:v.items.length,DETALLE:v.items.map(i=>i.tipo+' '+i.inv).join('; '),ESTADO:v.st,FIRMADA:v.signed||'',RECORDATORIOS:v.rem}))));
+  add('Movimientos',S.movs.map(m=>({FECHA:m.d,MOVIMIENTO:m.tipo,NUM_EMPLEADO:m.emp,COLABORADOR:colOf(m.emp)?.name||'',NUM_INVENTARIO:m.inv,ACTIVO:m.activo,DETALLE:m.det,MOTIVO:m.motivo,RESPONSABLE:m.resp})));
+  add('Tiempos meta',S.reqs.map(r=>({FOLIO:r.id,TIPO:RT[r.type].n,AREA:AREAS[RT[r.type].a],META_DIAS:slaOf(r),CREADA:r.created,RESUELTA:r.resD||'',DIAS:reqDays(r),CUMPLE:slaOk(r)?'Sí':'No',ESTADO:r.state})));
+  add('Encuestas',S.items.filter(e=>e.survey).map(e=>({ID_ACTIVO:e.ID_ACTIVO,CLINICA:e.CLINICA,COLABORADOR:e.buyer,FECHA:e.survey.d,PROCESO_COMPRA:e.survey.q[0],TIEMPO_ENTREGA:e.survey.q[1],ESTADO_EQUIPO:e.survey.q[2],PROMEDIO:+(sum(e.survey.q)/3).toFixed(2),COMENTARIO:e.survey.c})));
+  add('Donación',S.items.filter(e=>e.don).map(e=>({ID_ACTIVO:e.ID_ACTIVO,CLINICA:e.CLINICA,TIPO:tipo(e),DONATARIA:e.don.org,ESTATUS:ST[e.p]?.[0]||'',FECHA_PROGRAMADA:e.don.fecha||'',FECHA_ENTREGA:e.don.d||'',FACTURA_DONATARIA:e.don.factura||'',REVISION_FISCAL:e.don.fiscal||'',VALOR_ESTIMADO:estValue(e),KG:kgOf(e)})));
+  add('Configuración',[['Parámetro','Valor'],...Object.entries(S.cfg).flatMap(([k,v])=>typeof v==='object'&&!Array.isArray(v)?Object.entries(v).map(([k2,v2])=>[k+'.'+k2,v2]):[[k,Array.isArray(v)?v.join(' | '):v]])],[40,60]);
+  add('Correos',S.mails.map(m=>({FECHA:m.d,PARA:m.to,ASUNTO:m.subj,ID_ACTIVO:m.eq!=null?S.items[m.eq].ID_ACTIVO:'',MENSAJE:m.body})));
+  add('Integración',S.log.map(l=>({FECHA:l.d,METODO:l.m,ENDPOINT:l.ep,DESCRIPCION:l.desc,DATOS:l.body?JSON.stringify(l.body):''})));
+  try{const ws=XLSX.utils.json_to_sheet(asExportRows(),{header:[...AS_COLS(),'ESTATUS ACTIVO 360','PRECIO AUTORIZADO','FOLIO VENTA']});XLSX.utils.book_append_sheet(wb,ws,'AppSheet (estatus)')}catch(_){}
+  const name=`Activo360_trazabilidad_${S.today}.xlsx`;XLSX.writeFile(wb,name);toast('Descargando '+name)}catch(err){toast('No se pudo generar el reporte en esta vista')}}
+
+/* ---------- Eventos globales ---------- */
+document.addEventListener('click',ev=>{if(ev.target.closest('[data-rep]')){admT(false);exportReport();return}const t=ev.target.closest('[data-v],[data-go],[data-eq]');if(!t)return;
+  if(t.dataset.v)go(t.dataset.v);else if(t.dataset.go)go(t.dataset.go);else if(t.dataset.eq!=null&&!ev.target.closest('button,input,select'))openEq(+t.dataset.eq)});
+const admT=v=>{$('#admm').hidden=!v;$('#admb').setAttribute('aria-expanded',String(v))};$('#admb').onclick=ev=>{ev.stopPropagation();admT($('#admm').hidden)};document.addEventListener('click',ev=>{if(!ev.target.closest('.adm'))admT(false)});
+$$('#mods [data-modulo]').forEach(b=>b.onclick=()=>setMod(b.dataset.modulo));
+const THK='activo360-tema';const sysDark=()=>window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches;
+function curTheme(){return document.documentElement.dataset.theme||(sysDark()?'dark':'light')}
+function paintThm(){const d=curTheme()==='dark';$('#thm').innerHTML=d?'<span aria-hidden="true">☀</span> Modo claro':'<span aria-hidden="true">☾</span> Modo oscuro'}
+try{const t=localStorage.getItem(THK);if(t)document.documentElement.dataset.theme=t}catch(e){}
+$('#thm').onclick=()=>{const n=curTheme()==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem(THK,n)}catch(e){}paintThm()};paintThm();
+$('#d1').onclick=()=>{admT(false);tick(1)};$('#d30').onclick=()=>{admT(false);tick(30)};
+$('#reset').onclick=()=>{admT(false);init(true);save();render();toast('Datos restablecidos')};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
+load();render();welcome();
+if(GAS&&window.A360_FEED){syncFeed(false);setInterval(()=>syncFeed(false),Math.max(1,+window.A360_POLL||5)*60000);addEventListener('focus',()=>syncFeed(false))}
+
+
+;(window.A360_OK=window.A360_OK||[]).push('App3');
+</script>

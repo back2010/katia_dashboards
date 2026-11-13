@@ -1,0 +1,375 @@
+<script>
+/* Activo 360 · App2 */
+/* ================= INVENTARIO (formato AppSheet) ================= */
+const COLS=['ID_ACTIVO','NUM_SERIE','CLINICA','MUNICIPIO','ESTADO','ZONA','DIVISION','SERVICIO','UBICACION','TIPO_EQUIPO','MARCA','MODELO','PROCESADOR','GENERACION','RAM_GB','ALMACENAMIENTO','MONITOR','SO','FECHA_ADQUISICION','COSTO_ADQUISICION','VIDA_UTIL_ANIOS','INGENIERO','CORREO_INGENIERO'];
+const REQ=['ID_ACTIVO','NUM_SERIE','CLINICA','MUNICIPIO','SERVICIO','MARCA','MODELO','FECHA_ADQUISICION'];
+VIEWS.inventario=()=>{
+  const q=S.invQ.toLowerCase();let rows=S.items.filter(e=>(!S.invClin||e.CLINICA===S.invClin)&&(!S.invSt||stOf(e)===S.invSt)&&(!S.invAs||asStatus(e)===S.invAs)&&(!q||(e.ID_ACTIVO+e.MODELO+e.CLINICA+e.SERVICIO+e.INGENIERO+(e.as?.['# DE SERIE NUEVO EQUIPO']||'')).toLowerCase().includes(q)));
+  const per=50,pages=Math.max(1,Math.ceil(rows.length/per));S.invPage=Math.min(S.invPage,pages-1);const pg=rows.slice(S.invPage*per,S.invPage*per+per);
+  const cAS={};S.items.forEach(e=>{const k=asStatus(e);cAS[k]=(cAS[k]||0)+1});const cPrev={};(S.prev||[]).forEach(o=>cPrev[o['ESTATUS']]=(cPrev[o['ESTATUS']]||0)+1);
+  const nCl=new Set(S.items.map(e=>e.CLINICA)).size;
+  return `<div><h1>Inventario de equipos</h1><p class="sub">Vista de equipos de AppSheet (Sistemas) que alimenta Activo 360 · ${esc(S.src||'AppSheet')} · ${nCl} clínicas.</p></div>
+  <div class="grid g4">
+   <div class="card kpi"><div class="l">Equipos vigentes en AppSheet</div><div class="v">${S.items.length.toLocaleString('es-MX')}</div><div class="s">ACTIVO, RESGUARDO y PLAN DE RENOVACIÓN</div></div>
+   <div class="card kpi"><div class="l">Plan de renovación / enviado a CSI</div><div class="v">${S.items.filter(e=>e.AS_ESTATUS==='PLAN DE RENOVACION / ENVIADO A CSI').length}</div><div class="s">Entran directo a diagnóstico del ingeniero</div></div>
+   <div class="card kpi"><div class="l">Cumplen 5 años en ≤3 meses</div><div class="v">${S.items.filter(e=>!e.p&&soon(e)).length}</div><div class="s">Regla: INSTALACION + 5 años</div></div>
+   <div class="card kpi"><div class="l">Históricos (antes de Activo 360)</div><div class="v">${(S.prev||[]).length}</div><div class="s">${Object.entries(cPrev).map(([k,v])=>v+' '+k.toLowerCase()).join(' · ')||'—'}</div></div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>Cargar vista de AppSheet</h2>
+    <div class="drop" id="drop" style="margin-top:10px"><p style="margin:0 0 8px">Arrastra aquí el archivo exportado de AppSheet (<span class="mono">AppSheet.ViewData…csv</span>) o</p><input type="file" id="file" accept=".csv,.xlsx,.xls"><p class="note" style="margin:8px 0 0">Reemplaza el inventario y reinicia el proceso de venta. Los registros VENDIDO, DESTRUIDO y TRANSFERIDO se guardan como históricos.</p></div>
+    <div id="upres" style="margin-top:10px"></div>
+    <div class="row" style="margin-top:10px">${GAS?'<button class="btn p" id="sync">Actualizar desde Drive</button>':''}<button class="btn" id="tpl">Plantilla AppSheet .xlsx</button><button class="btn" id="exp">Exportar para AppSheet</button><button class="btn" id="sample">Restablecer demo</button></div></div>
+   <div class="card"><h2>Estructura de la vista</h2><p class="note">Mismas columnas y orden que la vista de equipos de AppSheet. En verde, las obligatorias para Activo 360.</p>
+    <div class="row" style="gap:6px;margin-top:8px">${AS_COLS().filter(c=>!/^Related /.test(c)).map(c=>`<span class="pill ${AS_REQ.includes(c)?'p-sd':'p-mut'}">${esc(c)}</span>`).join('')}</div>
+    <p class="note" style="margin-top:10px">Vida útil: <span class="mono">INSTALACION + 5 años</span> (CPU) · alerta 3 meses antes. <span class="mono">USUARIO</span> = ingeniero responsable. Al exportar, <span class="mono">ESTATUS</span> se actualiza con la etapa del proceso: vendido → VENDIDO, destruido → DESTRUIDO, en venta o destrucción → RESGUARDO, por diagnosticar → PLAN DE RENOVACION / ENVIADO A CSI.</p>
+    <div class="row" style="gap:6px;margin-top:8px">${Object.entries(cAS).map(([k,v])=>`${aspill(k)}<span class="mono note">${v}</span>`).join('')}</div></div>
+  </div>
+  <div class="card">
+   <div class="row"><input type="text" id="q" placeholder="Buscar serie, modelo, área, ingeniero…" value="${esc(S.invQ)}" style="flex:1 1 200px">
+   <select id="fc"><option value="">Todos los centros de trabajo</option>${[...new Set(S.items.map(e=>e.CLINICA))].sort().map(c=>`<option ${c===S.invClin?'selected':''}>${esc(c)}</option>`).join('')}</select>
+   <select id="fa"><option value="">Estatus AppSheet</option>${Object.keys(cAS).map(k=>`<option ${k===S.invAs?'selected':''}>${esc(k)}</option>`).join('')}</select>
+   <select id="fs"><option value="">Etapa Activo 360</option>${Object.keys(ST).map(k=>`<option value="${k}" ${k===S.invSt?'selected':''}>${ST[k][0]}</option>`).join('')}</select>
+   <span class="note">${rows.length} equipos</span></div>
+   <div class="tbl" style="margin-top:10px;max-height:560px"><table><tr><th># de serie</th><th>Centro de trabajo · área</th><th>Equipo</th><th>Instalación</th><th>Sustituir</th><th>AppSheet</th><th>Activo 360</th></tr>
+   ${pg.map(e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td><b class="mono">${esc(e.NUM_SERIE)}</b><div class="note">${esc(e.INGENIERO)}</div></td><td>${esc(e.CLINICA)}<div class="note">${esc(e.as?.['AREA']||e.SERVICIO)} · ubic. ${esc(e.as?.['UBICACIÓN']||e.UBICACION)} · ${esc(e.DIVISION)}</div></td><td>${esc(e.MARCA)} ${esc(e.MODELO)}<div class="note">${esc(e.PROCESADOR)} · ${e.RAM_GB} GB · ${esc(e.ALMACENAMIENTO)}</div></td><td class="mono">${e.as?esc(e.as['INSTALACION']):fd(e.FECHA_ADQUISICION)}</td><td class="mono">${fd(due(e))}</td><td>${aspill(asStatus(e))}</td><td>${pill(stOf(e))}</td></tr>`).join('')}</table></div>
+   <div class="row" style="margin-top:8px"><button class="btn sm" id="pp" ${S.invPage?'':'disabled'}>Anterior</button><span class="note">Página ${S.invPage+1} de ${pages}</span><button class="btn sm" id="pn" ${S.invPage<pages-1?'':'disabled'}>Siguiente</button></div>
+  </div>`;
+};
+after.inventario=()=>{
+  $('#q').oninput=e=>{S.invQ=e.target.value;S.invPage=0;const p=e.target.selectionStart;render();const q=$('#q');q.focus();q.setSelectionRange(p,p)};
+  $('#fc').onchange=e=>{S.invClin=e.target.value;S.invPage=0;render()};
+  $('#fa').onchange=e=>{S.invAs=e.target.value;S.invPage=0;render()};
+  $('#fs').onchange=e=>{S.invSt=e.target.value;S.invPage=0;render()};
+  $('#pp').onclick=()=>{S.invPage--;render()};$('#pn').onclick=()=>{S.invPage++;render()};
+  $('#file').onchange=e=>e.target.files[0]&&readFile(e.target.files[0]);
+  $('#sync')&&($('#sync').onclick=()=>syncSheet());
+  const d=$('#drop');d.ondragover=e=>{e.preventDefault();d.classList.add('over')};d.ondragleave=()=>d.classList.remove('over');d.ondrop=e=>{e.preventDefault();d.classList.remove('over');e.dataTransfer.files[0]&&readFile(e.dataTransfer.files[0])};
+  $('#tpl').onclick=()=>xlsxOut(asObjs({cols:AS_COLS(),rows:DATA.appsheet.rows.slice(0,6)}),'plantilla_AppSheet_Activo360.xlsx',AS_COLS());
+  $('#exp').onclick=()=>xlsxOut(asExportRows(),'AppSheet_equipos_Activo360_'+S.today+'.xlsx',[...AS_COLS(),'ESTATUS ACTIVO 360','PRECIO AUTORIZADO','FOLIO VENTA']);
+  $('#sample').onclick=()=>{init(true);S.view='inventario';save();render();toast('Demo restablecido')};
+};
+function xlsxOut(rows,name,header){try{const ws=XLSX.utils.json_to_sheet(rows,header?{header}:undefined);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'INVENTARIO');XLSX.writeFile(wb,name);toast('Descargando '+name)}catch(e){toast('No se pudo generar la descarga en esta vista')}}
+function normDate(v){if(v instanceof Date)return iso(new Date(Date.UTC(v.getFullYear(),v.getMonth(),v.getDate())));if(typeof v==='number'){const d=new Date(Date.UTC(1899,11,30));d.setUTCDate(d.getUTCDate()+Math.floor(v));return iso(d)}const s=String(v||'').trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);if(m&&+m[2]<=12&&+m[1]<=31)return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;return null}
+const normK=k=>String(k).trim().toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Z0-9]+/g,'_').replace(/^_|_$/g,'');
+function readRows(f,cb,out,asText){const rd=new FileReader();const csv=/\.csv$/i.test(f.name);rd.onload=ev=>{try{const wb=csv?XLSX.read(String(ev.target.result).replace(/^\uFEFF/,''),{type:'string',raw:!!asText}):XLSX.read(new Uint8Array(ev.target.result),{type:'array',cellDates:true});const raw=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],asText?{defval:'',raw:false,dateNF:'dd/mm/yyyy'}:{defval:''});if(!raw.length)throw new Error('El archivo no tiene filas.');cb(raw.map(r=>{const o={};for(const k in r)o[normK(k)]=r[k];return o}),raw)}catch(err){$(out).innerHTML=`<div class="result bad"><b>No se pudo cargar.</b> ${esc(err.message)}</div>`}};csv?rd.readAsText(f,'utf-8'):rd.readAsArrayBuffer(f)}
+function readFile(f){readRows(f,(rows,raw)=>{
+  let src;
+  if('ID_ACTIVO' in rows[0]){ // compatibilidad con la plantilla anterior de Activo 360
+    const miss=REQ.filter(c=>!(c in rows[0]));if(miss.length)throw new Error('Faltan columnas obligatorias: '+miss.join(', '));
+    let bad=0;const inv=[];rows.forEach(r=>{const fa=normDate(r.FECHA_ADQUISICION);if(!fa||!r.ID_ACTIVO){bad++;return}
+      const o={};COLS.forEach(c=>o[c]=r[c]??'');o.FECHA_ADQUISICION=fa;o.TIPO_EQUIPO=o.TIPO_EQUIPO||'Escritorio';o.VIDA_UTIL_ANIOS=+r.VIDA_UTIL_ANIOS||VIDA[o.TIPO_EQUIPO]||5;o.GENERACION=+r.GENERACION||genOf(r.PROCESADOR);o.RAM_GB=+r.RAM_GB||8;o.MUNICIPIO=o.MUNICIPIO||o.CLINICA;inv.push(o)});
+    src={inv,prev:[],bad,name:f.name,total:rows.length};
+  }else{
+    const miss=AS_REQ.filter(c=>!(normK(c) in rows[0]));if(miss.length)throw new Error('No es la vista de AppSheet. Faltan columnas: '+miss.join(', '));
+    src=mapAS(raw,f.name);
+  }
+  if(!src.inv.length)throw new Error('No hay equipos vigentes (ACTIVO, RESGUARDO o PLAN DE RENOVACION) en el archivo.');
+  const ti={col:S.col,ast:S.ast,cartas:S.cartas,movs:S.movs,cfg:S.cfg};init(false,src);Object.assign(S,ti);S.view='inventario';save();render();
+  $('#upres').innerHTML=`<div class="result"><b>${src.inv.length} equipos vigentes cargados</b> desde ${esc(f.name)} · ${src.prev.length} históricos${src.bad?` · ${src.bad} filas omitidas (sin serie, centro de trabajo o fecha válida)`:''}.<div class="note">Cumplieron vida útil: ${S.items.filter(e=>baseSt(e)==='VENCIDO').length} · En alerta: ${S.items.filter(e=>baseSt(e)==='ALERTA').length} · En plan de renovación: ${S.items.filter(e=>e.p==='CONFIRMADO').length}</div></div>`;
+  log('POST','/inventario/import','int',{archivo:f.name,filas:src.total,vigentes:src.inv.length,historicos:src.prev.length,omitidas:src.bad},'Carga de la vista de equipos de AppSheet a Activo 360.')},'#upres',true)}
+
+/* ================= ALERTAS ================= */
+VIEWS.alertas=()=>{const a=alerts(),f=S.alF||'';const l=a.map((x,i)=>[x,i]).filter(([x])=>!f||x.l===f);
+  return `<div><h1>Alertas</h1><p class="sub">Lo que necesita atención hoy (${fd(S.today)}), de la más urgente a la informativa. Se recalculan con cada cierre del día y cada actualización de AppSheet.</p></div>
+  <div class="row">${[['','Todas',a.length],['bad','Urgentes',a.filter(x=>x.l==='bad').length],['warn','Por atender',a.filter(x=>x.l==='warn').length],['info','Avisos',a.filter(x=>x.l==='info').length]].map(([k,t,n])=>`<button class="btn sm ${f===k?'p':''}" data-alf="${k}">${t} · ${n}</button>`).join('')}</div>
+  <div class="card alist">${l.map(([x,i])=>alertRow(x,i)).join('')||'<p class="note">Sin alertas en esta categoría.</p>'}</div>`};
+after.alertas=()=>{$$('[data-alf]').forEach(b=>b.onclick=()=>{S.alF=b.dataset.alf;render()});bindAlerts(alerts())};
+
+after.panel=()=>bindAlerts(alerts());
+
+/* ================= INGENIERO ================= */
+VIEWS.ingeniero=()=>{
+  const clins=[...new Set(S.items.map(e=>e.CLINICA))].sort();
+  const score=c=>S.items.filter(e=>e.CLINICA===c&&((!e.p&&soon(e))||['CONFIRMADO','AGENDA','ENTREGA','DONACION'].includes(e.p))).length;
+  if(!S.engClinic||!clins.includes(S.engClinic))S.engClinic=clins.slice().sort((a,b)=>score(b)-score(a))[0];
+  const its=S.items.filter(e=>e.CLINICA===S.engClinic);const eng=its[0]?.INGENIERO||'Ingeniero';
+  const toConf=its.filter(e=>!e.p&&soon(e)),toDx=its.filter(e=>e.p==='CONFIRMADO'),toAg=its.filter(e=>e.p==='AGENDA'),toDel=its.filter(e=>e.p==='ENTREGA'),toDon=its.filter(e=>e.p==='DONACION');
+  const dx=S.dxId!=null?S.items[S.dxId]:null;const tm=addBiz(S.today,1);
+  const hrs=['9:00','10:00','11:00','12:00','13:00','16:00','17:00'];
+  return `<div class="row"><div><h1>Ingeniero de Sistemas</h1><p class="sub">${esc(eng)} · alertas, diagnóstico, agenda y entrega en clínica. Los pendientes nuevos llegan por correo con el enlace a esta pantalla.</p></div><span class="sp"></span>
+   <select id="ec">${clins.map(c=>`<option value="${esc(c)}" ${c===S.engClinic?'selected':''}>${esc(c)} (${score(c)})</option>`).join('')}</select></div>
+  ${toConf.length?`<div class="banner"><div style="flex:1 1 300px"><b>Alerta preventiva.</b> ${toConf.filter(e=>baseSt(e)==='VENCIDO').length} equipos ya cumplieron su vida útil y ${toConf.filter(e=>baseSt(e)==='ALERTA').length} la cumplen en los próximos 3 meses en ${esc(S.engClinic)}. Cuando lleguen los equipos nuevos, confirma para iniciar el diagnóstico.</div><button class="btn p" id="confAll">Confirmar llegada de equipos nuevos (${toConf.length})</button></div>`:''}
+  ${dx?dxForm(dx):''}
+  <div class="grid g2">
+   <div class="card"><h2>Por diagnosticar <span class="cnt">${toDx.length}</span></h2>
+    <div class="tbl" style="margin-top:10px"><table>${toDx.map(e=>`<tr><td>${eqLine(e)}</td><td style="text-align:right"><button class="btn sm p" data-dx="${e._i}">Diagnosticar</button></td></tr>`).join('')||'<tr><td class="note">Sin equipos pendientes de diagnóstico.</td></tr>'}</table></div></div>
+   <div class="card"><h2>Por agendar entrega <span class="cnt">${toAg.length}</span></h2><p class="note">Ya están pagados y facturados. Prepara el equipo y propone fecha y hora; el comprador recibe la cita en Humand.</p>
+    <div class="tbl" style="margin-top:10px"><table>${toAg.map(e=>`<tr><td>${eqLine(e)}<div class="note">Comprador: <b>${esc(e.buyer)}</b> · ${esc(e.sale?.folio||'')}</div></td><td><div class="row" style="gap:4px;justify-content:flex-end"><input type="date" id="cd-${e._i}" value="${tm}" min="${S.today}"><select id="ch-${e._i}">${hrs.map(h=>`<option>${h}</option>`).join('')}</select><button class="btn sm p" data-ag="${e._i}">Agendar</button></div></td></tr>`).join('')||'<tr><td class="note">Sin entregas por agendar.</td></tr>'}</table></div></div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>Entregas agendadas <span class="cnt">${toDel.length}</span></h2><p class="note">El comprador recibe recordatorio diario en Humand hasta que marques la entrega. Solo Sistemas puede cambiar la cita.</p>
+    <div class="tbl" style="margin-top:10px"><table>${toDel.map(e=>`<tr><td>${eqLine(e)}<div class="note">Comprador: <b>${esc(e.buyer)}</b> · cita <b>${fd(e.cita.d)} ${esc(e.cita.h)}</b>${S.today>e.cita.d?` · <span class="pill p-warn">${diff(e.cita.d,S.today)} d sin recoger</span>`:''}</div></td><td><div class="row" style="gap:4px;justify-content:flex-end"><button class="btn sm" data-rp="${e._i}">Reprogramar</button><button class="btn sm h" data-del="${e._i}">Registrar entrega</button></div></td></tr>`).join('')||'<tr><td class="note">Sin entregas agendadas.</td></tr>'}</table></div></div>
+   <div class="card"><h2>Donaciones por entregar <span class="cnt">${toDon.length}</span></h2><p class="note">Activo Fijo eligió la donataria y la fecha. Al entregar, el equipo sale del stock.</p>
+    <div class="tbl" style="margin-top:10px"><table>${toDon.map(e=>`<tr><td>${eqLine(e)}<div class="note">${esc(e.don.org)} · ${fd(e.don.fecha)}</div></td><td style="text-align:right"><button class="btn sm h" data-dent="${e._i}">Registrar entrega</button></td></tr>`).join('')||'<tr><td class="note">Sin donaciones por entregar.</td></tr>'}</table></div></div>
+  </div>
+  <div class="card"><h2>Equipos de la clínica</h2><div class="tbl" style="margin-top:10px;max-height:420px"><table><tr><th>Equipo</th><th>Sustituir</th><th>Estatus</th></tr>${its.map(e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td>${eqLine(e)}</td><td class="mono">${fd(due(e))}</td><td>${pill(stOf(e))}</td></tr>`).join('')}</table></div></div>`;
+};
+
+function dxForm(e){const d=S.dxDraft||(S.dxDraft={...DEFDX,comp:[],fotos:''});const t=tipo(e),pc=t==='Escritorio'||t==='Laptop';
+  const seg=(k,opts)=>`<div class="seg">${opts.map(([v,l])=>`<label><input type="radio" name="${k}" value="${v}" ${d[k]===v?'checked':''}>${l}</label>`).join('')}</div>`;
+  const dest=destino(d),pr=priceCalc(e,d);const needDisk=pc||t==='Memoria USB';
+  return `<div class="card" style="border-color:var(--sd)"><div class="row"><h2>Diagnóstico · ${esc(e.ID_ACTIVO)}</h2><span class="pill p-mut">${esc(t)}</span><span class="sp"></span><button class="btn sm" id="dxx">Cerrar</button></div>
+  <p class="note">${esc(e.MARCA)} ${esc(e.MODELO)}${pc?` · ${esc(e.PROCESADOR)} · ${e.RAM_GB} GB · ${esc(e.ALMACENAMIENTO)}`:''}${t==='Escritorio'?' · '+esc(e.MONITOR):''} · serie ${esc(e.NUM_SERIE)} · adquirido ${fd(e.FECHA_ADQUISICION)}</p>
+  <form id="dxf" class="form" style="margin-top:10px">
+   <div class="fld"><span class="lb">${pc?'¿Enciende y arranca el sistema?':'¿Funciona correctamente?'}</span>${seg('enciende',[['si','Sí'],['no','No']])}</div>
+   ${d.enciende==='si'?`
+   ${pc?`<div class="fld"><span class="lb">Rendimiento en prueba</span>${seg('rend',[['ok','Óptimo'],['lento','Lento']])}</div>`:''}
+   ${t==='Escritorio'?`<div class="fld"><span class="lb">Monitor</span>${seg('monitor',[['ok','Funciona'],['fallas','Con fallas'],['no','No incluido']])}</div>`:''}
+   <div class="fld"><span class="lb">Estética</span>${seg('estetica',[['A','A · como nuevo'],['B','B · detalles'],['C','C · golpes']])}</div>
+   ${pc||t==='Hub USB-C'?`<div class="fld"><span class="lb">Puertos USB / red / video</span>${seg('puertos',[['ok','Todos funcionan'],['falla','Alguno falla']])}</div>`:''}
+   <div class="fld"><span class="lb">${t==='Escritorio'?'Teclado y mouse':t==='Laptop'?'Cargador':'Cables y accesorios'}</span>${seg('perif',[['si','Incluidos'],['no','No incluidos']])}</div>
+   ${needDisk?`<div class="fld"><span class="lb">Almacenamiento (seguridad de información)</span>${seg('disco',[['borrado','Borrado seguro hecho'],['pend','Pendiente'],['retirado','Retirado y destruido']])}</div>`:''}`:`
+   <div class="fld"><span class="lb">Componentes recuperables</span><div class="seg">${(pc?['RAM','Disco','Fuente','Monitor']:['Cables','Piezas']).map(c=>`<label><input type="checkbox" name="comp" value="${c}" ${d.comp.includes(c)?'checked':''}>${c}</label>`).join('')}</div></div>`}
+   <div class="fld"><label for="fotos">Evidencia fotográfica</label><input type="file" id="fotos" accept="image/*" multiple><span class="note">${esc(d.fotos||'Sin archivos')}</span></div>
+   <div class="fld"><label for="obs">Observaciones</label><input type="text" id="obs" value="${esc(d.obs)}" placeholder="Opcional"></div>
+  </form>
+  <div class="${dest==='VENTA'&&!(needDisk&&d.disco==='pend')?'result':'result bad'}" style="margin-top:12px">
+   ${dest==='VENTA'?(needDisk&&d.disco==='pend'?`<b>Falta el borrado seguro.</b> Para enviarlo a venta, el almacenamiento debe estar borrado o retirado.`:
+   `<div class="row"><div><div class="note">Destino: <b>Venta local en ${esc(e.MUNICIPIO)}</b></div><div class="pr">${money(pr.sug)}</div><div class="note">Rango sugerido ${money(pr.min)} – ${money(pr.max)} · tabulador de Activo Fijo</div></div><span class="sp"></span><button class="btn h" id="dxsend">Enviar a Activo Fijo por Humand</button></div>`)
+   :`<div class="row"><div><div class="note">Destino</div><b>${dest==='RECUP'?'Recuperar componentes ('+d.comp.join(', ')+') y destruir el remanente':'Destrucción certificada'}</b></div><span class="sp"></span><button class="btn" id="dxsend">Enviar a destrucción</button></div>`}
+  </div></div>`}
+after.ingeniero=()=>{
+  $('#ec').onchange=e=>{S.engClinic=e.target.value;S.dxId=null;render()};
+  $('#confAll')&&($('#confAll').onclick=()=>{const l=S.items.filter(e=>e.CLINICA===S.engClinic&&!e.p&&soon(e));l.forEach(e=>{e.p='CONFIRMADO';H(e,'Reemplazo confirmado: equipos nuevos recibidos en clínica','SIS')});save();render();toast(`${l.length} equipos listos para diagnóstico`)});
+  $$('[data-dx]').forEach(b=>b.onclick=()=>{S.dxId=+b.dataset.dx;S.dxDraft=null;render();$('#dxf').scrollIntoView({block:'center'})});
+  $$('[data-del]').forEach(b=>b.onclick=()=>openDelivery(+b.dataset.del));
+  $$('[data-ag]').forEach(b=>b.onclick=()=>{const e=S.items[+b.dataset.ag],d=$('#cd-'+e._i).value;if(!d||d<S.today){toast('Elige una fecha a partir de hoy');return}schedule(e,d,$('#ch-'+e._i).value);save();render();toast('Cita enviada al comprador por Humand')});
+  $$('[data-rp]').forEach(b=>b.onclick=()=>openResched(+b.dataset.rp));
+  $$('[data-dent]').forEach(b=>b.onclick=()=>{deliverDon(S.items[+b.dataset.dent]);save();render();toast('Donación entregada · Activo Fijo tiene 10 días para adjuntar la factura')});
+  if(!$('#dxf'))return;
+  $('#dxx').onclick=()=>{S.dxId=null;render()};
+  $('#dxf').onchange=ev=>{const d=S.dxDraft;const t=ev.target;if(t.name==='comp')d.comp=$$('input[name=comp]:checked').map(x=>x.value);else if(t.id==='fotos')d.fotos=[...t.files].map(f=>f.name).join(', ');else if(t.id==='obs')d.obs=t.value;else if(t.name)d[t.name]=t.value;render()};
+  $('#dxsend')&&($('#dxsend').onclick=()=>{const e=S.items[S.dxId],d={...S.dxDraft};e.dx=d;const dest=destino(d);
+    if(dest==='VENTA'){e.price=priceCalc(e,d);e.price.aut=e.price.sug;e.p='PRECIO';H(e,`Diagnóstico registrado · destino venta · sugerido ${money(e.price.sug)}`,'SIS');newReq('PRECIO',e,{amount:e.price.sug});toast('Solicitud enviada a la bandeja de Activo Fijo en Humand')}
+    else{e.p='DESTRUCCION';e.destD=S.today;H(e,dest==='RECUP'?`No funciona · se recuperan ${d.comp.join(', ')} · remanente a destrucción`:'No funciona · destrucción certificada','SIS');toast('Equipo enviado a destrucción certificada')}
+    S.dxId=null;S.dxDraft=null;save();render()});
+};
+function openResched(i){const e=S.items[i];const hrs=['9:00','10:00','11:00','12:00','13:00','16:00','17:00'];
+ $('#drawer').innerHTML=`<div class="drawer"><div><div class="row"><h2>Reprogramar entrega</h2><span class="sp"></span><button class="btn sm" data-close>Cerrar</button></div>${eqLine(e)}
+ <div class="card"><div class="note">Cita actual</div><b>${fd(e.cita.d)} · ${esc(e.cita.h)}</b><div class="note">Comprador: ${esc(e.buyer)}</div></div>
+ <div class="form"><div class="fld"><label for="rpd">Nueva fecha</label><input type="date" id="rpd" value="${addBiz(S.today,1)}" min="${S.today}"></div><div class="fld"><label for="rph">Hora</label><select id="rph">${hrs.map(h=>`<option>${h}</option>`).join('')}</select></div></div>
+ <button class="btn p" id="rpok">Guardar y avisar al comprador</button></div></div>`;bindClose();
+ $('#rpok').onclick=()=>{const d=$('#rpd').value;if(!d||d<S.today){toast('Elige una fecha a partir de hoy');return}schedule(e,d,$('#rph').value,true);closeDrawer();save();render();toast('Nueva cita enviada por Humand')}}
+function openDelivery(i){const e=S.items[i];$('#drawer').innerHTML=`<div class="drawer"><div><div class="row"><h2>Entrega en clínica</h2><span class="sp"></span><button class="btn sm" data-close>Cerrar</button></div>
+ ${eqLine(e)}<div class="card"><div class="note">Entregar a</div><b>${esc(e.buyer)}</b><div class="note">${esc(e.sale?.folio||'')} · factura ${esc(e.fac||'')} · ${money(e.pay?.amount||0)} · cita ${fd(e.cita?.d)} ${esc(e.cita?.h||'')}</div></div>
+ <label class="chk"><input type="checkbox" id="c1"> Verifiqué identificación / gafete del colaborador</label>
+ <label class="chk"><input type="checkbox" id="c2"> El colaborador revisó el equipo y firma de conformidad (equipo usado, sin garantía)</label>
+ <div class="fld"><label for="fir">Nombre de quien recibe (firma digital)</label><input type="text" id="fir" value="${esc((e.buyer||'').split(' · ')[0])}"></div>
+ <button class="btn p" id="okDel" disabled>Marcar como entregado</button></div></div>`;
+ const chk=()=>$('#okDel').disabled=!($('#c1').checked&&$('#c2').checked&&$('#fir').value.trim());['#c1','#c2','#fir'].forEach(s=>$(s).oninput=chk);
+ $('#okDel').onclick=()=>{e.p='ENTREGADO';H(e,`Equipo entregado a ${$('#fir').value.trim()} · expediente cerrado`,'SIS');addFile(e,'Acta de entrega firmada.pdf');notify(e.buyer,`Entrega registrada de ${e.ID_ACTIVO}. Cuéntanos cómo te fue en la encuesta de 3 preguntas.`,'req');log('PATCH','/inventario/'+e.ID_ACTIVO,'int',{estatus:'ENTREGADO',baja:true},'Cierre del activo en el inventario.');closeDrawer();save();render();toast('Entrega registrada · venta concluida')};
+ bindClose()}
+
+function closeDrawer(){$('#drawer').innerHTML=''}
+function bindClose(){$$('[data-close]').forEach(b=>b.onclick=closeDrawer);const d=document.querySelector('.drawer');d&&(d.onclick=ev=>{if(ev.target===d)closeDrawer()})}
+
+/* ================= SEGUIMIENTO ================= */
+const ownerOf=e=>e.p==='FIRMAS'&&e.sale?.colSig?'JEFE':OWNER[e.p];
+VIEWS.seguimiento=()=>{
+  const act=S.items.filter(e=>e.p&&!DESTR.includes(e.p)).filter(e=>!S.segArea||(S.segArea==='COL'?['COL','JEFE'].includes(ownerOf(e)):ownerOf(e)===S.segArea)||(S.segArea==='DONE'&&['ENTREGADO','DONADO'].includes(e.p)));
+  act.sort((a,b)=>(DON.includes(a.p)?20:flowIdx(a.p))-(DON.includes(b.p)?20:flowIdx(b.p)));
+  return `<div><h1>Seguimiento de ventas</h1><p class="sub">Dónde está cada venta, quién la tiene y cuántos días lleva. Mientras nadie responda hay recordatorio diario: por el bot de Activo 360 en Humand al colaborador, jefe, Activo Fijo e Ingresos; por correo a Sistemas, Facturación y Fiscal. Al tercero se escala al jefe del área.</p></div>
+  <div class="card"><div class="flow"><span>Ingeniero diagnostica</span><em>→</em><span>Activo Fijo autoriza precio</span><em>→</em><span class="h">Publicación en el Bazar</span><em>→</em><span class="h">Compra en Gestión de Servicios</span><em>→</em><span class="h">Colaborador y jefe firman (${C().plazo.firmas} d)</span><em>→</em><span class="h">Depósito y váucher (${C().plazo.pago} d)</span><em>→</em><span>Ingresos confirma · sale del stock</span><em>→</em><span class="g">Facturación adjunta CFDI</span><em>→</em><span class="g">Sistemas agenda</span><em>→</em><span>Entrega</span></div><p class="note" style="margin:8px 0 0">En rosa: lo que se hace en Humand (Bazar, formulario de compra, firmas). En blanco: se resuelve en Activo 360, con aviso por el bot de Humand. En azul: aviso por correo de Google. Si el equipo no se vende en ${C().plazo.sinVenta} días, Activo Fijo decide: bajar precio, subasta, donación o destrucción.</p></div>
+  <div class="row"><span class="note">Filtrar por responsable:</span>${[['','Todos'],['SIS','Sistemas'],['AF','Activo Fijo'],['COL','Colaborador / jefe'],['ING','Ingresos'],['FAC','Facturación'],['DONE','Concluidos']].map(([k,l])=>`<button class="btn sm ${S.segArea===k?'p':''}" data-sa="${k}">${l}</button>`).join('')}</div>
+  <div class="tbl"><table><tr><th>Equipo</th><th>Etapa actual</th><th>Responsable</th><th class="n">Días en etapa</th><th class="n">Recordat.</th><th>Tiempo meta</th><th>Avance</th></tr>
+  ${act.map(e=>{const r=curReq(e);const last=e.hist[e.hist.length-1];const days=r?diff(r.created,S.today):last?diff(last.d,S.today):0;const ow=ownerOf(e);return `<tr data-eq="${e._i}" style="cursor:pointer"><td>${eqLine(e)}${e.sale?`<div class="mono note">${e.sale.folio}</div>`:''}</td><td>${pill(e.p)}${r?`<div class="mono note">${r.id}</div>`:''}</td><td>${['ENTREGADO','DONADO'].includes(e.p)?'—':ow==='COL'&&e.buyer?esc(e.buyer.split(' · ')[0])+'<div class="note">colaborador</div>':ow==='JEFE'?esc(e.sale.jefe)+'<div class="note">jefe inmediato</div>':AREAS[ow]||'—'}${r?.esc?' <span class="pill p-bad">Escalado</span>':''}</td><td class="n">${e.p==='ENTREGADO'?'—':days}</td><td class="n">${r?r.rem:'—'}</td><td>${r?slaPill(r):sisTask(e)?slaPill(sisTask(e)):e.p==='PAGO'?`<span class="pill p-warn">vence ${fd(e.pay.dl)}</span>`:''}</td><td>${steps(e,true)}</td></tr>`}).join('')||'<tr><td class="note">Sin solicitudes en este filtro.</td></tr>'}</table></div>`;
+};
+after.seguimiento=()=>$$('[data-sa]').forEach(b=>b.onclick=()=>{S.segArea=b.dataset.sa;render()});
+function frozenNote(e){if(e.p==='FIRMAS')return `Congelado para ${esc(e.buyer)}. ${e.sale.colSig?`Falta la firma de ${esc(e.sale.jefe)}`:'Falta la firma del colaborador'}; si no se completa antes del ${fd(addD(e.sale.firmDl,1))} se libera.`;
+  if(e.p==='PAGO')return `Congelado para ${esc(e.buyer)}. Debe depositar y subir el váucher a más tardar el ${fd(e.pay.dl)}${e.pay.rej?' (Ingresos no encontró el primer depósito)':''}.`;
+  if(e.p==='DEPOSITO')return `Congelado para ${esc(e.buyer)} mientras Ingresos valida el váucher.`;return ''}
+function openEq(i){const e=S.items[i];const r=curReq(e);const cp=curPrice(e);
+ $('#drawer').innerHTML=`<div class="drawer"><div><div class="row"><h2>${esc(e.ID_ACTIVO)}</h2>${pill(stOf(e))}<span class="sp"></span><button class="btn sm p" data-exp="${e._i}">Expediente</button><button class="btn sm" data-close>Cerrar</button></div>
+ <div class="note">${esc(eqName(e))}${e.PROCESADOR?' · '+esc(e.PROCESADOR)+' · '+e.RAM_GB+' GB · '+esc(e.ALMACENAMIENTO):''}<br>${esc(e.CLINICA)} (${esc(e.MUNICIPIO)}, ${esc(e.ESTADO)}) · ${esc(e.SERVICIO)} ${esc(e.UBICACION)} · serie ${esc(e.NUM_SERIE)}<br>Adquirido ${fd(e.FECHA_ADQUISICION)} · fin de vida útil ${fd(due(e))} · responsable ${esc(e.INGENIERO)}${e.as?`<br>AppSheet: ${aspill(e.as['ESTATUS'])} → ${aspill(asStatus(e))} · área ${esc(e.as['AREA'])} ubic. ${esc(e.as['UBICACIÓN'])} · zona ${esc(e.as['ZONA'])}${e.as['# DE SERIE NUEVO EQUIPO']?' · equipo nuevo '+esc(e.as['# DE SERIE NUEVO EQUIPO']):''}${e.as['# DE TICKET']?' · ticket '+esc(e.as['# DE TICKET']):''}${e.as['PERTENECE A:']?' · '+esc(e.as['PERTENECE A:']):''}${e.as['MODIFICADO EL:']?' · modificado '+esc(e.as['MODIFICADO EL:']):''}`:''}</div>
+ ${e.p&&!DESTR.includes(e.p)?`<div class="card">${steps(e)}${r?`<p class="note" style="margin:8px 0 0">Solicitud <b class="mono">${r.id}</b> (${RT[r.type].n}) con <b>${r.type==='FIRMA_JEFE'?esc(e.sale.jefe):r.type==='FIRMA_COL'?esc(e.buyer):AREAS[RT[r.type].a]}</b> desde ${fd(r.created)} · ${RT[r.type].ch==='correo'?'aviso por correo':RT[r.type].ch==='firma'?'firma en Humand':'aviso por bot de Humand'} · ${r.rem} recordatorio(s)${r.esc?' · escalada':''}</p>`:''}${FROZEN.includes(e.p)?`<p class="note">${frozenNote(e)}</p>`:''}${e.p==='ENTREGA'?`<p class="note">Cita: ${fd(e.cita.d)} ${esc(e.cita.h)} en ${esc(e.CLINICA)}.</p>`:''}${e.sale?`<p class="note">Folio <b class="mono">${e.sale.folio}</b> · carpeta en Drive con ${e.sale.files.length} documento(s) · ${esc(fiscalTxt(e.sale.fiscal))}</p>`:''}</div>`:''}
+ <div class="card grid g4"><div class="kpi"><div class="l">Valor estimado</div><div class="v" style="font-size:18px">${money(estValue(e))}</div></div>${e.price?`<div class="kpi"><div class="l">Autorizado AF</div><div class="v" style="font-size:18px">${money(e.price.aut)}</div></div>`:''}${cp&&['PUBLICADO','SUBASTA'].includes(e.p)?`<div class="kpi"><div class="l">${cp.auction?'Mejor oferta':'Precio hoy'}</div><div class="v" style="font-size:18px">${money(cp.v)}</div><div class="s">${cp.l}</div></div>`:''}${e.buyer?`<div class="kpi"><div class="l">Comprador</div><div style="font-weight:600">${esc(e.buyer)}</div></div>`:''}</div>
+ <div class="card"><h3>Bitácora</h3><ul class="tl" style="margin-top:10px">${e.hist.slice().reverse().map(h=>`<li class="${h.k}"><span class="mono note">${fd(h.d)}</span><span class="dot"></span><span>${esc(h.t)}<div class="note">${AREAS[h.a]||''}</div></span></li>`).join('')||'<li><span></span><span></span><span class="note">Sin movimientos.</span></li>'}</ul></div></div></div>`;bindClose();$('[data-exp]').onclick=()=>openExp(e._i)}
+/* ================= COMPRA ================= */
+const REGS=['605 Sueldos y salarios','612 Personas físicas con actividad empresarial','626 Régimen simplificado de confianza','616 Sin obligaciones fiscales','601 General de ley personas morales'];
+const USOS=['G03 Gastos en general','S01 Sin efectos fiscales','I04 Equipo de cómputo y accesorios'];
+function formatoDoc(e,amount){const s=e.sale||{};const buyer=e.sale?e.buyer:MEB_();const emp=s.emp||ME.emp,jefe=s.jefe||ME.jefe;
+  const kv=rows=>`<table>${rows.map(([k,v])=>`<tr><th style="width:42%">${k}</th><td>${v}</td></tr>`).join('')}</table>`;
+  return `<div class="carta"><div class="row"><b>FORMATO SGC-N4-60 · Solicitud de compra de activo usado</b><span class="sp"></span><span class="note mono">${esc(s.folio||'folio al confirmar')}</span></div>
+   <h3 style="margin-top:12px;text-align:left">Colaborador (perfil de Humand)</h3>${kv([['Nombre',esc(buyer.split(' · ')[0])],['No. de empleado',esc(emp)],['Puesto',esc(s.puesto||ME.puesto)],['Área',esc(s.area||ME.area)],['Jefe inmediato',esc(jefe)]])}
+   <h3 style="margin-top:12px;text-align:left">Equipo</h3>${kv([['Marca',esc(e.MARCA)],['Modelo',esc(e.MODELO)],['No. de serie',esc(e.NUM_SERIE)],['Código de barras / activo',esc(e.ID_ACTIVO)],['Clínica de entrega',esc(e.CLINICA)],['Precio',money(amount??e.pay?.amount??e.price?.aut)]])}
+   <div class="firma"><div><div class="sig">${s.colSig?'Firmado '+fd(s.colSig):''}</div>Colaborador</div><div><div class="sig">${s.jefeSig?'Firmado '+fd(s.jefeSig):''}</div>Jefe inmediato</div></div></div>`}
+VIEWS.compra=()=>{
+  const e=S.buyId!=null?S.items[S.buyId]:null;const me=MEB_();const mine=S.items.filter(x=>x.buyer===me||(x.p==='SUBASTA'&&x.auc.bids.some(b=>b.who===me)));
+  let top='';const avail=e&&['PUBLICADO','SUBASTA'].includes(e.p);
+  if(avail&&!canBuy(e).ok)top=`<div class="banner"><div><b>No puedes comprar este equipo.</b> ${esc(canBuy(e).msg)}.</div></div>`;
+  else if(avail){const cp=curPrice(e);const auc=e.p==='SUBASTA';const minBid=auc?r50(Math.max(e.auc.min,cp.v+(e.auc.bids.length?50:0))):0;const f=S.fisDraft||(S.fisDraft={tipo:'publico',modo:'datos'});
+   top=`<div class="card" style="border-color:var(--hm)"><p class="note" style="margin:0 0 8px"><b style="color:var(--hm)">Formulario “Compra de equipo”</b> · lo llena <b>${ME.name}</b> · No. empleado ${ME.emp} · datos del perfil de Humand</p>
+   <div class="grid g2"><div><h2>${esc(eqName(e))}</h2><p class="note">${e.PROCESADOR?esc(e.PROCESADOR)+' · '+e.RAM_GB+' GB RAM · '+(e.dx?.disco==='retirado'?'sin disco':esc(e.ALMACENAMIENTO))+' · ':''}${tipo(e)==='Escritorio'?(e.dx?.monitor==='no'?'sin monitor':esc(e.MONITOR))+' · ':''}estética ${e.dx?.estetica||'A'}<br>Activo ${esc(e.ID_ACTIVO)} · se entrega en <b>${esc(e.CLINICA)}</b>, ${esc(e.MUNICIPIO)}</p>
+    <div style="font:700 30px var(--f-num)">${auc?`<input type="number" id="bid" min="${minBid}" step="50" value="${minBid}" style="width:140px"> <span class="note">tu oferta</span>`:money(cp.v)}</div><div class="note">${auc?`Subasta · ${cp.bids} oferta(s) · mejor ${money(cp.v)} · mínimo ${money(minBid)} · cierra ${fd(e.auc.end)}`:cp.l+' · publicado hace '+cp.d+' días'}</div>
+    <details style="margin-top:12px"><summary>Ver formato SGC-N4-60 prellenado</summary>${formatoDoc(e,auc?minBid:cp.v)}</details></div>
+    <form id="buyf" class="fld" style="gap:10px"><span class="lb">¿Necesitas factura?</span>
+     <div class="seg"><label><input type="radio" name="tf" value="publico" ${f.tipo==='publico'?'checked':''}>No, público en general</label><label><input type="radio" name="tf" value="factura" ${f.tipo==='factura'?'checked':''}>Sí, a mi nombre</label></div>
+     ${f.tipo==='factura'?`<div class="seg"><label><input type="radio" name="fm" value="datos" ${f.modo==='datos'?'checked':''}>Capturar datos</label><label><input type="radio" name="fm" value="csf" ${f.modo==='csf'?'checked':''}>Subir constancia (CSF)</label></div>
+      ${f.modo==='csf'?`<label class="btn sm" style="align-self:flex-start">${f.csf?esc(f.csf):'Elegir constancia de situación fiscal'}<input type="file" id="csf" hidden accept=".pdf,image/*"></label>`:`<div class="form">
+       <div class="fld"><label for="frfc">RFC</label><input type="text" id="frfc" maxlength="13" value="${esc(f.rfc||'')}" style="text-transform:uppercase"></div>
+       <div class="fld"><label for="fnom">Nombre o razón social</label><input type="text" id="fnom" value="${esc(f.nombre||ME.name)}"></div>
+       <div class="fld"><label for="freg">Régimen fiscal</label><select id="freg">${REGS.map(x=>`<option ${f.regimen===x?'selected':''}>${x}</option>`).join('')}</select></div>
+       <div class="fld"><label for="fcp">Código postal</label><input type="text" id="fcp" maxlength="5" value="${esc(f.cp||'')}"></div>
+       <div class="fld"><label for="fuso">Uso de CFDI</label><select id="fuso">${USOS.map(x=>`<option ${f.uso===x?'selected':''}>${x}</option>`).join('')}</select></div></div>`}`:''}
+     <div class="note">${auc?`Si tu oferta es la más alta al cierre, el equipo se congela a tu nombre y sigue el mismo proceso de compra.`:`Al confirmar, el equipo se <b>congela a tu nombre</b> y se crea la carpeta de tu compra. Primero firmas tú el formato en Humand y después tu jefe inmediato (${C().plazo.firmas} día hábil). Luego recibes los datos bancarios y tienes ${C().plazo.pago} días hábiles para depositar y subir tu váucher.`}</div>
+     <label class="chk"><input type="checkbox" id="acc"> Acepto que es equipo usado, sin garantía, con información borrada de forma segura, y que lo recojo en la clínica indicada (no hay envíos).</label>
+     <button type="submit" class="btn h" id="buyok" disabled>${auc?'Enviar oferta':'Confirmar compra'}</button></form></div></div>`}
+  else if(e&&e.buyer!==me&&!avail) top=`<div class="banner"><div><b>Este equipo ya no está disponible.</b> Elige otro en el Bazar.</div></div>`;
+  const b=C().banco;
+  return `<div><h1>Gestión de Servicios · Compra de equipo</h1><p class="sub">El colaborador inicia la compra en un formulario de Gestión de Servicios de Humand, así la solicitud la crea la persona, como pide Humand por seguridad. Activo 360 lee el formulario con la API y se encarga del resto del proceso.</p></div>
+  ${hmFrame(`${top||`<div class="card row"><span>Elige un equipo en el Bazar de Humand para iniciar una compra.</span><span class="sp"></span><button class="btn h" data-go="hbazar">Ir al Bazar</button></div>`}
+  <div class="card"><h2>Mis compras</h2>${mine.length?mine.map(x=>{const r=curReq(x);return `<div style="border-top:1px solid var(--line);padding-top:12px;margin-top:12px"><div class="row">${eqLine(x)}<span class="sp"></span>${x.sale?`<span class="mono note">${x.sale.folio}</span>`:''}${pill(x.p)}</div>${x.p==='SUBASTA'?'':steps(x)}
+   ${x.p==='SUBASTA'?`<p class="note">Tu oferta: <b>${money(Math.max(...x.auc.bids.filter(b=>b.who===me).map(b=>b.amount)))}</b> · mejor oferta ${money(curPrice(x).v)} · cierra el ${fd(x.auc.end)}.</p>`:''}
+   ${x.p==='FIRMAS'?(x.sale.colSig?`<p class="note">Ya firmaste. Esperando la firma de <b>${esc(x.sale.jefe)}</b> en Humand (a más tardar ${fd(x.sale.firmDl)}).</p>`:`<div class="banner" style="margin-top:8px"><div style="flex:1 1 260px"><b>Firma tu formato SGC-N4-60 en Humand</b> a más tardar el ${fd(x.sale.firmDl)} o el equipo regresa al Bazar.</div><button class="btn sm h" data-go="hfirma">Ir a Documentos en Humand</button></div>`):''}
+   ${x.p==='PAGO'?`<div class="banner" style="margin-top:8px"><div style="flex:1 1 260px">${x.pay.rej?'<b style="color:var(--bad)">Ingresos no encontró tu depósito.</b> Revisa el váucher y vuelve a subirlo.<br>':''}<b>Deposita ${money(x.pay.amount)}</b> · banco ${esc(b.banco)} · titular ${esc(b.titular)} · CLABE <span class="mono">${esc(b.clabe)}</span> · concepto <span class="mono">${esc(x.sale.folio)}</span><br><span class="note">Sube tu váucher a más tardar el ${fd(x.pay.dl)}; si no, el equipo regresa al Bazar.</span></div><label class="btn sm h">Adjuntar váucher en Humand<input type="file" data-up="${x._i}" hidden accept="image/*,.pdf"></label></div>`:''}
+   ${r&&!['FIRMAS','PAGO'].includes(x.p)?`<p class="note">Ahora está en <b>${AREAS[RT[r.type].a]}</b> (${RT[r.type].n}) desde ${fd(r.created)}${r.rem?` · ${r.rem} recordatorio(s) enviados`:''}.</p>`:''}
+   ${x.p==='ENTREGA'?`<p class="note"><b>Tu equipo está listo.</b> Cita: ${fd(x.cita.d)} a las ${esc(x.cita.h)} en ${esc(x.CLINICA)}. Lleva tu gafete. Factura ${esc(x.fac||'')}.</p>`:''}
+   ${x.p==='ENTREGADO'&&!x.survey?`<form class="card" data-sv="${x._i}" style="margin-top:8px;background:var(--surface2)"><b>¿Cómo fue tu experiencia?</b><div class="form" style="margin-top:8px">${['Proceso de compra','Tiempo de entrega','Estado del equipo'].map((l,k)=>`<div class="fld"><span class="lb">${l}</span><div class="seg">${[1,2,3,4,5].map(n=>`<label><input type="radio" name="q${k}" value="${n}" ${n===5?'checked':''}>${n}</label>`).join('')}</div></div>`).join('')}<div class="fld"><label for="svc${x._i}">Comentario</label><input type="text" id="svc${x._i}" name="c" placeholder="Opcional"></div></div><button class="btn p" style="margin-top:8px">Enviar encuesta</button></form>`:''}
+   ${x.survey?`<p class="note">Tu calificación: ${(sum(x.survey.q)/3).toFixed(1)} / 5. ¡Gracias!</p>`:''}</div>`}).join(''):'<p class="note">Aún no tienes compras.</p>'}</div>`,'Vista: colaborador')}`;
+};
+after.compra=()=>{
+  $$('[data-sv]').forEach(f=>f.onsubmit=ev=>{ev.preventDefault();const x=S.items[+f.dataset.sv];x.survey={d:S.today,q:[0,1,2].map(k=>+f['q'+k].value),c:f.c.value.trim()};log('GET','/forms/{id}/answers','pub',{formulario:'Encuesta Activo 360',employeeInternalId:ME.emp,asset:x.ID_ACTIVO,scores:x.survey.q},'Activo 360 lee la respuesta de la encuesta hecha con Formularios de Humand.');save();render();toast('Gracias por tu respuesta')});
+  $$('[data-up]').forEach(inp=>inp.onchange=()=>{const x=S.items[+inp.dataset.up];if(!inp.files[0])return;uploadVoucher(x,inp.files[0].name);save();render();toast('Váucher enviado · Ingresos recibió la solicitud en Humand')});
+  const f=$('#buyf');if(!f)return;const D=S.fisDraft;
+  const keep=()=>{if(D.tipo==='factura'&&D.modo==='datos'&&$('#frfc')){D.rfc=$('#frfc').value.trim().toUpperCase();D.nombre=$('#fnom').value.trim();D.regimen=$('#freg').value;D.cp=$('#fcp').value.trim();D.uso=$('#fuso').value}};
+  $$('input[name=tf],input[name=fm]').forEach(i=>i.onchange=()=>{keep();if(i.name==='tf')D.tipo=i.value;else D.modo=i.value;render()});
+  $('#csf')&&($('#csf').onchange=ev=>{if(ev.target.files[0]){D.csf=ev.target.files[0].name;render()}});
+  $('#acc').onchange=()=>$('#buyok').disabled=!$('#acc').checked;
+  f.onsubmit=ev=>{ev.preventDefault();keep();const e=S.items[S.buyId];
+    let fiscal={tipo:'publico'};
+    if(D.tipo==='factura'){if(D.modo==='csf'){if(!D.csf){toast('Sube tu constancia de situación fiscal');return}fiscal={tipo:'factura',csf:D.csf}}
+      else{if(!/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/.test(D.rfc||'')){toast('Revisa el RFC (12 o 13 caracteres)');return}if(!/^\d{5}$/.test(D.cp||'')){toast('El código postal debe tener 5 dígitos');return}if(!D.nombre){toast('Escribe el nombre o razón social');return}
+        fiscal={tipo:'factura',rfc:D.rfc,nombre:D.nombre,regimen:D.regimen||REGS[0],cp:D.cp,uso:D.uso||USOS[0]}}}
+    const info={emp:ME.emp,puesto:ME.puesto,area:ME.area,jefe:ME.jefe};
+    if(e.p==='SUBASTA'){const v=+($('#bid').value||0),mn=+$('#bid').min;if(!(v>=mn)){toast(`La oferta mínima es ${money(mn)}`);return}e.auc.bids.push({who:MEB_(),amount:v,d:S.today,fiscal,info});H(e,`Oferta de ${MEB_()} por ${money(v)}`,'COL');
+      log('PUT','/products/'+e.ID_ACTIVO,'pub',{status:'SUBASTA',mejorOferta:v},'Actualiza la mejor oferta en el Bazar.');S.fisDraft=null;save();render();toast('Oferta registrada');return}
+    startSale(e,MEB_(),curPrice(e).v,fiscal,info);S.fisDraft=null;save();render();toast('Equipo congelado · firma tu formato en Humand')};
+};
+/* ================= FACTURACIÓN ================= */
+VIEWS.facturacion=()=>{
+  const pend=S.reqs.filter(r=>r.type==='FACTURA'&&r.state==='Pendiente'),done=S.items.filter(e=>e.fac&&e.sale).sort((a,b)=>(b.sale.files.find(f=>f.name===b.fac)?.d||'')>(a.sale.files.find(f=>f.name===a.fac)?.d||'')?1:-1).slice(0,25);
+  return `<div><h1>Facturación</h1><p class="sub">Cada venta confirmada por Ingresos llega por correo a <span class="mono">${MAIL_FAC}</span> con los datos del equipo y a quién se factura. Aquí se adjunta el CFDI; al hacerlo, el comprador recibe aviso en Humand y Sistemas recibe el correo para agendar la entrega.</p></div>
+  <div class="card"><h2>Por facturar <span class="cnt">${pend.length}</span></h2><div class="tbl" style="margin-top:10px"><table><tr><th>Venta</th><th>Equipo</th><th>Facturar a</th><th class="n">Monto</th><th class="n">Días</th><th>CFDI</th></tr>
+   ${pend.map(r=>{const e=S.items[r.eq],f=e.sale.fiscal||{};return `<tr><td class="mono">${e.sale.folio}<div class="note">${r.id}</div></td><td>${eqLine(e)}<div class="note">Serie ${esc(e.NUM_SERIE)}</div></td><td>${f.tipo==='factura'?(f.csf?`<b>${esc(e.buyer.split(' · ')[0])}</b><div class="note">Constancia adjunta: ${esc(f.csf)}</div>`:`<b>${esc(f.nombre)}</b><div class="note mono">${esc(f.rfc)} · CP ${esc(f.cp)}</div><div class="note">${esc(f.regimen)} · ${esc(f.uso)}</div>`):'<b>Público en general</b><div class="note">'+esc(e.buyer)+'</div>'}</td><td class="n">${money(e.pay.amount)}</td><td class="n">${reqDays(r)}<div style="margin-top:4px">${slaPill(r)}</div></td><td><label class="btn sm p">Adjuntar CFDI<input type="file" data-cfdi="${r.id}" hidden accept=".pdf,.xml"></label></td></tr>`}).join('')||'<tr><td colspan="6" class="note">Nada por facturar.</td></tr>'}</table></div></div>
+  <div class="card"><h2>Facturadas recientemente</h2><div class="tbl" style="margin-top:10px"><table><tr><th>Venta</th><th>Equipo</th><th>Comprador</th><th>CFDI</th><th>Estatus</th></tr>${done.map(e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td class="mono">${e.sale.folio}</td><td>${eqLine(e)}</td><td>${esc(e.buyer)}</td><td class="mono note">${esc(e.fac)}</td><td>${pill(e.p)}</td></tr>`).join('')}</table></div></div>`};
+after.facturacion=()=>$$('[data-cfdi]').forEach(inp=>inp.onchange=()=>{if(!inp.files[0])return;attachCFDI(inp.dataset.cfdi,inp.files[0].name);save();render();toast('CFDI adjunto · aviso al comprador y correo a Sistemas')});
+function attachCFDI(id,file){const r=S.reqs.find(x=>x.id===id);const e=S.items[r.eq];closeReq(r);e.fac=file;addFile(e,file);H(e,`Facturación adjuntó el CFDI (${file})`,'FAC');
+  notify(e.buyer,`Tu factura de ${e.sale.folio} está lista. Sistemas te avisará la fecha de entrega.`,'info');e.p='AGENDA';newReq('AGENDA',e)}
+
+/* ================= DESTRUCCIÓN ================= */
+VIEWS.destruccion=()=>{
+  const l=S.items.filter(e=>DESTR.includes(e.p));const g={};l.forEach(e=>(g[e.MUNICIPIO]??=[]).push(e));
+  return `<div><h1>Destrucción certificada</h1><p class="sub">Equipos sin valor de venta, agrupados por ciudad para una sola recolección con proveedor local autorizado. El certificado queda en el expediente del activo.</p></div>
+  ${Object.keys(g).length?Object.entries(g).map(([c,es])=>{const pend=es.filter(e=>e.p==='DESTRUCCION'),rec=es.filter(e=>e.p==='RECOLECCION'),id=c.replace(/\W/g,'');return `<div class="card"><div class="row"><h2>${esc(c)}</h2><span class="note">${es.length} equipos</span><span class="sp"></span>
+   ${pend.length?`<button class="btn" data-rec="${esc(c)}">Solicitar recolección (${pend.length})</button>`:''}${rec.length?`<input type="text" id="cert-${id}" placeholder="Folio del certificado" value="CERT-${S.today.replace(/-/g,'')}"> <button class="btn p" data-cert="${esc(c)}">Registrar certificado (${rec.length})</button>`:''}</div>
+   <div class="tbl" style="margin-top:10px"><table>${es.map(e=>`<tr><td>${eqLine(e)}</td><td>${esc(e.hist[e.hist.length-1]?.t||'')}</td><td>${e.dx?.enciende==='si'?'<span class="pill p-bad">Funcional</span>':''}</td><td>${pill(e.p)}</td></tr>`).join('')}</table></div></div>`}).join(''):'<div class="card note">No hay equipos enviados a destrucción.</div>'}`;
+};
+after.destruccion=()=>{
+  $$('[data-rec]').forEach(b=>b.onclick=()=>{S.items.filter(e=>e.MUNICIPIO===b.dataset.rec&&e.p==='DESTRUCCION').forEach(e=>{e.p='RECOLECCION';H(e,`Recolección programada con proveedor autorizado local (${fd(addD(S.today,2))})`,'SIS')});save();render();toast('Recolección solicitada')});
+  $$('[data-cert]').forEach(b=>b.onclick=()=>{const c=b.dataset.cert,f=$('#cert-'+c.replace(/\W/g,'')).value||'CERT';S.items.filter(e=>e.MUNICIPIO===c&&e.p==='RECOLECCION').forEach(e=>{e.p='DESTRUIDO';e.destD=S.today;H(e,`Destruido · certificado ${f} integrado al expediente`,'AF')});save();render();toast('Certificado registrado')});
+};
+
+/* ================= DONACIÓN ================= */
+function startDon(e,org,fecha){const r=S.reqs.find(x=>x.eq===e._i&&x.type==='DECISION'&&x.state==='Pendiente');if(r){closeReq(r,'Donar');r.res=fd(S.today)}
+  if(e.p==='PUBLICADO'||e.p==='SUBASTA')log('DELETE','/products/'+e.ID_ACTIVO,'pub',null,'Retira el equipo del Bazar.');
+  e.don={org,fecha};e.p='DONACION';H(e,`Activo Fijo decidió donarlo a ${org} · entrega el ${fd(fecha)}`,'AF','hmn');
+  mail(e.CORREO_INGENIERO||e.INGENIERO,`[Activo 360] Donación por entregar · ${e.ID_ACTIVO}`,`Activo Fijo decidió donar el equipo ${eqName(e)} (activo ${e.ID_ACTIVO}) a ${org}. Entrégalo el ${fd(fecha)} y regístralo aquí: https://activo360.salud-digna.interno/donaciones/${e.ID_ACTIVO}`,e)}
+function deliverDon(e){e.don.d=S.today;e.p='DONADO_FACT';H(e,`Entregado a ${e.don.org} · sale del stock`,'SIS');log('PATCH','/inventario/'+e.ID_ACTIVO,'int',{estatus:'DONADO',baja:true},'Baja del activo en el inventario.');newReq('DONFACT',e,{dl:addD(S.today,C().plazo.donFact)})}
+function attachDonFact(e,file){closeReq(S.reqs.find(x=>x.eq===e._i&&x.type==='DONFACT'&&x.state==='Pendiente'),'Adjuntada');e.don.factura=file;e.p='DONADO';H(e,`Se adjuntó la factura de la donataria (${file})`,'AF');
+  log('POST','https://www.googleapis.com/upload/drive/v3/files','g',{carpeta:'Activo 360 / Donaciones / '+e.ID_ACTIVO,archivo:file},'Guarda la factura de la donataria en Drive.');newReq('REVFIS',e)}
+VIEWS.donacion=()=>{
+  const cand=S.items.filter(e=>(['PUBLICADO','SUBASTA'].includes(e.p)&&diff(e.pub,S.today)>=C().plazo.sinVenta)||(e.p==='DESTRUCCION'&&e.dx?.enciende==='si'));
+  const ent=S.items.filter(e=>e.p==='DONACION'),fac=S.items.filter(e=>e.p==='DONADO_FACT'),done=S.items.filter(e=>e.p==='DONADO');
+  const opts=C().donatarias.map(d=>`<option>${esc(d)}</option>`).join('');const d2=addBiz(S.today,2);
+  return `<div><h1>Donación</h1><p class="sub">Activo Fijo elige la donataria y la fecha; Sistemas entrega y el equipo sale del stock. Después hay ${C().plazo.donFact} días naturales para adjuntar la factura de la donataria, que se envía por correo a Fiscal para su revisión.</p></div>
+  <div class="grid g4"><div class="card kpi"><div class="l">Candidatos</div><div class="v">${cand.length}</div><div class="s">funcionales sin venta</div></div><div class="card kpi"><div class="l">Por entregar</div><div class="v">${ent.length}</div></div><div class="card kpi"><div class="l">Falta factura</div><div class="v" style="color:var(--warn)">${fac.length}</div></div><div class="card kpi"><div class="l">Donados</div><div class="v" style="color:var(--ok)">${done.length}</div><div class="s">${money(sum(done,estValue))} valor estimado · ${Math.round(sum(done,kgOf))} kg reutilizados</div></div></div>
+  <div class="card"><h2>Candidatos a donación</h2><p class="note">Equipos sin venta en ${C().plazo.sinVenta} días o funcionales que iban a destrucción. También se puede decidir desde la solicitud “Equipo sin venta” en Humand.</p><div class="tbl" style="margin-top:8px"><table>${cand.map(e=>`<tr><td>${eqLine(e)}</td><td>${pill(e.p)}</td><td class="n">${money(estValue(e))}</td><td><div class="row" style="gap:4px"><select id="dorg-${e._i}">${opts}</select><input type="date" id="dfe-${e._i}" value="${d2}" min="${S.today}"><button class="btn sm p" data-prop="${e._i}">Donar</button></div></td></tr>`).join('')||'<tr><td class="note">Sin candidatos por ahora.</td></tr>'}</table></div></div>
+  <div class="grid g2"><div class="card"><h2>Por entregar (Sistemas)</h2><div class="tbl" style="margin-top:8px"><table>${ent.map(e=>`<tr><td>${eqLine(e)}</td><td>${esc(e.don.org)}<div class="note">${fd(e.don.fecha)}</div></td></tr>`).join('')||'<tr><td class="note">Nada por entregar.</td></tr>'}</table></div></div>
+  <div class="card"><h2>Falta factura de la donataria</h2><div class="tbl" style="margin-top:8px"><table>${fac.map(e=>{const r=S.reqs.find(x=>x.eq===e._i&&x.type==='DONFACT'&&x.state==='Pendiente');const left=r?.dl?diff(S.today,r.dl):0;return `<tr><td>${eqLine(e)}<div class="note">${esc(e.don.org)} · entregado ${fd(e.don.d)}</div></td><td>${left>=0?`<span class="pill ${left<=3?'p-warn':'p-info'}">${left} d restantes</span>`:`<span class="pill p-bad">${-left} d vencida</span>`}</td><td><label class="btn sm p">Adjuntar factura<input type="file" data-dfac="${e._i}" hidden accept=".pdf,.xml"></label></td></tr>`}).join('')||'<tr><td class="note">Sin facturas pendientes.</td></tr>'}</table></div></div></div>
+  <div class="card"><h2>Donados</h2><div class="tbl" style="margin-top:8px"><table><tr><th>Equipo</th><th>Donataria</th><th>Entregado</th><th>Factura</th><th>Revisión fiscal</th></tr>${done.map(e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td>${eqLine(e)}</td><td>${esc(e.don.org)}</td><td>${fd(e.don.d)}</td><td class="mono note">${esc(e.don.factura||'')}</td><td>${e.don.fiscal?`<span class="pill ${/sin obs/i.test(e.don.fiscal)?'p-ok':'p-warn'}">${esc(e.don.fiscal)}</span>`:'<span class="pill p-info">En revisión</span>'}</td></tr>`).join('')||'<tr><td class="note">Aún no hay donaciones.</td></tr>'}</table></div></div>`};
+after.donacion=()=>{
+  $$('[data-prop]').forEach(b=>b.onclick=()=>{const e=S.items[+b.dataset.prop],f=$('#dfe-'+e._i).value;if(!f||f<S.today){toast('Elige una fecha a partir de hoy');return}startDon(e,$('#dorg-'+e._i).value,f);save();render();toast('Donación registrada · Sistemas recibió el correo para entregar')});
+  $$('[data-dfac]').forEach(inp=>inp.onchange=()=>{if(!inp.files[0])return;attachDonFact(S.items[+inp.dataset.dfac],inp.files[0].name);save();render();toast('Factura adjunta · Fiscal recibió el correo para revisión')});
+};
+/* ================= FISCAL ================= */
+VIEWS.fiscal=()=>{const pend=S.reqs.filter(r=>r.type==='REVFIS'&&r.state==='Pendiente'),done=S.items.filter(e=>e.don?.fiscal);
+  return `<div><h1>Fiscal</h1><p class="sub">Fiscal (Jurídico) recibe un correo cada vez que se adjunta la factura de una donataria. La revisión no detiene la donación; si hay observaciones, quedan en el expediente para que Activo Fijo las atienda.</p></div>
+  <div class="card"><h2>Por revisar <span class="cnt">${pend.length}</span></h2><div class="tbl" style="margin-top:10px"><table><tr><th>Equipo</th><th>Donataria</th><th>Factura</th><th class="n">Días</th><th>Resultado</th></tr>
+   ${pend.map(r=>{const e=S.items[r.eq];return `<tr><td>${eqLine(e)}<div class="note">Valor estimado ${money(estValue(e))}</div></td><td>${esc(e.don.org)}<div class="note">entregado ${fd(e.don.d)}</div></td><td class="mono note">${esc(e.don.factura)}</td><td class="n">${reqDays(r)}<div style="margin-top:4px">${slaPill(r)}</div></td><td><div class="row" style="gap:4px"><button class="btn sm p" data-fok="${r.id}">Sin observaciones</button><input type="text" id="fo-${r.id}" placeholder="Observación" style="width:160px"><button class="btn sm o" data-fobs="${r.id}">Con observaciones</button></div></td></tr>`}).join('')||'<tr><td colspan="5" class="note">Nada por revisar.</td></tr>'}</table></div></div>
+  <div class="card"><h2>Revisadas</h2><div class="tbl" style="margin-top:10px"><table>${done.map(e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td>${eqLine(e)}</td><td>${esc(e.don.org)}</td><td>${esc(e.don.fiscal)}</td></tr>`).join('')||'<tr><td class="note">Sin revisiones.</td></tr>'}</table></div></div>`};
+after.fiscal=()=>{const res=(id,txt)=>{const r=S.reqs.find(x=>x.id===id),e=S.items[r.eq];closeReq(r,'Revisada');e.don.fiscal=txt;H(e,`Fiscal revisó la factura de la donación: ${txt}`,'FIS');if(!/sin obs/i.test(txt))notify('Activo Fijo',`Fiscal dejó observaciones en la donación de ${e.ID_ACTIVO}: ${txt}`,'req');save();render();toast('Revisión registrada')};
+  $$('[data-fok]').forEach(b=>b.onclick=()=>res(b.dataset.fok,'Sin observaciones'));
+  $$('[data-fobs]').forEach(b=>b.onclick=()=>{const t=$('#fo-'+b.dataset.fobs).value.trim();if(!t){toast('Escribe la observación');return}res(b.dataset.fobs,'Con observaciones: '+t)})};
+/* ================= CORREOS ================= */
+VIEWS.correos=()=>{const tabs=[['','Todos'],[MAIL_FAC,'Facturación'],['SIS','Sistemas'],['Fiscal (Jurídico)','Fiscal']];
+  const l=S.mails.filter(m=>!S.mailTab||(S.mailTab==='SIS'?m.to!==MAIL_FAC&&m.to!=='Fiscal (Jurídico)':m.to===S.mailTab)).slice(0,120);
+  return `<div><h1>Correos enviados</h1><p class="sub">Avisos que Activo 360 manda por Gmail a Sistemas, Facturación y Fiscal. Estas áreas no necesitan revisar la herramienta todo el día: entran solo cuando el correo les dice que tienen algo pendiente. Colaboradores, jefes, Activo Fijo e Ingresos reciben sus avisos en Humand.</p></div>
+  <div class="row">${tabs.map(([k,t])=>`<button class="btn sm ${(S.mailTab||'')===k?'p':''}" data-mt="${esc(k)}">${t}</button>`).join('')}</div>
+  <div class="log">${l.map(m=>`<div class="logi"><div class="row"><span class="pill ${/Recordatorio/.test(m.subj)?'p-warn':'p-info'}">${/Recordatorio/.test(m.subj)?'Recordatorio':'Aviso'}</span><b style="min-width:0">${esc(m.subj)}</b><span class="sp"></span><span class="mono note">${fd(m.d)}</span></div><div class="note" style="margin-top:4px">Para: ${esc(m.to)}</div>${m.body?`<pre style="white-space:pre-wrap">${esc(m.body)}</pre>`:''}</div>`).join('')||'<p class="note">Sin correos.</p>'}</div>`};
+after.correos=()=>$$('[data-mt]').forEach(b=>b.onclick=()=>{S.mailTab=b.dataset.mt;render()});
+
+/* ================= TABULADOR Y REGLAS ================= */
+VIEWS.config=()=>{const K=C();const n=(id,v,step,suf)=>`<input type="number" id="${id}" data-cfg="${id}" value="${v}" step="${step||1}" style="width:110px">${suf?` <span class="note">${suf}</span>`:''}`;
+  const sample=S.items.find(e=>e.p==='CONFIRMADO')||S.items[0];const pr=priceCalc(sample,DEFDX);
+  const row=(l,inp)=>`<div class="fld"><label>${l}</label><div>${inp}</div></div>`;
+  return `<div class="row"><div><h1>Tabulador y reglas</h1><p class="sub">Activo Fijo ajusta aquí precios, descuentos, tiempos meta y reglas de venta sin depender de Sistemas. Los cambios aplican a los diagnósticos nuevos.</p></div><span class="sp"></span><button class="btn" id="cfgreset">Restablecer valores</button></div>
+  <div class="card result"><div class="row"><div><div class="note">Vista previa con ${esc(sample.ID_ACTIVO)} · ${esc(eqName(sample))} · ${esc(sample.PROCESADOR||'')} · estética A</div><div class="pr">${money(pr.sug)}</div><div class="note">Rango ${money(pr.min)} – ${money(pr.max)}</div></div></div></div>
+  <div class="grid g2">
+   <div class="card"><h2>Precio máximo y descuentos por falla</h2><p class="note">Se parte del precio máximo y se resta por cada condición. Nunca supera el máximo ni baja del piso.</p><div class="form" style="margin-top:10px">
+    ${row('Precio máximo · escritorio',n('pmax.Escritorio',K.pmax['Escritorio'],50,'$'))}${row('Precio máximo · laptop',n('pmax.Laptop',K.pmax['Laptop'],50,'$'))}${row('Precio piso',n('piso',K.piso,50,'$'))}
+    ${row('Procesador Core i3 o inferior',n('ded.i3',K.ded.i3,50,'− $'))}${row('Generación anterior a la 8.ª',n('ded.genOld',K.ded.genOld,50,'− $'))}${row('RAM de 4 GB',n('ded.ram4',K.ded.ram4,50,'− $'))}
+    ${row('Disco HDD (no SSD)',n('ded.hdd',K.ded.hdd,50,'− $'))}${row('Sin disco',n('ded.noDisk',K.ded.noDisk,50,'− $'))}${row('Monitor con fallas',n('ded.monF',K.ded.monF,50,'− $'))}${row('Sin monitor',n('ded.noMon',K.ded.noMon,50,'− $'))}
+    ${row('Sin teclado y mouse',n('ded.noPerif',K.ded.noPerif,50,'− $'))}${row('Laptop sin cargador',n('ded.noCharger',K.ded.noCharger,50,'− $'))}${row('Por año después de vida útil',n('ded.anio',K.ded.anio,50,'− $'))}
+    ${row('Equipos aptos para venta (proyección)',n('aptos',K.aptos,.05,'0 a 1'))}</div></div>
+   <div class="card"><h2>Accesorios (precio máximo) y factores</h2><div class="form" style="margin-top:10px">
+    ${Object.keys(K.acc).map(t=>row(t,n('acc.'+t,K.acc[t],10))).join('')}
+    ${row('Estética A',n('est.A',K.est.A,.01))}${row('Estética B',n('est.B',K.est.B,.01))}${row('Estética C',n('est.C',K.est.C,.01))}${row('Rendimiento lento',n('lento',K.lento,.01))}${row('Algún puerto falla',n('puertos',K.puertos,.01))}</div></div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>Plazos de la venta</h2><p class="note">Hábiles: firmas, depósito y subasta. Naturales: sin venta, reintento de depósito y factura de donación.</p><div class="form" style="margin-top:10px">
+    ${row('Firmas del formato (colaborador y jefe)',n('plazo.firmas',K.plazo.firmas,1,'días hábiles'))}${row('Depositar y subir váucher',n('plazo.pago',K.plazo.pago,1,'días hábiles'))}${row('Corregir depósito no encontrado',n('plazo.reintento',K.plazo.reintento,1,'días naturales'))}
+    ${row('Preguntar a Activo Fijo si no se vende',n('plazo.sinVenta',K.plazo.sinVenta,1,'días naturales'))}${row('Duración de la subasta',n('plazo.subasta',K.plazo.subasta,1,'días hábiles'))}${row('Mínimo sugerido de subasta',n('subastaMin',K.subastaMin,.05,'× precio autorizado'))}
+    ${row('Adjuntar factura de donataria',n('plazo.donFact',K.plazo.donFact,1,'días naturales'))}${row('Meta de recuperación',n('meta',K.meta,.05,'0 a 1'))}</div>
+    <h2 style="margin-top:16px">Cuenta para depósito</h2><p class="note">Datos que recibe el colaborador en Humand después de las firmas. Ingresos indica cuál de sus cuentas usar.</p><div class="form" style="margin-top:10px">
+    ${[['banco','Banco'],['titular','Titular'],['clabe','CLABE'],['concepto','Concepto']].map(([k,l])=>row(l,`<input type="text" data-cfgt="banco.${k}" value="${esc(K.banco[k])}" style="width:220px">`)).join('')}</div></div>
+   <div class="card"><h2>Reglas de venta</h2><div class="form" style="margin-top:10px">
+    ${row('Máximo de equipos por colaborador al año',n('max',K.max,1,'0 = sin límite'))}${row('Días de prioridad para la clínica',n('prio',K.prio,1,'días'))}
+    <div class="fld"><label class="chk"><input type="checkbox" data-cfg="bloqDev" ${K.bloqDev?'checked':''}> Bloquear compra con devoluciones pendientes</label></div></div>
+    <h2 style="margin-top:16px">Tiempos meta por área</h2><div class="form" style="margin-top:10px">${Object.keys(K.sla).map(a=>row(AREAS[a],n('sla.'+a,K.sla[a],1,'días'))).join('')}</div></div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>Peso promedio por tipo (impacto ambiental)</h2><div class="form" style="margin-top:10px">${Object.keys(K.kg).map(t=>row(t,n('kg.'+t,K.kg[t],.1,'kg'))).join('')}</div></div>
+   <div class="card"><h2>Donatarias autorizadas</h2><p class="note">Una por línea.</p><textarea id="dons" rows="6" style="width:100%;margin-top:8px">${esc(K.donatarias.join('\n'))}</textarea></div>
+  </div>`};
+after.config=()=>{
+  $$('[data-cfg]').forEach(i=>i.onchange=()=>{const path=i.dataset.cfg.split('.');let o=S.cfg;for(let k=0;k<path.length-1;k++)o=o[path[k]];const key=path[path.length-1];if(i.type!=='checkbox'&&(i.value.trim()===''||isNaN(+i.value)||+i.value<0)){toast('Valor no válido; se conserva el anterior');render();return}
+    o[key]=i.type==='checkbox'?i.checked:+i.value;
+    log('PATCH','/config/tabulador','int',{campo:i.dataset.cfg,valor:o[key],usuario:'Activo Fijo'},'Cambio de tabulador o reglas (queda en bitácora).');save();render();toast('Configuración guardada')});
+  $$('[data-cfgt]').forEach(i=>i.onchange=()=>{const[a,b]=i.dataset.cfgt.split('.');const v=i.value.trim();if(!v){toast('El campo no puede quedar vacío');render();return}S.cfg[a][b]=v;log('PATCH','/config/banco','int',{campo:i.dataset.cfgt,valor:v,usuario:'Ingresos / Activo Fijo'},'Cambio de la cuenta para depósito.');save();toast('Cuenta guardada')});
+  $('#dons').onchange=e=>{S.cfg.donatarias=e.target.value.split('\n').map(s=>s.trim()).filter(Boolean);save();toast('Donatarias guardadas')};
+  $('#cfgreset').onclick=()=>{S.cfg=defaultCfg();save();render();toast('Valores restablecidos')};
+};
+
+/* ================= EXPEDIENTE ================= */
+function openExp(i){const e=S.items[i];const reqs=S.reqs.filter(r=>r.eq===i).sort((a,b)=>a.created<b.created?-1:1);const dx=e.dx;
+  const kv=rows=>`<table>${rows.filter(r=>r[1]!==''&&r[1]!=null).map(([k,v])=>`<tr><th style="width:38%">${k}</th><td>${v}</td></tr>`).join('')}</table>`;
+  const DXL={enciende:'Enciende / funciona',rend:'Rendimiento',monitor:'Monitor',estetica:'Estética',puertos:'Puertos',perif:'Accesorios',disco:'Almacenamiento'};
+  const DXV={si:'Sí',no:'No',ok:'Óptimo / funciona',lento:'Lento',fallas:'Con fallas',falla:'Alguno falla',borrado:'Borrado seguro',pend:'Pendiente',retirado:'Retirado y destruido',A:'A',B:'B',C:'C'};
+  const doc=`<div class="carta" id="expdoc"><div class="row"><img src="${document.querySelector('.brand img').src}" alt="" style="height:54px"><span class="sp"></span><div style="text-align:right"><b>EXPEDIENTE DEL ACTIVO</b><div class="note">${esc(e.ID_ACTIVO)} · emitido ${fd(S.today)}</div></div></div>
+   <h3 style="margin-top:14px;text-align:left">1. Datos del activo</h3>${kv([['Activo',esc(e.ID_ACTIVO)],['Serie',esc(e.NUM_SERIE)],['Tipo',esc(tipo(e))],['Equipo',esc(e.MARCA+' '+e.MODELO)],['Especificaciones',e.PROCESADOR?esc(`${e.PROCESADOR} · ${e.RAM_GB} GB · ${e.ALMACENAMIENTO}`):''],['Clínica',esc(`${e.CLINICA} · ${e.MUNICIPIO}, ${e.ESTADO}`)],['Área',esc(`${e.SERVICIO} ${e.UBICACION}`)],['Adquisición',fd(e.FECHA_ADQUISICION)],['Fin de vida útil',fd(due(e))],['Costo de adquisición',e.COSTO_ADQUISICION?money(e.COSTO_ADQUISICION):''],['Estatus actual',ST[stOf(e)][0]]])}
+   <h3 style="margin-top:14px;text-align:left">2. Diagnóstico de Sistemas</h3>${dx?kv([...Object.keys(DXL).filter(k=>dx[k]).map(k=>[DXL[k],DXV[dx[k]]||dx[k]]),['Componentes recuperados',(dx.comp||[]).join(', ')],['Evidencia',esc(dx.fotos||'')],['Observaciones',esc(dx.obs||'')],['Destino',destino(dx)==='VENTA'?'Venta local':destino(dx)==='RECUP'?'Recuperación + destrucción':'Destrucción'],['Responsable',esc(e.INGENIERO)]]):'<p class="note">Sin diagnóstico.</p>'}
+   ${e.price?`<h3 style="margin-top:14px;text-align:left">3. Precio</h3>${kv([['Sugerido por tabulador',money(e.price.sug)+` (rango ${money(e.price.min)}–${money(e.price.max)})`],['Autorizado por Activo Fijo',money(e.price.aut)],['Publicado en Bazar',fd(e.pub)]])}`:''}
+   ${e.buyer&&e.sale?`<h3 style="margin-top:14px;text-align:left">4. Venta</h3>${kv([['Folio',`<span class="mono">${esc(e.sale.folio)}</span>`],['Comprador',esc(e.buyer)+(e.sale.emp?' · empleado '+esc(e.sale.emp):'')],['Jefe inmediato',esc(e.sale.jefe||'')],['Datos fiscales',esc(fiscalTxt(e.sale.fiscal))],['Firma del colaborador',e.sale.colSig?fd(e.sale.colSig):'Pendiente'],['Firma del jefe',e.sale.jefeSig?fd(e.sale.jefeSig):'Pendiente'],['Monto',money(e.pay?.amount)],['Váucher',esc(e.pay?.file||'Pendiente')],['Depósito confirmado por Ingresos',e.pay?.ok?'Sí':'Pendiente'],['Factura (CFDI)',esc(e.fac||'Pendiente')],['Cita de entrega',e.cita?fd(e.cita.d)+' '+esc(e.cita.h):''],['Carpeta en Drive',(e.sale.files||[]).map(f=>esc(f.name)).join('<br>')],['Encuesta',e.survey?`${(sum(e.survey.q)/3).toFixed(1)} / 5 · “${esc(e.survey.c)}”`:'']])}`:''}
+   ${e.don?`<h3 style="margin-top:14px;text-align:left">4. Donación</h3>${kv([['Donataria',esc(e.don.org)],['Fecha programada',fd(e.don.fecha)],['Entregado',fd(e.don.d)],['Factura de la donataria',esc(e.don.factura||'Pendiente')],['Revisión fiscal',esc(e.don.fiscal||(e.don.factura?'En revisión':''))]])}`:''}
+   ${DESTR.includes(e.p)?`<h3 style="margin-top:14px;text-align:left">4. Destrucción</h3>${kv([['Funcional al destruir',e.dx?.enciende==='si'?'Sí':'No'],['Fecha',fd(e.destD)],['Certificado',esc((e.hist.find(h=>/certificado/i.test(h.t))?.t||'Pendiente'))]])}`:''}
+   <h3 style="margin-top:14px;text-align:left">5. Aprobaciones y avisos</h3><table><tr><th>Folio</th><th>Tipo</th><th>Área</th><th>Canal</th><th>Creada</th><th>Resuelta</th><th>Días</th><th>Resultado</th></tr>${reqs.map(r=>`<tr><td class="mono">${r.id}</td><td>${RT[r.type].n}</td><td>${AREAS[RT[r.type].a]}</td><td>${RT[r.type].ch==='correo'?'Activo 360 · aviso por correo':RT[r.type].ch==='firma'?'Firma en Humand':'Activo 360 · aviso por bot de Humand'}</td><td>${fd(r.created)}</td><td>${fd(r.resD)}</td><td>${reqDays(r)}</td><td>${r.state}${r.resD?(slaOk(r)?' · en tiempo':' · fuera de tiempo'):''}</td></tr>`).join('')||'<tr><td colspan="8">Sin solicitudes.</td></tr>'}</table>
+   <h3 style="margin-top:14px;text-align:left">6. Bitácora completa</h3><table>${e.hist.map(h=>`<tr><td style="width:110px">${fd(h.d)}</td><td>${esc(h.t)}</td><td>${AREAS[h.a]||''}</td></tr>`).join('')}</table>
+   <div class="firma"><div><div class="sig"></div>Sistemas</div><div><div class="sig"></div>Activo Fijo</div></div></div>`;
+  $('#drawer').innerHTML=`<div class="drawer"><div style="width:min(860px,100%)"><div class="row"><h2>Expediente ${esc(e.ID_ACTIVO)}</h2><span class="sp"></span><button class="btn sm p" id="expp">Imprimir o guardar PDF</button><button class="btn sm" id="exph">Descargar .html</button><button class="btn sm" data-close>Cerrar</button></div>${doc}</div></div>`;bindClose();
+  $('#expp').onclick=()=>{document.body.classList.add('printing');window.print();setTimeout(()=>document.body.classList.remove('printing'),500)};
+  $('#exph').onclick=()=>{try{const css=[...document.querySelectorAll('style')].map(s=>s.textContent).join('\n');const blob=new Blob([`<!doctype html><html lang="es"><meta charset="utf-8"><title>Expediente ${e.ID_ACTIVO}</title><style>${css}body{padding:20px}</style>${document.getElementById('expdoc').outerHTML}</html>`],{type:'text/html'});const u=URL.createObjectURL(blob),l=document.createElement('a');l.href=u;l.download=`Expediente_${e.ID_ACTIVO}.html`;document.body.appendChild(l);l.click();l.remove();toast('Descargando expediente')}catch(err){toast('No se pudo descargar en esta vista')}};
+}
+
+;(window.A360_OK=window.A360_OK||[]).push('App2');
+</script>

@@ -1,0 +1,4 @@
+__pycache__/
+dist/_appscript_sim.html
+*.xlsx
+*.csv
