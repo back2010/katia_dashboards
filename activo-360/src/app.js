@@ -83,9 +83,10 @@ function mapAS(rows,name){
   const usr={};rows.forEach(r=>{const c=nkey(g(r,'CENTRO DE TRABAJO')),u=String(g(r,'USUARIO')).trim();if(u){(usr[c]??={})[u]=(usr[c][u]||0)+1}});
   const topU=c=>{const o=usr[c];return o?Object.entries(o).sort((a,b)=>b[1]-a[1])[0][0]:''};
   const inv=[],prev=[];let bad=0;const seen=new Set();
+  const mdy=isMDY(rows.flatMap(r=>[g(r,'INSTALACION'),g(r,'FIN DE GARANTIA'),g(r,'MODIFICADO EL:')]));
   rows.forEach(r=>{const raw={};AS_COLS().forEach(c=>raw[c]=String(g(r,c)??''));
     const st=nkey(raw['ESTATUS']),serie=raw['# DE SERIE'].trim(),clin=raw['CENTRO DE TRABAJO'].replace(/\s+/g,' ').trim();
-    let fa=normDate(g(r,'INSTALACION'));if(!fa||fa<'2000'){const gw=normDate(g(r,'FIN DE GARANTIA'));fa=gw&&gw>'2003'?addY(gw,-3):null}
+    let fa=normDate(g(r,'INSTALACION'),mdy);if(!fa||fa<'2000'){const gw=normDate(g(r,'FIN DE GARANTIA'),mdy);fa=gw&&gw>'2003'?addY(gw,-3):null}
     if(!serie||!clin||!fa){bad++;return}
     if(!AS_VIVOS.includes(st)||seen.has(serie)){prev.push(raw);return}seen.add(serie);
     const c=dir[nkey(clin)],t=tipoAS(raw['DISPOSITIVO']),cpu=raw['PROCESADOR'];
@@ -94,8 +95,8 @@ function mapAS(rows,name){
       SERVICIO:niceArea(raw['AREA']),UBICACION:'Estación '+(raw['UBICACIÓN']||'1'),TIPO_EQUIPO:t,MARCA:raw['MARCA'],MODELO:raw['MODELO'],PROCESADOR:cpu,GENERACION:genOf(cpu),
       RAM_GB:parseInt(raw['RAM(GB)'])||8,ALMACENAMIENTO:raw['DISCO DURO (HDD, SSD)']||'',MONITOR:t==='Escritorio'?'Monitor de la estación':'',SO:raw['SistemaOperativo']||'',
       FECHA_ADQUISICION:fa,COSTO_ADQUISICION:0,VIDA_UTIL_ANIOS:VIDA[t]||5,INGENIERO:ing,CORREO_INGENIERO:'',
-      AS_ESTATUS:st,_p0:st==='PLAN DE RENOVACION / ENVIADO A CSI'?'CONFIRMADO':null,_d0:normDate(String(raw['MODIFICADO EL:']).slice(0,10)),as:raw})});
-  return{inv,prev,bad,name:name||'AppSheet',total:rows.length}}
+      AS_ESTATUS:st,_p0:st==='PLAN DE RENOVACION / ENVIADO A CSI'?'CONFIRMADO':null,_d0:normDate(String(raw['MODIFICADO EL:']).slice(0,10),mdy),as:raw})});
+  return{inv,prev,bad,mdy,name:name||'AppSheet',total:rows.length}}
 let BASE0=null;const base0=()=>BASE0||(BASE0=mapAS(asObjs(DATA.appsheet),'Demo en formato AppSheet'));
 function applyAS(items){items.forEach(e=>{if(e._p0==='CONFIRMADO'&&!e.p){e.p='CONFIRMADO';const d=e._d0&&e._d0<=S.today&&diff(e._d0,S.today)<=30?e._d0:S.today;
   e.hist.push({d,t:'Reemplazo confirmado: AppSheet en "Plan de renovación / enviado a CSI"'+(e.as?.['# DE SERIE NUEVO EQUIPO']?' · equipo nuevo '+e.as['# DE SERIE NUEVO EQUIPO']:''),a:'SIS',k:''})}})}
@@ -633,23 +634,25 @@ after.inventario=()=>{
   $('#sample').onclick=()=>{init(true);S.view='inventario';save();render();toast('Demo restablecido')};
 };
 function xlsxOut(rows,name,header){try{const ws=XLSX.utils.json_to_sheet(rows,header?{header}:undefined);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'INVENTARIO');XLSX.writeFile(wb,name);toast('Descargando '+name)}catch(e){toast('No se pudo generar la descarga en esta vista')}}
-function normDate(v){if(v instanceof Date)return iso(new Date(Date.UTC(v.getFullYear(),v.getMonth(),v.getDate())));if(typeof v==='number'){const d=new Date(Date.UTC(1899,11,30));d.setUTCDate(d.getUTCDate()+Math.floor(v));return iso(d)}const s=String(v||'').trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);if(m&&+m[2]<=12&&+m[1]<=31)return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;return null}
+// Formato de fecha por archivo: mm/dd solo si algún valor lo prueba (2.º número >12) y ninguno prueba dd/mm (1.º >12). Ambiguo → dd/mm.
+function isMDY(vals){let md=0,dm=0;vals.forEach(v=>{const m=String(v??'').trim().match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-]\d{4}/);if(!m)return;if(+m[1]>12)dm++;else if(+m[2]>12)md++});return md>0&&dm===0}
+function normDate(v,mdy){if(v instanceof Date)return iso(new Date(Date.UTC(v.getFullYear(),v.getMonth(),v.getDate())));if(typeof v==='number'){const d=new Date(Date.UTC(1899,11,30));d.setUTCDate(d.getUTCDate()+Math.floor(v));return iso(d)}const s=String(v||'').trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);if(m&&mdy)m=[m[0],m[2],m[1],m[3]];if(m&&+m[2]<=12&&+m[1]<=31)return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;return null}
 const normK=k=>String(k).trim().toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Z0-9]+/g,'_').replace(/^_|_$/g,'');
 function readRows(f,cb,out,asText){const rd=new FileReader();const csv=/\.csv$/i.test(f.name);rd.onload=ev=>{try{const wb=csv?XLSX.read(String(ev.target.result).replace(/^\uFEFF/,''),{type:'string',raw:!!asText}):XLSX.read(new Uint8Array(ev.target.result),{type:'array',cellDates:true});const raw=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],asText?{defval:'',raw:false,dateNF:'dd/mm/yyyy'}:{defval:''});if(!raw.length)throw new Error('El archivo no tiene filas.');cb(raw.map(r=>{const o={};for(const k in r)o[normK(k)]=r[k];return o}),raw)}catch(err){$(out).innerHTML=`<div class="result bad"><b>No se pudo cargar.</b> ${esc(err.message)}</div>`}};csv?rd.readAsText(f,'utf-8'):rd.readAsArrayBuffer(f)}
 function readFile(f){readRows(f,(rows,raw)=>{
   let src;
   if('ID_ACTIVO' in rows[0]){ // compatibilidad con la plantilla anterior de Activo 360
     const miss=REQ.filter(c=>!(c in rows[0]));if(miss.length)throw new Error('Faltan columnas obligatorias: '+miss.join(', '));
-    let bad=0;const inv=[];rows.forEach(r=>{const fa=normDate(r.FECHA_ADQUISICION);if(!fa||!r.ID_ACTIVO){bad++;return}
+    let bad=0;const inv=[];const mdy=isMDY(rows.map(r=>r.FECHA_ADQUISICION));rows.forEach(r=>{const fa=normDate(r.FECHA_ADQUISICION,mdy);if(!fa||!r.ID_ACTIVO){bad++;return}
       const o={};COLS.forEach(c=>o[c]=r[c]??'');o.FECHA_ADQUISICION=fa;o.TIPO_EQUIPO=o.TIPO_EQUIPO||'Escritorio';o.VIDA_UTIL_ANIOS=+r.VIDA_UTIL_ANIOS||VIDA[o.TIPO_EQUIPO]||5;o.GENERACION=+r.GENERACION||genOf(r.PROCESADOR);o.RAM_GB=+r.RAM_GB||8;o.MUNICIPIO=o.MUNICIPIO||o.CLINICA;inv.push(o)});
-    src={inv,prev:[],bad,name:f.name,total:rows.length};
+    src={inv,prev:[],bad,mdy,name:f.name,total:rows.length};
   }else{
     const miss=AS_REQ.filter(c=>!(normK(c) in rows[0]));if(miss.length)throw new Error('No es la vista de AppSheet. Faltan columnas: '+miss.join(', '));
     src=mapAS(raw,f.name);
   }
   if(!src.inv.length)throw new Error('No hay equipos vigentes (ACTIVO, RESGUARDO o PLAN DE RENOVACION) en el archivo.');
   const ti={col:S.col,ast:S.ast,cartas:S.cartas,movs:S.movs,cfg:S.cfg};init(false,src);Object.assign(S,ti);S.view='inventario';save();render();
-  $('#upres').innerHTML=`<div class="result"><b>${src.inv.length} equipos vigentes cargados</b> desde ${esc(f.name)} · ${src.prev.length} históricos${src.bad?` · ${src.bad} filas omitidas (sin serie, centro de trabajo o fecha válida)`:''}.<div class="note">Cumplieron vida útil: ${S.items.filter(e=>baseSt(e)==='VENCIDO').length} · En alerta: ${S.items.filter(e=>baseSt(e)==='ALERTA').length} · En plan de renovación: ${S.items.filter(e=>e.p==='CONFIRMADO').length}</div></div>`;
+  $('#upres').innerHTML=`<div class="result"><b>${src.inv.length} equipos vigentes cargados</b> desde ${esc(f.name)} · ${src.prev.length} históricos${src.bad?` · ${src.bad} filas omitidas (sin serie, centro de trabajo o fecha válida)`:''}${src.mdy?' · fechas leídas como mm/dd/aaaa (formato EE. UU.)':''}.<div class="note">Cumplieron vida útil: ${S.items.filter(e=>baseSt(e)==='VENCIDO').length} · En alerta: ${S.items.filter(e=>baseSt(e)==='ALERTA').length} · En plan de renovación: ${S.items.filter(e=>e.p==='CONFIRMADO').length}</div></div>`;
   log('POST','/inventario/import','int',{archivo:f.name,filas:src.total,vigentes:src.inv.length,historicos:src.prev.length,omitidas:src.bad},'Carga de la vista de equipos de AppSheet a Activo 360.')},'#upres',true)}
 
 /* ================= ALERTAS ================= */
@@ -1003,10 +1006,10 @@ after.ti=()=>{
   $('#tiexp').onclick=()=>xlsxOut(S.ast.map(a=>{const c=colOf(a.emp);return{NUM_EMPLEADO:a.emp||'',NOMBRE_COLABORADOR:c?.name||'',AREA:c?.area||'',UBICACION:c?.ubi||'',TIPO_ACTIVO:a.tipo,MARCA:a.marca,MODELO:a.modelo,NUM_SERIE:a.serie,NUM_INVENTARIO:a.inv,FECHA_ENTREGA:a.entrega||'',ESTADO:a.estado,RESPONSABLE_ENTREGA:a.resp}}),'inventario_tecnologico_Activo360.xlsx');
   $('#tifile').onchange=e=>{const f=e.target.files[0];f&&readRows(f,rows=>{
     if(!('NUM_EMPLEADO' in rows[0])||!('TIPO_ACTIVO' in rows[0]))throw new Error('Faltan columnas NUM_EMPLEADO o TIPO_ACTIVO.');
-    S.col=[];S.ast=[];S.cartas={};S.movs=[];let n=0;
+    S.col=[];S.ast=[];S.cartas={};S.movs=[];let n=0;const mdy=isMDY(rows.map(r=>r.FECHA_ENTREGA));
     rows.forEach(r=>{const emp=String(r.NUM_EMPLEADO||'').trim();if(emp&&!colOf(emp))S.col.push({emp,name:r.NOMBRE_COLABORADOR||emp,area:r.AREA||'',ubi:r.UBICACION||'',st:'Activo'});
       const t=Object.keys(VIDA).find(k=>k.toLowerCase()===String(r.TIPO_ACTIVO).trim().toLowerCase())||String(r.TIPO_ACTIVO||'Accesorio');
-      S.ast.push({inv:r.NUM_INVENTARIO||'TI-'+(++invSeq),tipo:t,marca:r.MARCA||'',modelo:r.MODELO||'',serie:r.NUM_SERIE||'',entrega:normDate(r.FECHA_ENTREGA),alta:S.today,estado:emp?(r.ESTADO&&/devol/i.test(r.ESTADO)?'Devuelto':'Asignado'):'En almacén',emp:emp||null,resp:r.RESPONSABLE_ENTREGA||'Sistemas',hist:[]});n++});
+      S.ast.push({inv:r.NUM_INVENTARIO||'TI-'+(++invSeq),tipo:t,marca:r.MARCA||'',modelo:r.MODELO||'',serie:r.NUM_SERIE||'',entrega:normDate(r.FECHA_ENTREGA,mdy),alta:S.today,estado:emp?(r.ESTADO&&/devol/i.test(r.ESTADO)?'Devuelto':'Asignado'):'En almacén',emp:emp||null,resp:r.RESPONSABLE_ENTREGA||'Sistemas',hist:[]});n++});
     S.col.forEach(c=>newCarta(c.emp,'Carga inicial desde Excel',{st:'Firmada',signed:S.today,silent:true}));S.emp=S.col[0]?.emp;save();render();
     $('#tires').innerHTML=`<div class="result"><b>${n} activos</b> de ${S.col.length} colaboradores cargados.</div>`},'#tires')};
 };

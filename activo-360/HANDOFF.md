@@ -55,7 +55,7 @@ Demo funcional del proyecto LAI (Líderes de Alto Impacto) de Salud Digna. Su ob
    - Pantalla de inicio con dos tarjetas: equipo de cómputo e inventario.
    - Inventario por colaborador con datos inventados: laptops Lenovo y HP, diademas, monitores.
 3. Si se elimina la exportación XLSX, se puede quitar `vendor/xlsx.full.min.js` (1.2 MB) y Apps Script queda en 6 archivos. Revisar antes que la carga de archivos tampoco lo necesite.
-4. **Fechas en CSV:** se leen como dd/mm/aaaa. Un archivo con formato de EE. UU. (mm/dd) se leería mal.
+4. **Fechas en CSV:** se leen como dd/mm/aaaa. Desde v9.2, `isMDY` detecta por archivo el formato de EE. UU. (mm/dd) si algún valor lo prueba (segundo número > 12) y ninguno prueba dd/mm; el resumen de carga lo avisa. Un archivo mm/dd con todas las fechas ambiguas (día ≤ 12) se sigue leyendo como dd/mm. El inventario tecnológico lee sus CSV sin `asText`, así que ahí SheetJS interpreta las fechas antes que `normDate`.
 5. **Guardado del avance:** el estado se guarda en `localStorage` con la clave `activo360-v9`. Si cambia la estructura de `S`, hay que subir la versión de la clave.
 
 ## Estructura
