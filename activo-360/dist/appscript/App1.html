@@ -1,0 +1,589 @@
+<script>
+/* Activo 360 · App1 */
+const T0 = '2026-10-13';
+const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=n=>'$'+Math.round(n||0).toLocaleString('es-MX');
+const kmoney=n=>n>=1e6?'$'+(n/1e6).toFixed(2)+' M':n>=1e4?'$'+Math.round(n/1e3).toLocaleString('es-MX')+' mil':money(n);
+const pd=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(Date.UTC(a,b-1,c))};
+const iso=d=>d.toISOString().slice(0,10);
+const addD=(s,n)=>{const d=pd(s);d.setUTCDate(d.getUTCDate()+n);return iso(d)};
+const addY=(s,n)=>{const d=pd(s);d.setUTCFullYear(d.getUTCFullYear()+n);return iso(d)};
+const diff=(a,b)=>Math.round((pd(b)-pd(a))/864e5);
+const fd=s=>{if(!s)return'—';const d=pd(s);return d.getUTCDate()+' '+MES[d.getUTCMonth()]+' '+d.getUTCFullYear()};
+const r50=n=>Math.max(50,Math.round(n/50)*50);
+const isWk=s=>{const d=pd(s).getUTCDay();return d===0||d===6};
+const bizDiff=(a,b)=>{let n=0,s=a;while(s<b){s=addD(s,1);if(!isWk(s))n++}return n};
+const addBiz=(s,n)=>{while(n>0){s=addD(s,1);if(!isWk(s))n--}return s};
+const sum=(a,f)=>a.reduce((s,x)=>s+(f?f(x):x),0);
+
+/* ---------- Catálogos ---------- */
+const VIDA={'Escritorio':5,'Laptop':3,'Monitor':5,'Diadema':2,'Hub USB-C':3,'Memoria USB':2,'Divisor de pantalla':3};
+const defaultCfg=()=>({pmax:{'Escritorio':800,'Laptop':1000},ded:{i3:150,genOld:100,ram4:80,hdd:50,noDisk:150,monF:100,noMon:250,noPerif:50,noCharger:100,anio:50},piso:150,aptos:.4,
+  acc:{'Monitor':250,'Diadema':50,'Hub USB-C':60,'Memoria USB':20,'Divisor de pantalla':80},est:{A:1,B:.85,C:.7},lento:.85,puertos:.9,
+  meta:.7,sla:{SIS:3,AF:1,ING:2,FAC:2,FIS:5},prio:3,max:1,bloqDev:true,
+  plazo:{firmas:1,pago:2,reintento:2,sinVenta:15,subasta:5,donFact:10},subastaMin:.5,
+  banco:{banco:'Por configurar',titular:'Salud Digna, A.C.',clabe:'Por configurar',concepto:'Folio de la venta'},
+  kg:{'Escritorio':12,'Laptop':2.2,'Monitor':4.5,'Diadema':.2,'Hub USB-C':.15,'Memoria USB':.02,'Divisor de pantalla':.3},
+  donatarias:['Escuela Primaria Federal (SEP) · donataria autorizada','DIF Municipal','Casa Hogar comunitaria A.C. · donataria autorizada SAT','Centro Comunitario de Capacitación A.C.']});
+const C=()=>S.cfg;
+const MAIL_FAC='cfdifacturacion@salud-digna.org';
+const AREAS={AF:'Activo Fijo',ING:'Ingresos',FAC:'Facturación',FIS:'Fiscal (Jurídico)',SIS:'Sistemas (ingeniero de clínica)',COL:'Colaborador',JEFE:'Jefe inmediato'};
+const RT={
+  PRECIO:{n:'Autorización de precio',a:'AF',ch:'humand',d:'valida o modifica el precio sugerido por el diagnóstico'},
+  DECISION:{n:'Equipo sin venta',a:'AF',ch:'humand',d:'decide si baja el precio, inicia subasta, destruye o dona'},
+  FIRMA_COL:{n:'Firma del formato de compra',a:'COL',ch:'firma',d:'el colaborador firma el formato SGC-N4-60 prellenado'},
+  FIRMA_JEFE:{n:'Firma del jefe inmediato',a:'JEFE',ch:'firma',d:'el jefe firma el formato de su colaborador'},
+  DEPOSITO:{n:'Confirmación de depósito',a:'ING',ch:'humand',d:'valida el váucher del depósito'},
+  FACTURA:{n:'Emisión de factura',a:'FAC',ch:'correo',d:'adjunta el CFDI en Activo 360'},
+  AGENDA:{n:'Agendar entrega',a:'SIS',ch:'correo',d:'prepara el equipo y propone fecha y hora'},
+  DONFACT:{n:'Factura de la donataria',a:'AF',ch:'humand',d:'adjunta la factura emitida por la donataria'},
+  REVFIS:{n:'Revisión fiscal de donación',a:'FIS',ch:'correo',d:'revisa que la factura cumpla los requisitos fiscales'},
+};
+const ST={
+  VIGENTE:['Vigente','p-ok'],ALERTA:['Alerta: cumple vida útil en ≤3 meses','p-warn'],VENCIDO:['Cumplió vida útil','p-bad'],
+  CONFIRMADO:['Por diagnosticar','p-info'],PRECIO:['En Activo Fijo (precio)','p-hm'],PUBLICADO:['Disponible en Bazar','p-sd'],SUBASTA:['En subasta','p-warn'],
+  FIRMAS:['Congelado · firmas del formato','p-hm'],PAGO:['Congelado · esperando depósito','p-warn'],DEPOSITO:['Congelado · Ingresos valida','p-hm'],
+  FACTURA:['Vendido · en Facturación','p-info'],AGENDA:['Vendido · por agendar entrega','p-info'],ENTREGA:['Vendido · cita de entrega','p-info'],
+  ENTREGADO:['Vendido y entregado','p-ok'],DESTRUCCION:['Para destrucción certificada','p-mut'],RECOLECCION:['Recolección programada','p-mut'],DESTRUIDO:['Destruido (certificado)','p-mut'],
+  DONACION:['Donación · por entregar','p-info'],DONADO_FACT:['Donado · falta factura de la donataria','p-warn'],DONADO:['Donado','p-ok']
+};
+const SOLD=['FACTURA','AGENDA','ENTREGA','ENTREGADO'],FROZEN=['FIRMAS','PAGO','DEPOSITO'],DESTR=['DESTRUCCION','RECOLECCION','DESTRUIDO'],DON=['DONACION','DONADO_FACT','DONADO'];
+const DFLOW=[['Por entregar','DONACION'],['Factura donataria','DONADO_FACT'],['Donado','DONADO']];
+const FLOW=[['Diagnóstico','CONFIRMADO'],['Precio AF','PRECIO'],['Publicado','PUBLICADO'],['Firmas','FIRMAS'],['Depósito','PAGO'],['Ingresos','DEPOSITO'],['Factura','FACTURA'],['Agenda','AGENDA'],['Entrega','ENTREGA'],['Cerrado','ENTREGADO']];
+const flowIdx=p=>p==='SUBASTA'?2:FLOW.findIndex(f=>f[1]===p);
+const OWNER={CONFIRMADO:'SIS',PRECIO:'AF',PUBLICADO:'COL',SUBASTA:'COL',FIRMAS:'COL',PAGO:'COL',DEPOSITO:'ING',FACTURA:'FAC',AGENDA:'SIS',ENTREGA:'SIS',DONACION:'SIS',DONADO_FACT:'AF'};
+const BUYERS=['Ana Gómez · Recepción','Luis Peña · Ultrasonido','Carla Ruiz · Optometría','Mario Soto · Almacén','Elena Vidal · Laboratorio','Iris Castro · Nutrición'];
+const JEFES=['Dra. Laura Félix','Dr. Óscar Zamora','Lic. Paola Ibarra','Ing. Raúl Montaño','Dra. Sofía Rentería','Lic. Tomás Cota'];
+const ME={name:'Karla Méndez',emp:'104582',puesto:'Recepcionista',area:'Recepción',jefe:'Lic. Paola Ibarra'};
+// Horas-hombre por equipo vendido (supuestos editables en la reunión con cada área)
+const HH_MANUAL=[['Diagnóstico y listado en Excel','Sistemas',.75],['Tabulador y envío a Humand','Activo Fijo',.5],['Atención de ticket y verificación de existencia','Activo Fijo',.5],['Formato impreso, firma y escaneo','Colaborador / Activo Fijo',.5],['Envío de link de pago y seguimiento','Activo Fijo',.25],['Llevar la ficha a Ingresos y confirmar','Activo Fijo / Ingresos',.35],['Solicitud y emisión de factura por correo','Activo Fijo / Facturación',.4],['Avisos y entrega','Activo Fijo / Sistemas',.5]];
+const HH_A360=[['Diagnóstico en la herramienta','Sistemas',.33],['Aprobar precio en Humand','Activo Fijo',.05],['Firma electrónica del formato','Colaborador / jefe',.05],['Validar váucher en Humand','Ingresos',.1],['Adjuntar CFDI desde el correo','Facturación',.2],['Agendar y entregar','Sistemas',.3]];
+const HHM=sum(HH_MANUAL,x=>x[2]),HHA=sum(HH_A360,x=>x[2]),HH_CARTA=[.5,.1];
+Object.defineProperty(window,'HOLD',{get:()=>S?.cfg?.plazo?.pago??2});Object.defineProperty(window,'META',{get:()=>S?.cfg?.meta??.85});
+
+
+/* ---------- Integración AppSheet (formato real de la vista de equipos) ---------- */
+const AS_COLS=()=>DATA.appsheet.cols;
+const AS_REQ=['CENTRO DE TRABAJO','AREA','ESTATUS','MARCA','MODELO','INSTALACION','# DE SERIE'];
+const AS_VIVOS=['ACTIVO','RESGUARDO','PLAN DE RENOVACION / ENVIADO A CSI',''];
+const ASP={'ACTIVO':'p-ok','PLAN DE RENOVACION / ENVIADO A CSI':'p-info','RESGUARDO':'p-warn','VENDIDO':'p-sd','DESTRUIDO':'p-mut','TRANSFERIDO':'p-mut','DONADO':'p-sd'};
+const aspill=s=>`<span class="pill ${ASP[s]||'p-mut'}" title="Estatus en AppSheet">${esc(s==='PLAN DE RENOVACION / ENVIADO A CSI'?'Plan de renovación':s?s.charAt(0)+s.slice(1).toLowerCase():'Sin estatus')}</span>`;
+const asObjs=t=>t.rows.map(r=>{const o={};t.cols.forEach((c,i)=>o[c]=r[i]??'');return o});
+const ACC={RECEPCION:'Recepción',OPTOMETRIA:'Optometría',DENSITOMETRIA:'Densitometría',MASTOGRAFIA:'Mastografía',TOMOGRAFIA:'Tomografía',MAGNETICA:'magnética',NUTRICION:'Nutrición',ALMACEN:'Almacén',CAPACITACION:'capacitación',AREA:'área'};
+const niceArea=a=>String(a||'').trim().split(/\s+/).map((w,i)=>{const n=ACC[w]||w.toLowerCase();return i?n.toLowerCase():n.charAt(0).toUpperCase()+n.slice(1)}).join(' ');
+const nkey=s=>String(s||'').toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();
+function genOf(cpu){const s=String(cpu||'');let m=s.match(/(\d{1,2})th Gen/i);if(m)return+m[1];m=s.match(/i[3579]-(\d{4,5})/i);if(m)return m[1].length===5?+m[1].slice(0,2):+m[1][0];
+  m=s.match(/Ryzen\s*\d\s*(?:PRO\s*)?(\d)\d{3}/i);if(m)return({2:8,3:9,4:10,5:11,7:12})[m[1]]||9;if(/\bA\d{1,2}\b|A\d-|PRO A\d/i.test(s))return 6;return 8}
+const tipoAS=d=>{const s=String(d||'CPU').toUpperCase();return /LAP/.test(s)?'Laptop':/MON/.test(s)?'Monitor':'Escritorio'};
+/* rows: objetos con encabezados AppSheet originales (o normalizados con normK) */
+function mapAS(rows,name){
+  const g=(r,k)=>{if(k in r)return r[k];const n=normK(k);return r[n]??''};
+  const dir={};DATA.clinics.forEach(c=>dir[nkey(c.n)]=c);
+  const usr={};rows.forEach(r=>{const c=nkey(g(r,'CENTRO DE TRABAJO')),u=String(g(r,'USUARIO')).trim();if(u){(usr[c]??={})[u]=(usr[c][u]||0)+1}});
+  const topU=c=>{const o=usr[c];return o?Object.entries(o).sort((a,b)=>b[1]-a[1])[0][0]:''};
+  const inv=[],prev=[];let bad=0;const seen=new Set();
+  rows.forEach(r=>{const raw={};AS_COLS().forEach(c=>raw[c]=String(g(r,c)??''));
+    const st=nkey(raw['ESTATUS']),serie=raw['# DE SERIE'].trim(),clin=raw['CENTRO DE TRABAJO'].replace(/\s+/g,' ').trim();
+    let fa=normDate(g(r,'INSTALACION'));if(!fa||fa<'2000'){const gw=normDate(g(r,'FIN DE GARANTIA'));fa=gw&&gw>'2003'?addY(gw,-3):null}
+    if(!serie||!clin||!fa){bad++;return}
+    if(!AS_VIVOS.includes(st)||seen.has(serie)){prev.push(raw);return}seen.add(serie);
+    const c=dir[nkey(clin)],t=tipoAS(raw['DISPOSITIVO']),cpu=raw['PROCESADOR'];
+    const ing=String(raw['USUARIO']).trim()||topU(nkey(clin))||'Ingeniero de Sistemas';
+    inv.push({ID_ACTIVO:serie,NUM_SERIE:serie,CLINICA:clin,MUNICIPIO:c?.m||clin.split(' ')[0],ESTADO:c?.e||'',ZONA:c?.z||raw['ZONA'],DIVISION:raw['ZONA']||c?.dv||'',
+      SERVICIO:niceArea(raw['AREA']),UBICACION:'Estación '+(raw['UBICACIÓN']||'1'),TIPO_EQUIPO:t,MARCA:raw['MARCA'],MODELO:raw['MODELO'],PROCESADOR:cpu,GENERACION:genOf(cpu),
+      RAM_GB:parseInt(raw['RAM(GB)'])||8,ALMACENAMIENTO:raw['DISCO DURO (HDD, SSD)']||'',MONITOR:t==='Escritorio'?'Monitor de la estación':'',SO:raw['SistemaOperativo']||'',
+      FECHA_ADQUISICION:fa,COSTO_ADQUISICION:0,VIDA_UTIL_ANIOS:VIDA[t]||5,INGENIERO:ing,CORREO_INGENIERO:'',
+      AS_ESTATUS:st,_p0:st==='PLAN DE RENOVACION / ENVIADO A CSI'?'CONFIRMADO':null,_d0:normDate(String(raw['MODIFICADO EL:']).slice(0,10)),as:raw})});
+  return{inv,prev,bad,name:name||'AppSheet',total:rows.length}}
+let BASE0=null;const base0=()=>BASE0||(BASE0=mapAS(asObjs(DATA.appsheet),'Demo en formato AppSheet'));
+function applyAS(items){items.forEach(e=>{if(e._p0==='CONFIRMADO'&&!e.p){e.p='CONFIRMADO';const d=e._d0&&e._d0<=S.today&&diff(e._d0,S.today)<=30?e._d0:S.today;
+  e.hist.push({d,t:'Reemplazo confirmado: AppSheet en "Plan de renovación / enviado a CSI"'+(e.as?.['# DE SERIE NUEVO EQUIPO']?' · equipo nuevo '+e.as['# DE SERIE NUEVO EQUIPO']:''),a:'SIS',k:''})}})}
+/* estatus que Activo 360 devuelve a AppSheet según la etapa del proceso */
+function asStatus(e){const p=e.p;if(!p)return e.AS_ESTATUS||'ACTIVO';if(SOLD.includes(p))return'VENDIDO';if(p==='DESTRUIDO')return'DESTRUIDO';if(DON.includes(p)&&p!=='DONACION')return'DONADO';
+  if(p==='CONFIRMADO')return'PLAN DE RENOVACION / ENVIADO A CSI';return'RESGUARDO'}
+function asExportRows(){const now=new Date(),z=n=>String(n).padStart(2,'0'),[y,m,d]=S.today.split('-');const ts=`${d}/${m}/${y} ${z(now.getHours())}:${z(now.getMinutes())}:${z(now.getSeconds())}`;
+  return[...S.items.filter(e=>e.as).map(e=>{const o={...e.as};const ns=asStatus(e);if(ns!==o['ESTATUS']){o['ESTATUS']=ns;o['MODIFICADO EL:']=ts}o['ESTATUS ACTIVO 360']=ST[stOf(e)][0];o['PRECIO AUTORIZADO']=e.price?.aut??'';o['FOLIO VENTA']=e.sale?.folio||'';return o}),
+    ...S.prev.map(o=>({...o,'ESTATUS ACTIVO 360':'Histórico (antes de Activo 360)','PRECIO AUTORIZADO':'','FOLIO VENTA':''}))]}
+/* Apps Script: lectura directa de la hoja AppSheet */
+const GAS=typeof google!=='undefined'&&google.script&&google.script.run;
+
+
+/* ---------- Saludo ---------- */
+function userName(){let n='';try{n=localStorage.getItem('activo360-nombre')||''}catch(e){}return n||window.A360_USER||''}
+function greet(){const d=new Date(),h=d.getHours();const s=h<12?'Buenos días':h<19?'Buenas tardes':'Buenas noches';const n=userName();
+  const f=DIAS[d.getDay()].replace(/^./,c=>c.toUpperCase())+', '+d.getDate()+' de '+MESL[d.getMonth()];return{s,n,f,line:n?`${s}, <b>${esc(n)}</b>`:s}}
+function paintGreet(){const g=greet(),a=alerts();$('#greet').innerHTML=`<div class="gh">${g.line}</div><div class="gs">${g.f} · Activo 360</div>`;
+  const nb=a.filter(x=>x.l!=='info').length;$('#bell').innerHTML=`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>${nb?`<span>${nb}</span>`:''}`;$('#bell').setAttribute('aria-label',`Alertas: ${nb}`)}
+function welcome(){try{if(sessionStorage.getItem('a360-hola'))return;sessionStorage.setItem('a360-hola','1')}catch(e){}
+  const g=greet(),a=alerts(),bad=a.filter(x=>x.l==='bad').length,warn=a.filter(x=>x.l==='warn').length;
+  const el=document.createElement('div');el.className='hola';el.innerHTML=`<div class="holac" role="dialog" aria-label="Bienvenida"><img src="${$('.navlogo').src}" alt=""><h2>${g.line}</h2><p>${g.f}</p>
+   <div class="holak"><span class="pill p-bad">${bad} urgentes</span><span class="pill p-warn">${warn} por atender</span></div>
+   <div class="row" style="justify-content:center;margin-top:14px"><button class="btn p" data-hola="alertas">Ver alertas</button><button class="btn" data-hola="">Entrar</button></div>
+   ${userName()?'':'<p class="note" style="margin-top:12px"><a href="#" data-nombre>¿Cómo te llamas?</a> para saludarte por tu nombre.</p>'}</div>`;
+  document.body.appendChild(el);const close=v=>{el.classList.add('out');setTimeout(()=>el.remove(),350);if(v)go(v)};
+  el.onclick=ev=>{const b=ev.target.closest('[data-hola]');if(b)close(b.dataset.hola);else if(ev.target.closest('[data-nombre]')){ev.preventDefault();askName()}else if(ev.target===el)close()};
+  setTimeout(()=>el.isConnected&&!el.matches(':hover')&&close(),6000)}
+function askName(){const n=prompt('¿Cómo quieres que te salude?',userName());if(n!=null){try{localStorage.setItem('activo360-nombre',n.trim())}catch(e){}paintGreet();$('.hola')?.remove()}}
+
+/* ---------- Alertas ---------- */
+function alerts(){if(!S)return[];const o=[],K=C(),add=(l,cat,t,d,act)=>o.push({l,cat,t,d,act});
+  const byC=(f)=>{const g={};S.items.filter(f).forEach(e=>(g[e.CLINICA]??=[]).push(e));return Object.entries(g).sort((a,b)=>b[1].length-a[1].length)};
+  byC(e=>!e.p&&baseSt(e)==='VENCIDO').forEach(([c,l])=>add('bad','Vida útil',`${c}: ${l.length} ${l.length>1?'equipos cumplieron':'equipo cumplió'} 5 años sin iniciar proceso`,`Instalados ${[...new Set(l.map(e=>e.as?.['INSTALACION']||fd(e.FECHA_ADQUISICION)))].slice(0,3).join(', ')}${l.length>3?'…':''} · ${l[0].INGENIERO}`,{eng:c}));
+  S.items.map(e=>[e,sisTask(e)]).filter(([e,t])=>t&&!t.ok).forEach(([e,t])=>add('bad','Sistemas',`Diagnóstico atrasado · ${e.ID_ACTIVO}`,`${e.CLINICA} · ${t.days} días hábiles (meta ${K.sla.SIS}) · ${e.INGENIERO}`,{eq:e._i}));
+  S.reqs.filter(r=>r.state==='Pendiente'&&!slaOk(r)).forEach(r=>{const e=S.items[r.eq];if(!e)return;add('bad',AREAS[RT[r.type].a]||'Solicitud',`${RT[r.type].n} fuera de tiempo${r.esc?' · escalada':''}`,`${r.id} · ${e.ID_ACTIVO} · ${e.CLINICA} · ${reqDays(r)} días hábiles (meta ${slaOf(r)})`,{eq:e._i})});
+  S.items.filter(e=>e.p==='PAGO'&&e.pay?.dl&&diff(S.today,e.pay.dl)<=1).forEach(e=>add('warn','Ingresos',`Depósito vence ${e.pay.dl===S.today?'hoy':fd(e.pay.dl)} · ${e.sale?.folio}`,`${e.buyer} · ${money(e.pay.amount)} · si no paga, el equipo regresa al Bazar`,{eq:e._i}));
+  S.items.filter(e=>['PUBLICADO','SUBASTA'].includes(e.p)&&diff(e.pub,S.today)>=K.plazo.sinVenta).forEach(e=>add('warn','Bazar',`${diff(e.pub,S.today)} días en Bazar sin venta · ${e.ID_ACTIVO}`,`${e.CLINICA} · ${money(curPrice(e).v)} · Activo Fijo debe decidir`,{eq:e._i}));
+  byC(e=>!e.p&&baseSt(e)==='ALERTA').forEach(([c,l])=>add('warn','Vida útil',`${c}: ${l.length} equipo${l.length>1?'s':''} cumple${l.length>1?'n':''} 5 años en ≤3 meses`,`Primero: ${fd(l.map(due).sort()[0])} · programar reemplazo con ${l[0].INGENIERO}`,{eng:c}));
+  S.items.filter(e=>e.p==='DONADO_FACT'&&e.don?.d&&diff(e.don.d,S.today)>K.plazo.donFact).forEach(e=>add('warn','Activo Fijo',`Falta factura de donataria · ${e.ID_ACTIVO}`,`${e.don.org} · entregado ${fd(e.don.d)}`,{eq:e._i}));
+  Object.entries(S.cartas).forEach(([emp,L])=>{const v=L[L.length-1];if(v.st==='Pendiente de firma'&&diff(v.d,S.today)>=2){const c=colOf(emp);add('warn','Cartas',`Carta responsiva sin firma · ${v.folio}`,`${c?.name||emp} · ${diff(v.d,S.today)} días · ${v.rem} recordatorio(s)`,{v:'carta'})}});
+  S.col.filter(c=>c.st==='Baja laboral'&&assignedTo(c.emp).some(a=>a.estado==='Pendiente de devolución')).forEach(c=>add('bad','Sistemas',`Baja laboral con equipo sin devolver · ${c.name}`,`${assignedTo(c.emp).length} activo(s) pendiente(s) de devolución`,{v:'ti'}));
+  const pl=S.items.filter(e=>e.p==='CONFIRMADO'&&e.AS_ESTATUS==='PLAN DE RENOVACION / ENVIADO A CSI').length;if(pl)add('info','AppSheet',`${pl} equipos en plan de renovación`,'Vienen de AppSheet y esperan diagnóstico del ingeniero',{v:'ingeniero'});
+  (S.feedLog||[]).slice(0,3).forEach(f=>add('info','AppSheet',f.t,f.d,{v:'inventario'}));
+  return o}
+const LV={bad:['p-bad','Urgente'],warn:['p-warn','Por atender'],info:['p-info','Aviso']};
+function alertRow(a,i){return `<div class="alr ${a.l}"><span class="pill ${LV[a.l][0]}">${LV[a.l][1]}</span><div class="alt"><b>${esc(a.t)}</b><div class="note">${esc(a.cat)} · ${esc(a.d)}</div></div><button class="btn sm" data-alr="${i}">Ver</button></div>`}
+function bindAlerts(list){$$('[data-alr]').forEach(b=>b.onclick=()=>{const a=list[+b.dataset.alr].act;if(a.eq!=null)openEq(a.eq);else if(a.eng){S.engClinic=a.eng;go('ingeniero')}else go(a.v)})}
+/* ---------- Archivo de AppSheet en Drive (Apps Script) ---------- */
+const PROC_K=['p','dx','price','pub','buyer','pay','fac','destD','hist'];
+function mergeFeed(src){const byId={};S.items.forEach(e=>byId[e.ID_ACTIVO]=e);const fresh=freshItems(src.inv);let nNew=0,nCh=0;
+  fresh.forEach(n=>{const o=byId[n.ID_ACTIVO];if(!o){nNew++;return}if(o.AS_ESTATUS!==n.AS_ESTATUS)nCh++;
+    for(const k in o){if(PROC_K.includes(k)||!(k in n))n[k]=o[k]}n._old=o._i;delete byId[n.ID_ACTIVO]});
+  const left=Object.values(byId),kept=left.filter(o=>o.p||!o.as);kept.forEach(o=>o._old=o._i);
+  const out=[...fresh,...kept],map={};out.forEach((e,i)=>{if(e._old!=null)map[e._old]=i;e._i=i;delete e._old});
+  S.reqs=S.reqs.filter(r=>map[r.eq]!=null);S.reqs.forEach(r=>r.eq=map[r.eq]);S.mails.forEach(m=>{if(m.eq!=null)m.eq=map[m.eq]??null});
+  S.items=out;S.prev=src.prev;S.src=src.name;S.dxId=null;S.buyId=null;applyAS(S.items);
+  return{nNew,nCh,nOut:left.length-kept.length}}
+function feedLoad(src,stamp,silent){
+  if(!src.inv.length){toast('El archivo no tiene equipos vigentes con el formato AppSheet');return}
+  const first=!S.feedStamp||/^Demo/.test(S.src||'');let msg;
+  if(first){const ti={col:S.col,ast:S.ast,cartas:S.cartas,movs:S.movs,cfg:S.cfg};init(false,src);Object.assign(S,ti);msg=`${src.inv.length} equipos vigentes · ${src.prev.length} históricos`}
+  else{const r=mergeFeed(src);msg=`+${r.nNew} nuevos · ${r.nCh} cambiaron estatus · ${r.nOut} salieron de vigentes`}
+  S.feedStamp=stamp;(S.feedLog??=[]).unshift({t:'AppSheet actualizado desde Drive · '+fd(S.today),d:msg});S.feedLog.length=Math.min(S.feedLog.length,10);
+  log('GET','Drive · '+src.name,'g',{filas:src.total,vigentes:src.inv.length,historicos:src.prev.length},'Activo 360 lee el archivo de AppSheet guardado en Drive.');
+  save();render();toast('AppSheet actualizado · '+msg)}
+function syncFeed(force){if(!GAS){toast('Disponible al publicar en Apps Script');return}
+  const fail=err=>toast('No se pudo leer el archivo de Drive: '+(err&&err.message||err));
+  google.script.run.withSuccessHandler(info=>{if(!info||!info.ok){force&&toast(info?.msg||'Configura FILE_ID en Code.gs');return}
+    if(!force&&info.updated===S.feedStamp)return;force&&toast('Leyendo '+info.name+'…');
+    google.script.run.withSuccessHandler(res=>{try{let rows=res.rows;
+        if(!rows){const bin=atob(res.b64);let wb;if(/csv|text/i.test(res.mime)||/\.csv$/i.test(res.name)){const u=Uint8Array.from(bin,c=>c.charCodeAt(0));wb=XLSX.read(new TextDecoder('utf-8').decode(u).replace(/^\uFEFF/,''),{type:'string',raw:true})}
+          else wb=XLSX.read(bin,{type:'binary',cellDates:true});rows=XLSX.utils.sheet_to_json(wb.Sheets[res.sheet&&wb.Sheets[res.sheet]?res.sheet:wb.SheetNames[0]],{defval:'',raw:false,dateNF:'dd/mm/yyyy'})}
+        feedLoad(mapAS(rows,'Drive · '+res.name),info.updated)}catch(e){fail(e)}}).withFailureHandler(fail).getFeedData()}).withFailureHandler(fail).getFeedInfo()}
+function syncSheet(){syncFeed(true)}
+
+/* ---------- Estado ---------- */
+let S;
+const due=e=>addY(e.FECHA_ADQUISICION,+e.VIDA_UTIL_ANIOS||VIDA[e.TIPO_EQUIPO]||5);
+function baseSt(e){const d=diff(S.today,due(e));return d<=0?'VENCIDO':d<=90?'ALERTA':'VIGENTE'}
+const soon=e=>diff(S.today,due(e))<=90;
+const stOf=e=>e.p||baseSt(e);
+const tipo=e=>e.TIPO_EQUIPO||'Escritorio';
+function freshItems(inv){return inv.map((x,i)=>({...x,TIPO_EQUIPO:/escrit/i.test(x.TIPO_EQUIPO||'Escritorio')?'Escritorio':x.TIPO_EQUIPO,_i:i,p:null,dx:null,price:null,pub:null,buyer:null,pay:null,fac:null,destD:null,hist:[]}))}
+function init(sample=true,src){src=src||base0();
+  S={cfg:defaultCfg(),meClinic:null,today:sample?T0:new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),items:freshItems(src.inv),prev:src.prev||[],src:src.name||'AppSheet',invAs:'',mod:'venta',reqs:[],notifs:[],log:[],mails:[],mailTab:'',fisDraft:null,seq:1000,view:'panel',hmTab:'ALL',city:null,engClinic:null,dxId:null,dxDraft:null,buyId:null,invQ:'',invClin:'',invSt:'',invPage:0,segArea:'',sample,
+     col:[],ast:[],cartas:{},movs:[],emp:'102458',tiQ:'',tiTipo:'',tiEst:'',tiPage:0,mov:null,clinQ:''};
+  applyAS(S.items);
+  genTI();
+  if(sample)seed();
+}
+function H(e,txt,area,kind){e.hist.push({d:S.today,t:txt,a:area,k:kind||''})}
+function log(m,ep,src,body,desc){S.log.unshift({d:S.today,m,ep,src,body,desc})}
+function notify(to,txt,kind){S.notifs.unshift({d:S.today,to,txt,kind:kind||'info'})}
+function newReq(type,e,extra){const t=RT[type];const r={id:'SOL-'+(++S.seq),type,eq:e._i,created:S.today,last:S.today,state:'Pendiente',rem:0,esc:false,res:null,amount:extra?.amount??null,dl:extra?.dl||null};S.reqs.unshift(r);
+  const who=t.a==='COL'?e.buyer:t.a==='JEFE'?(e.sale?.jefe||'Jefe inmediato'):t.a==='SIS'?e.INGENIERO:AREAS[t.a];
+  if(t.ch==='humand'){log('POST','/chats/{id}/messages (API Marty · bot Activo 360)','pub',{to:AREAS[t.a],text:`Tienes pendiente: ${t.n} · ${e.ID_ACTIVO}`,link:'https://activo360.salud-digna.interno/aprobaciones/'+r.id},'El bot de Activo 360 avisa al área en Humand; la aprobación se hace dentro de Activo 360 (Humand no permite crear solicitudes desde un sistema externo).');notify(AREAS[t.a],`Nueva solicitud: ${t.n} · ${e.ID_ACTIVO} (${e.CLINICA})`,'req')}
+  else if(t.ch==='firma'){log('POST','/documents','pub',{employeeInternalId:t.a==='COL'?(e.sale?.emp||''):'jefe de '+(e.sale?.emp||''),name:`Formato SGC-N4-60 ${e.sale?.folio}.pdf`,signatureStatus:'PENDING',signatureCoordinates:[{page:1,x:t.a==='COL'?.12:.58,y:.82,width:.3,height:.06}],sendNotification:true},'Sube el formato prellenado a Documentos de Humand para firma electrónica.');notify(who,`Tienes un documento por firmar: formato de compra de ${eqName(e)} (${e.sale?.folio})`,'req')}
+  else{const to=t.a==='FAC'?MAIL_FAC:t.a==='SIS'?(e.CORREO_INGENIERO||e.INGENIERO):'Fiscal (Jurídico)';mail(to,`[Activo 360] ${t.n} · ${e.sale?.folio||e.ID_ACTIVO}`,mailBody(type,e),e)}
+  return r}
+function curReq(e){return S.reqs.find(r=>r.eq===e._i&&r.state==='Pendiente')}
+function closeReq(r,state){if(!r)return;r.state=state||'Aprobada';r.res=fd(S.today);r.resD=S.today}
+function mail(to,subj,body,e){S.mails.unshift({d:S.today,to,subj,body,eq:e?e._i:null});log('POST','https://gmail.googleapis.com/gmail/v1/users/me/messages/send','g',{to,subject:subj},'Aviso por correo de Google: el área entra a Activo 360 solo cuando tiene algo pendiente.')}
+function fiscalTxt(f){if(!f||f.tipo==='publico')return 'Venta a público en general';return f.csf?`Con factura · constancia de situación fiscal: ${f.csf}`:`Con factura · RFC ${f.rfc} · ${f.nombre} · régimen ${f.regimen} · CP ${f.cp} · uso ${f.uso}`}
+function mailBody(type,e){const s=e.sale||{};
+  if(type==='FACTURA')return `Hay una venta pendiente de facturar.\nFolio: ${s.folio}\nEquipo: ${eqName(e)} · activo ${e.ID_ACTIVO} · serie ${e.NUM_SERIE}\nPrecio: ${money(e.pay?.amount)}\nComprador: ${e.buyer} (empleado ${s.emp||''})\nDatos fiscales: ${fiscalTxt(s.fiscal)}\nAdjunta el CFDI aquí: https://activo360.salud-digna.interno/facturas/${s.folio}`;
+  if(type==='AGENDA')return `La venta ${s.folio} ya está facturada. Prepara el equipo ${eqName(e)} (activo ${e.ID_ACTIVO}) y propone fecha y hora de entrega en ${e.CLINICA}.\nComprador: ${e.buyer}\nAgenda aquí: https://activo360.salud-digna.interno/entregas/${s.folio}`;
+  if(type==='REVFIS')return `Se donó el equipo ${eqName(e)} (activo ${e.ID_ACTIVO}) a ${e.don?.org}. Se adjuntó la factura de la donataria (${e.don?.factura}). Revisa que cumpla los requisitos fiscales: https://activo360.salud-digna.interno/donaciones/${e.ID_ACTIVO}`;
+  return ''}
+function addFile(e,name){if(!e.sale)return;e.sale.files.push({d:S.today,name});log('POST','https://www.googleapis.com/upload/drive/v3/files','g',{carpeta:'Activo 360 / Ventas / '+e.sale.folio,archivo:name},'Guarda el documento en la carpeta de la venta en Drive.')}
+
+/* ---------- Tabulador y diagnóstico ---------- */
+const DEFDX={enciende:'si',rend:'ok',monitor:'ok',estetica:'A',puertos:'ok',perif:'si',disco:'borrado',comp:[],obs:''};
+function priceCalc(e,dx){
+  const t=tipo(e),K=C(),D=K.ded,pc=t==='Escritorio'||t==='Laptop';let b,top;
+  if(pc){top=K.pmax[t]||800;b=top;const cpu=e.PROCESADOR||'';
+    if(!/i5|i7|Ryzen 5|Ryzen 7/.test(cpu))b-=D.i3;if((+e.GENERACION||8)<8)b-=D.genOld;if((+e.RAM_GB||8)<=4)b-=D.ram4;
+    if(dx.disco==='retirado')b-=D.noDisk;else if(/HDD/i.test(String(e.ALMACENAMIENTO)))b-=D.hdd;
+    if(t==='Escritorio'){if(dx.monitor==='fallas')b-=D.monF;else if(dx.monitor==='no')b-=D.noMon;if(dx.perif!=='si')b-=D.noPerif}
+    else if(dx.perif!=='si')b-=D.noCharger;
+    const extra=Math.floor(diff(due(e),S.today)/365);if(extra>0)b-=D.anio*extra}
+  else{top=K.acc[t]||100;b=top;if(dx.perif!=='si')b*=.85}
+  let f=K.est[dx.estetica]||1;if(dx.rend==='lento')f*=K.lento;if(dx.puertos==='falla')f*=K.puertos;
+  const fl=pc?K.piso:20,rr=n=>Math.max(fl,Math.round(n/50)*50||fl);const sug=Math.min(top,rr(b*f));
+  return{sug,min:Math.min(sug,rr(sug*.88)),max:Math.min(top,rr(sug*1.12))};
+}
+const destino=dx=>dx.enciende==='no'?((dx.comp&&dx.comp.length)?'RECUP':'DEST'):'VENTA';
+const estValue=e=>e.price?.aut??priceCalc(e,e.dx&&e.dx.enciende==='si'?e.dx:DEFDX).sug;
+const estExp=e=>e.dx?(e.dx.enciende==='si'?estValue(e):0):estValue(e)*C().aptos; // sin diagnóstico: se pondera por % de equipos aptos para venta
+function curPrice(e){if(!e.price)return null;const d=diff(e.pub||S.today,S.today);
+  if(e.p==='SUBASTA'){const bids=e.auc.bids||[];const best=bids.length?Math.max(...bids.map(b=>b.amount)):e.auc.min;return{v:best,l:`Subasta · cierra ${fd(e.auc.end)}`,d,auction:true,bids:bids.length}}
+  return{v:e.price.aut,l:e.price.adj?'Precio ajustado por Activo Fijo':'Precio autorizado',d,auction:false}}
+const slaOf=r=>r.type==='DONFACT'?C().plazo.donFact:C().sla[RT[r.type].a]??2;
+const reqDays=r=>bizDiff(r.created,r.resD||S.today);
+const slaOk=r=>reqDays(r)<=slaOf(r);
+const slaPill=r=>r.sis?(r.ok?`<span class="pill p-ok">En tiempo · meta ${C().sla.SIS} d</span>`:`<span class="pill p-bad">Fuera de tiempo · meta ${C().sla.SIS} d</span>`):r.state==='Pendiente'?(slaOk(r)?`<span class="pill p-ok">En tiempo · meta ${slaOf(r)} d</span>`:`<span class="pill p-bad">Fuera de tiempo · meta ${slaOf(r)} d</span>`):(slaOk(r)?'<span class="pill p-ok">En tiempo</span>':'<span class="pill p-bad">Fuera de tiempo</span>');
+const MEB_=()=>ME.name+' · '+ME.area;
+function canBuy(e){const K=C(),d=diff(e.pub||S.today,S.today);
+  const mine=S.items.filter(x=>x.buyer===MEB_()&&x.sale&&diff(x.sale.start,S.today)<365&&(FROZEN.includes(x.p)||SOLD.includes(x.p))).length;
+  if(K.max&&mine>=K.max)return{ok:false,msg:`Límite de ${K.max} equipo(s) por colaborador al año`};
+  if(K.bloqDev&&S.ast.some(a=>a.emp===ME.emp&&a.estado==='Pendiente de devolución'))return{ok:false,msg:'Tienes activos pendientes de devolución'};
+  if(e.p==='PUBLICADO'&&d<K.prio&&S.meClinic!==e.CLINICA)return{ok:false,msg:`Prioridad para personal de ${e.CLINICA} hasta el ${fd(addD(e.pub,K.prio))}`};
+  return{ok:true}}
+const kgOf=e=>C().kg[tipo(e)]||1;
+function sisTask(e){if(e.p!=='CONFIRMADO')return null;const h=[...e.hist].reverse().find(x=>/Reemplazo confirmado|Devuelto por/.test(x.t));const d0=h?.d||S.today;const days=bizDiff(d0,S.today);return{sis:1,days,ok:days<=C().sla.SIS}}
+function sisDone(){const o=[];S.items.forEach(e=>{const H_=e.hist;const c=H_.find(x=>/Reemplazo confirmado|Devuelto por/.test(x.t)),d=H_.find(x=>/Diagnóstico registrado|No funciona|No enciende/.test(x.t));if(c&&d)o.push(bizDiff(c.d,d.d))});return o}
+
+/* ---------- Inventario tecnológico por colaborador ---------- */
+let _s=20261013;const rnd=()=>{_s|=0;_s=_s+0x6D2B79F5|0;let t=Math.imul(_s^_s>>>15,1|_s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const pick=a=>a[Math.floor(rnd()*a.length)];
+const TI_MOD={Laptop:[['Lenovo','ThinkPad E14 Gen 4','Intel Core i5-1235U',12],['Lenovo','ThinkPad T14 Gen 3','Intel Core i7-1255U',12],['Lenovo','ThinkPad L14 Gen 2','Intel Core i5-1135G7',11]],
+  Monitor:[['Lenovo','ThinkVision T24i-30 24"']],Diadema:[['Logitech','H390 USB'],['Jabra','Evolve2 30']],'Hub USB-C':[['Lenovo','USB-C Mini Dock'],['Lenovo','Hub USB-C 7 en 1']],
+  'Memoria USB':[['Kingston','DataTraveler 64 GB']],'Divisor de pantalla':[['StarTech','Divisor HDMI 1x2']]};
+const STAFF=['Ing. Andrés Lugo','Ing. Mónica Beltrán','Ing. Saúl Camacho'];
+const TI_AREAS=['Finanzas','Activo Fijo','Sistemas','Experiencia del Paciente','Call Center','Recursos Humanos','Compras','Calidad','Mercadotecnia','Jurídico','Operaciones','Crédito y Cobranza','Facturación'];
+const NOMS=['Sofía','Diego','Valeria','Alejandro','Regina','Fernando','Camila','Rodrigo','Ximena','Eduardo','Natalia','Arturo','Paulina','Manuel','Renata','Javier','Daniela','Héctor','Lorena','Gustavo','Alma','Ernesto','Patricia','Rubén'];
+const APS=['Pérez','López','Ramírez','Castro','Morales','Ortiz','Delgado','Vega','Herrera','Mendoza','Ríos','Acosta','Lara','Serrano','Guerrero','Pacheco','Sandoval','Montes','Beltrán','Inzunza','Valdez','Osuna'];
+let invSeq=40000;
+function newAsset(t,extra){const m=pick(TI_MOD[t]);const a={inv:'TI-'+(++invSeq),tipo:t,marca:m[0],modelo:m[1],cpu:m[2]||'',gen:m[3]||0,serie:(m[0].slice(0,2)+Math.floor(rnd()*9e6+1e6)).toUpperCase(),entrega:null,alta:S.today,estado:'En almacén',emp:null,resp:pick(STAFF),hist:[],...extra};S.ast.push(a);return a}
+const tiDue=a=>a.entrega?addY(a.entrega,VIDA[a.tipo]||3):null;
+const tiSoon=a=>a.estado==='Asignado'&&a.entrega&&diff(S.today,tiDue(a))<=90;
+const colOf=emp=>S.col.find(c=>c.emp===emp);
+const assignedTo=emp=>S.ast.filter(a=>a.emp===emp&&['Asignado','Pendiente de devolución'].includes(a.estado));
+const curCarta=emp=>(S.cartas[emp]||[]).slice(-1)[0];
+function snap(emp){return assignedTo(emp).map(a=>({inv:a.inv,tipo:a.tipo,marca:a.marca,modelo:a.modelo,serie:a.serie,entrega:a.entrega}))}
+function newCarta(emp,motivo,opts={}){const L=S.cartas[emp]||(S.cartas[emp]=[]);const prev=L[L.length-1];
+  if(prev){if(prev.st==='Pendiente de firma')prev.st='Cancelada (reemplazada antes de firmar)';else if(prev.st==='Firmada')prev.st='Histórica'}
+  const v={v:L.length+1,folio:`CR-${emp}-${String(L.length+1).padStart(2,'0')}`,d:S.today,motivo,items:snap(emp),st:opts.st||'Pendiente de firma',signed:opts.signed||null,rem:0,last:S.today};L.push(v);
+  if(!opts.silent){log('POST','/users/'+emp+'/documents/files','pub',{file:v.folio+'.pdf',folder:'Cartas responsivas',version:v.v},'Sube la nueva versión al expediente del colaborador.');
+    log('POST','/documents','pub',{employeeInternalId:emp,name:v.folio+'.pdf',signatureStatus:'PENDING',signatureCoordinates:[{page:2,x:.12,y:.8,width:.3,height:.06}],sendNotification:true},'Sube la carta responsiva a Documentos de Humand para firma electrónica.');
+    notify(colOf(emp)?.name||emp,`Tienes una carta responsiva por firmar (${v.folio}): ${motivo}`,'req')}
+  return v}
+function addMov(emp,tipoM,a,det,motivo,resp){S.movs.unshift({d:S.today,emp,tipo:tipoM,inv:a?.inv||'',activo:a?`${a.tipo} ${a.marca} ${a.modelo}`:'',det,motivo:motivo||'',resp:resp||'Sistemas'});a&&a.hist.push({d:S.today,t:`${tipoM}: ${det}`})}
+function genTI(){
+  const keep=S.today;const ubis=['Campus Culiacán','Campus Culiacán','Campus Culiacán','Campus Culiacán','Corporativo CDMX',...DATA.clinics.filter((c,i)=>i%37===0).map(c=>c.n)];
+  const used=new Set();
+  for(let i=0;i<48;i++){
+    let name;do{name=pick(NOMS)+' '+pick(APS)+' '+pick(APS)}while(used.has(name));used.add(name);
+    const c=i===0?{emp:'102458',name:'Juan Pérez Osuna',area:'Finanzas',ubi:'Campus Culiacán',st:'Activo'}:{emp:String(102400+i*13),name,area:pick(TI_AREAS),ubi:pick(ubis),st:'Activo'};
+    if(i===7||i===19){c.st='Baja laboral';c.bajaD=addD(T0,-(i===7?12:4))}
+    S.col.push(c);
+    const lapD=i===0?'2024-03-15':addD('2023-07-01',Math.floor(rnd()*1050));
+    const had=i!==0&&rnd()<.3;
+    if(had){S.today=addD(lapD,-1095);const old=newAsset('Laptop',{entrega:S.today,estado:'Asignado',emp:c.emp});addMov(c.emp,'Alta',old,'Entrega inicial','Nuevo ingreso',old.resp);newCarta(c.emp,'Entrega inicial',{st:'Firmada',signed:addD(S.today,1),silent:true})}
+    S.today=lapD;
+    const items=[['Laptop',1],['Monitor',.6],['Diadema',.7],['Hub USB-C',.45],['Memoria USB',.35],['Divisor de pantalla',.1]];
+    const list=[];
+    if(had){const old=S.ast.find(a=>a.emp===c.emp&&a.tipo==='Laptop');old.estado='Devuelto';old.devD=S.today;old.emp=null}
+    items.forEach(([t,p])=>{if(i===0?['Laptop','Monitor','Diadema'].includes(t):rnd()<p){const a=newAsset(t,{entrega:S.today,estado:'Asignado',emp:c.emp});list.push(a);addMov(c.emp,had&&t==='Laptop'?'Sustitución':'Alta',a,had&&t==='Laptop'?'Renovación de laptop (3 años)':'Entrega de equipo',had&&t==='Laptop'?'Fin de vida útil':'Asignación',a.resp)}});
+    newCarta(c.emp,had?'Sustitución de laptop por renovación':'Entrega de equipo de cómputo',{st:'Firmada',signed:addD(S.today,1),silent:true});
+    if(i===0){S.today='2025-06-10';const u=newAsset('Memoria USB',{entrega:S.today,estado:'Asignado',emp:c.emp});addMov(c.emp,'Alta',u,'Entrega de memoria USB','Asignación',u.resp);newCarta(c.emp,'Alta de memoria USB',{st:'Firmada',signed:'2025-06-11',silent:true})}
+    if(c.st==='Baja laboral')assignedTo(c.emp).forEach(a=>a.estado='Pendiente de devolución');
+  }
+  S.today=keep;
+  // cartas pendientes de firma (movimientos recientes)
+  [3,11,24,31,40].forEach((i,k)=>{const c=S.col[i];if(c.st!=='Activo')return;S.today=addD(keep,-k%3-(k===3?2:0));const a=newAsset(pick(['Diadema','Hub USB-C','Monitor']),{entrega:S.today,estado:'Asignado',emp:c.emp});addMov(c.emp,'Alta',a,'Entrega de accesorio','Asignación',a.resp);const v=newCarta(c.emp,'Alta de '+a.tipo.toLowerCase(),{silent:true});if(k===3){v.rem=2;v.last=addD(keep,-1)}});
+  S.today=keep;
+  for(let k=0;k<14;k++)newAsset(['Laptop','Laptop','Laptop','Monitor','Diadema','Hub USB-C','Hub USB-C','Memoria USB'][k%8],{alta:addD(keep,-k*3)});
+}
+
+/* ---------- Flujo de venta ---------- */
+function release(e,why){S.reqs.filter(r=>r.eq===e._i&&r.state==='Pendiente').forEach(r=>closeReq(r,'Cancelada'));
+  H(e,why+' · el equipo regresa al Bazar','COL','rem');notify(e.buyer,`${why}. El equipo ${e.ID_ACTIVO} regresó al Bazar.`,'rem');
+  log('PUT','/products/'+e.ID_ACTIVO,'pub',{status:'DISPONIBLE',stock:1},'Descongela el equipo en el Bazar.');e.p='PUBLICADO';e.buyer=null;e.pay=null;e.sale=null}
+function startSale(e,buyer,amount,fiscal,info){e.buyer=buyer;e.pay={amount};
+  e.sale={folio:'VTA-'+S.today.slice(0,4)+'-'+String(++S.seq).padStart(5,'0'),start:S.today,files:[],fiscal,emp:info?.emp||String(100000+S.seq),puesto:info?.puesto||buyer.split(' · ')[1]||'',area:info?.area||buyer.split(' · ')[1]||'',jefe:info?.jefe||JEFES[S.seq%JEFES.length],firmDl:addBiz(S.today,C().plazo.firmas)};
+  e.p='FIRMAS';H(e,`Solicitud de compra de ${buyer} · ${fiscalTxt(fiscal)} · equipo congelado`,'COL');
+  log('GET','/service-management/service-items/{sid}/tasks','pub',{servicio:'Compra de equipo',initiatorIds:e.sale.emp,createdAtFrom:S.today},'Activo 360 lee la solicitud "Compra de equipo" que el colaborador llenó en Gestión de Servicios de Humand.');
+  log('PUT','/products/'+e.ID_ACTIVO,'pub',{status:'CONGELADO',folio:e.sale.folio},'Congela el equipo en el Bazar mientras se concreta la compra.');
+  log('POST','https://www.googleapis.com/drive/v3/files','g',{carpeta:'Activo 360 / Ventas / '+e.sale.folio,mimeType:'application/vnd.google-apps.folder'},'Crea la carpeta de la venta en Drive con su folio.');
+  addFile(e,'Formato SGC-N4-60 prellenado.pdf');if(fiscal?.csf)addFile(e,fiscal.csf);
+  notify('Activo Fijo',`Solicitud de compra ${e.sale.folio}: ${eqName(e)} para ${buyer} (informativo)`,'info');
+  newReq('FIRMA_COL',e)}
+function signCol(e){closeReq(S.reqs.find(r=>r.eq===e._i&&r.type==='FIRMA_COL'&&r.state==='Pendiente'),'Firmada');e.sale.colSig=S.today;H(e,`${e.buyer} firmó el formato de compra`,'COL','hmn');newReq('FIRMA_JEFE',e)}
+function signJefe(e){closeReq(S.reqs.find(r=>r.eq===e._i&&r.type==='FIRMA_JEFE'&&r.state==='Pendiente'),'Firmada');e.sale.jefeSig=S.today;H(e,`${e.sale.jefe} (jefe inmediato) firmó el formato`,'JEFE','hmn');addFile(e,'Formato SGC-N4-60 firmado.pdf');
+  e.p='PAGO';e.pay.dl=addBiz(S.today,C().plazo.pago);const b=C().banco;
+  notify(e.buyer,`Formato firmado. Deposita ${money(e.pay.amount)} a ${b.banco}, CLABE ${b.clabe}, concepto ${e.sale.folio}, y sube tu váucher antes del ${fd(e.pay.dl)}.`,'req');H(e,`Datos bancarios enviados · plazo para depositar hasta el ${fd(e.pay.dl)}`,'COL')}
+function uploadVoucher(e,file){e.pay.file=file;e.pay.date=S.today;log('GET','/service-management/tasks/{taskId}','pub',{servicio:'Comprobante de depósito',folio:e.sale.folio,formAnswer:{fileAnswerSources:[file]}},'Activo 360 lee el váucher que el colaborador adjuntó en el formulario de Humand.');addFile(e,file);e.p='DEPOSITO';H(e,`Váucher cargado (${file})`,'COL');newReq('DEPOSITO',e,{amount:e.pay.amount})}
+function schedule(e,dia,hora,re){const r=S.reqs.find(x=>x.eq===e._i&&x.type==='AGENDA'&&x.state==='Pendiente');if(r)closeReq(r);e.cita={d:dia,h:hora};e.p='ENTREGA';
+  H(e,`${re?'Entrega reprogramada':'Entrega agendada'} para el ${fd(dia)} a las ${hora} en ${e.CLINICA}`,'SIS');notify(e.buyer,`Tu equipo ${e.ID_ACTIVO} está listo. ${re?'Nueva cita':'Cita'}: ${fd(dia)} a las ${hora} en ${e.CLINICA}. Lleva tu gafete.`,'req');
+  log('POST','/chats/{id}/messages (API Marty · bot Activo 360)','pub',{to:'user:'+(e.sale?.emp||''),text:`Entrega de tu equipo: ${fd(dia)} ${hora} · ${e.CLINICA}`},'El bot de Activo 360 avisa la cita al comprador en Humand.')}
+function startAuction(e,min){e.p='SUBASTA';e.auc={min:r50(min),end:addBiz(S.today,C().plazo.subasta),bids:[]};H(e,`Activo Fijo inició subasta desde ${money(e.auc.min)} · cierra el ${fd(e.auc.end)}`,'AF','hmn');
+  log('PUT','/products/'+e.ID_ACTIVO,'pub',{status:'SUBASTA',min:e.auc.min,cierre:e.auc.end},'Publica la subasta en el Bazar de la ciudad.');notify('Colaboradores de '+e.MUNICIPIO,`Subasta en el Bazar de Activos: ${eqName(e)} desde ${money(e.auc.min)}`)}
+
+/* ---------- Datos iniciales de operación ---------- */
+function seed(){
+  const V=S.items.filter(e=>!e.p&&diff(S.today,due(e))<=75).sort((a,b)=>due(a)<due(b)?-1:1).slice(5); // los 5 más vencidos quedan sin seguimiento
+  const mk=(e,dxo)=>{const dx={...DEFDX,...(dxo||{})};e.dx=dx;e.price={...priceCalc(e,dx)};e.price.aut=e.price.sug;H(e,'Reemplazo confirmado: equipos nuevos recibidos en clínica','SIS');H(e,`Diagnóstico registrado · destino venta · sugerido ${money(e.price.sug)}`,'SIS')};
+  const at=(n,fn)=>{const keep=S.today;S.today=addD(keep,-n);fn();S.today=keep};
+  const go_=n=>S.today=addD(S.today,n);
+  const pastReq=(type,e,cr,dd,amount)=>S.reqs.push({id:'SOL-'+(++S.seq),type,eq:e._i,created:cr,last:cr,state:type.startsWith('FIRMA')?'Firmada':'Aprobada',rem:Math.max(0,dd-1),esc:dd>=4,res:fd(addD(cr,dd)),resD:addD(cr,dd),amount});
+  const fis=k=>k%3===0?{tipo:'factura',rfc:'GOMA850312AB1',nombre:'Ana Gómez Ruiz',regimen:'605 Sueldos y salarios',cp:'80000',uso:'G03 Gastos en general'}:k%3===1?{tipo:'factura',csf:'Constancia_situacion_fiscal.pdf'}:{tipo:'publico'};
+  let k=0;const take=n=>V.slice(k,k+=n);
+  take(4).forEach((e,i)=>at(i===0?2:0,()=>{mk(e,i===3?{estetica:'B'}:{});e.p='PRECIO';const r=newReq('PRECIO',e,{amount:e.price.sug});if(i===0){r.rem=1;r.last=addD(S.today,1)}}));
+  // publicados; los de más de 15 días ya tienen la pregunta en la bandeja de Activo Fijo
+  [2,5,9,12,16,21].forEach(dd=>{const[e]=take(1);at(dd,()=>{mk(e,dd>10?{estetica:'B'}:{});e.p='PUBLICADO';e.pub=S.today;H(e,'Precio autorizado por Activo Fijo y publicado en Bazar (Humand)','AF','hmn');
+    if(dd>=15){go_(15);const r=newReq('DECISION',e,{amount:e.price.aut});if(dd>18){r.rem=3;r.esc=true;r.last=addD(S.today,5)}}})});
+  // precio ajustado por Activo Fijo hace 6 días
+  take(1).forEach(e=>at(21,()=>{mk(e);e.p='PUBLICADO';e.pub=S.today;H(e,'Publicado en Bazar','AF','hmn');go_(15);pastReq('DECISION',e,S.today,0,e.price.aut);e.price.aut=r50(e.price.aut*.8);e.price.adj=true;e.pub=S.today;H(e,`Sin venta en 15 días · Activo Fijo bajó el precio 20 % (${money(e.price.aut)})`,'AF','hmn')}));
+  // subasta abierta con una oferta
+  take(1).forEach(e=>at(19,()=>{mk(e,{estetica:'C'});e.p='PUBLICADO';e.pub=S.today;go_(16);pastReq('DECISION',e,S.today,1,e.price.aut);go_(1);startAuction(e,e.price.aut*C().subastaMin);go_(1);e.auc.bids.push({who:BUYERS[3],amount:r50(e.auc.min+100),d:S.today})}));
+  // en firmas, pago, Ingresos
+  take(1).forEach(e=>at(0,()=>{mk(e);e.pub=addD(S.today,-4);startSale(e,BUYERS[0],e.price.aut,fis(0));signCol(e)}));
+  take(1).forEach(e=>at(1,()=>{mk(e);e.pub=addD(S.today,-6);startSale(e,BUYERS[1],e.price.aut,fis(2));signCol(e);signJefe(e)}));
+  take(1).forEach(e=>at(3,()=>{mk(e);e.pub=addD(S.today,-8);startSale(e,BUYERS[5],e.price.aut,fis(1));signCol(e);signJefe(e);go_(1);uploadVoucher(e,'vaucher_deposito.jpg');go_(1);closeReq(curReq(e),'Rechazada');e.p='PAGO';e.pay.rej=1;e.pay.dl=addD(S.today,C().plazo.reintento);H(e,'Ingresos no encontró el depósito · se avisa al colaborador y tiene 2 días naturales para corregir','ING','hmn')}));
+  take(2).forEach((e,i)=>at(i?3:0,()=>{mk(e);e.pub=addD(S.today,-10);startSale(e,BUYERS[2+i],e.price.aut,fis(i));signCol(e);signJefe(e);uploadVoucher(e,'vaucher_spei.pdf');if(i){const r=curReq(e);r.rem=2;r.last=addD(S.today,2)}}));
+  // vendidos en proceso: factura, agenda y cita
+  const sold=(e,i,stage)=>{mk(e);e.pub=addD(S.today,-12);startSale(e,BUYERS[i],e.price.aut,fis(i));signCol(e);signJefe(e);uploadVoucher(e,'vaucher.pdf');closeReq(curReq(e));e.pay.ok=true;e.p='FACTURA';H(e,'Ingresos confirmó el depósito · el equipo sale del stock','ING','hmn');newReq('FACTURA',e,{amount:e.pay.amount});
+    if(stage>0){go_(1);closeReq(curReq(e));e.fac='CFDI_'+e.sale.folio+'.pdf';addFile(e,e.fac);H(e,`Facturación adjuntó el CFDI (${e.fac})`,'FAC');e.p='AGENDA';newReq('AGENDA',e)}
+    if(stage>1){go_(1);schedule(e,addBiz(S.today,1),'10:00')}};
+  take(1).forEach(e=>at(2,()=>sold(e,4,0)));
+  take(1).forEach(e=>at(3,()=>sold(e,5,1)));
+  take(1).forEach(e=>at(3,()=>sold(e,2,2)));
+  // ventas cerradas
+  const COMS=['Muy rápido, recogí el equipo en mi misma clínica.','Buen precio, el proceso fue claro.','Tardó un poco la validación del depósito.','Excelente opción para mis hijos que estudian.','Me hubiera gustado ver fotos del equipo.','Todo bien, volvería a comprar.'];
+  take(14).forEach((e,i)=>at(30+i*9,()=>{mk(e,i%4===3?{estetica:'B'}:{});const k=i%6;
+    const d1=[0,1,1,2,0,3][k],d2=[1,0,2,1,4,1][k],d3=[1,1,0,2,1,3][k],d4=[1,2,1,3,1,2][k],buyD=[1,3,2,5,1,4][k];
+    pastReq('PRECIO',e,S.today,d1,e.price.sug);go_(d1);H(e,`Activo Fijo autorizó ${money(e.price.aut)} · publicado en Bazar`,'AF','hmn');e.pub=S.today;
+    go_(buyD);e.buyer=BUYERS[k];e.pay={amount:e.price.aut,ok:true,date:S.today};e.sale={folio:'VTA-'+S.today.slice(0,4)+'-'+String(++S.seq).padStart(5,'0'),start:S.today,files:[{d:S.today,name:'Formato SGC-N4-60 firmado.pdf'},{d:S.today,name:'vaucher.pdf'}],fiscal:fis(k),emp:String(100300+i),jefe:JEFES[k],colSig:S.today,jefeSig:S.today};
+    H(e,`Solicitud de compra de ${e.buyer} · formato firmado por colaborador y jefe`,'COL','hmn');pastReq('FIRMA_COL',e,S.today,0);pastReq('FIRMA_JEFE',e,S.today,0);
+    go_(1);H(e,'Váucher cargado','COL');pastReq('DEPOSITO',e,S.today,d2,e.price.aut);go_(d2);H(e,'Ingresos confirmó el depósito · el equipo sale del stock','ING','hmn');
+    pastReq('FACTURA',e,S.today,d3,e.price.aut);go_(d3);e.fac='CFDI_'+e.sale.folio+'.pdf';e.sale.files.push({d:S.today,name:e.fac});H(e,`Facturación adjuntó el CFDI (${e.fac})`,'FAC');
+    pastReq('AGENDA',e,S.today,d4);go_(d4);e.cita={d:addBiz(S.today,1),h:['10:00','12:30','9:00','16:00','11:00','13:00'][k]};H(e,`Entrega agendada para el ${fd(e.cita.d)} a las ${e.cita.h}`,'SIS');
+    S.today=e.cita.d;H(e,`Equipo entregado a ${e.buyer.split(' · ')[0]} · expediente cerrado`,'SIS');e.sale.files.push({d:S.today,name:'Acta de entrega firmada.pdf'});e.p='ENTREGADO';
+    e.survey={d:addD(S.today,1),q:[[5,4,5,3,5,4][k],[5,5,4,3,4,5][k],[5,4,5,4,5,5][k]],c:COMS[k]}}));
+  // destruidos: no funcionales y funcionales (valor perdido)
+  take(8).forEach((e,i)=>at(8+i*17,()=>{const func=i%3===1;if(func){mk(e);e.price=null;H(e,'Sin venta · Activo Fijo decidió destruirlo','AF','hmn')}else{e.dx={...DEFDX,enciende:'no',comp:i%2?['RAM']:[]};H(e,'No enciende · destrucción certificada','SIS')}e.p='DESTRUIDO';e.destD=S.today;H(e,`Destruido · certificado CERT-${S.today.replace(/-/g,'')}`,'AF')}));
+  take(3).forEach((e,i)=>{e.dx={...DEFDX,enciende:'no',comp:i?['RAM']:[]};e.p='DESTRUCCION';e.destD=S.today;H(e,i?'No enciende · se recupera RAM · remanente a destrucción':'No enciende · sin componentes aprovechables','SIS')});
+  take(6).forEach(e=>{e.p='CONFIRMADO';H(e,'Reemplazo confirmado: equipos nuevos recibidos en clínica','SIS')});
+  // donaciones
+  take(4).forEach((e,i)=>at([1,5,9,70][i],()=>{mk(e,{estetica:'C'});e.p='PUBLICADO';e.pub=addD(S.today,-16);pastReq('DECISION',e,S.today,0,e.price.aut);
+    e.don={org:C().donatarias[i%4],fecha:addBiz(S.today,2)};e.p='DONACION';H(e,`Sin venta · Activo Fijo decidió donarlo a ${e.don.org} (entrega ${fd(e.don.fecha)})`,'AF','hmn');
+    if(i>0){S.today=e.don.fecha;e.don.d=S.today;e.p='DONADO_FACT';H(e,`Entregado a ${e.don.org} · sale del stock`,'SIS');const r=newReq('DONFACT',e,{dl:addD(S.today,C().plazo.donFact)});
+      if(i>1){go_(4);closeReq(r,'Adjuntada');e.don.factura='Factura_donataria_'+e.ID_ACTIVO+'.pdf';H(e,`Se adjuntó la factura de la donataria (${e.don.factura})`,'AF');e.p='DONADO';const rf=newReq('REVFIS',e);if(i>2){go_(3);closeReq(rf);e.don.fiscal='Revisada sin observaciones';H(e,'Fiscal revisó la factura de la donación: sin observaciones','FIS')}}}}));
+  S.log=S.log.slice(0,25);S.mails=S.mails.slice(0,30);
+}
+
+/* ---------- Cierre diario: recordatorios, plazos, renovaciones ---------- */
+function tick(days){
+  for(let i=0;i<days;i++){
+    S.today=addD(S.today,1);const wk=isWk(S.today);const K=C();
+    S.reqs.filter(r=>r.state==='Pendiente').forEach(r=>{
+      if(!wk&&diff(r.last,S.today)>=1&&!(r.type==='DONFACT'&&r.dl&&diff(S.today,r.dl)>3)){r.rem++;r.last=S.today;const e=S.items[r.eq];const t=RT[r.type];const area=t.a==='COL'?e.buyer:t.a==='JEFE'?e.sale?.jefe:AREAS[t.a];
+        if(r.rem>=3&&!r.esc){r.esc=true;notify('Jefe de '+area,`Escalamiento: ${r.id} (${t.n}) lleva ${diff(r.created,S.today)} días sin respuesta`,'esc');H(e,`Escalado a jefe de ${area} tras 3 recordatorios`,t.a,'rem')}
+        else if(t.ch==='correo'){mail(t.a==='FAC'?MAIL_FAC:t.a==='SIS'?(e.CORREO_INGENIERO||e.INGENIERO):'Fiscal (Jurídico)',`[Activo 360] Recordatorio: ${t.n} · ${e.sale?.folio||e.ID_ACTIVO}`,`Sigue pendiente: ${t.n}. ${mailBody(r.type,e).split('\n')[0]}`,e);H(e,`Recordatorio ${r.rem} enviado por correo a ${area}`,t.a,'rem')}
+        else{notify(area,`Recordatorio: tienes pendiente ${t.n} · ${e.ID_ACTIVO}`,'rem');H(e,`Recordatorio ${r.rem} enviado a ${area} por Humand`,t.a,'rem')}}});
+    S.items.forEach(e=>{
+      if(e.p==='FIRMAS'&&S.today>e.sale.firmDl)release(e,'No se completaron las firmas del formato a tiempo');
+      else if(e.p==='PAGO'&&S.today>e.pay.dl)release(e,e.pay.rej?'No se corrigió el depósito en el plazo':'No se recibió el depósito en el plazo');
+      else if(e.p==='PAGO'&&!wk&&!e.pay.rs&&bizDiff(e.sale.jefeSig||S.today,S.today)>=1){e.pay.rs=1;notify(e.buyer,`Recordatorio: deposita y sube tu váucher de ${e.sale.folio} antes del ${fd(e.pay.dl)}`,'rem');H(e,'Recordatorio al colaborador: depositar y subir váucher','COL','rem')}
+      else if(e.p==='ENTREGA'&&S.today>=e.cita.d){notify(e.buyer,`Recordatorio: tu equipo ${e.ID_ACTIVO} te espera en ${e.CLINICA}. Cita: ${fd(e.cita.d)} ${e.cita.h}.`,'rem');H(e,'Recordatorio diario al comprador para recoger su equipo','COL','rem')}
+      else if(e.p==='PUBLICADO'&&diff(e.pub,S.today)>=K.plazo.sinVenta&&!S.reqs.some(r=>r.eq===e._i&&r.type==='DECISION'&&r.state==='Pendiente')){newReq('DECISION',e,{amount:e.price.aut});H(e,`${K.plazo.sinVenta} días sin venta · se pregunta a Activo Fijo qué hacer`,'AF','hmn')}
+      else if(e.p==='SUBASTA'&&S.today>=e.auc.end){const bids=e.auc.bids;if(bids.length){const w=bids.reduce((a,b)=>b.amount>a.amount?b:a);H(e,`Subasta cerrada · gana ${w.who} con ${money(w.amount)}`,'COL','hmn');
+          log('PUT','/products/'+e.ID_ACTIVO,'pub',{status:'SUBASTA_CERRADA',ganador:w.who,monto:w.amount},'Cierra la subasta.');e.price.aut=w.amount;startSale(e,w.who,w.amount,w.fiscal||{tipo:'publico'},w.info)}
+        else{e.p='PUBLICADO';e.pub=addD(S.today,-K.plazo.sinVenta);H(e,'Subasta cerrada sin ofertas · se vuelve a preguntar a Activo Fijo','AF','hmn');newReq('DECISION',e,{amount:e.price.aut})}}
+    });
+    Object.entries(S.cartas).forEach(([emp,L])=>{const v=L[L.length-1];if(wk||v.st!=='Pendiente de firma'||diff(v.last,S.today)<1)return;v.rem++;v.last=S.today;const c=colOf(emp);
+      if(v.rem>=3)notify('Jefe inmediato de '+(c?.name||emp),`${c?.name} lleva ${diff(v.d,S.today)} días sin firmar su carta responsiva ${v.folio}`,'esc');
+      else notify(c?.name||emp,`Recordatorio: firma tu carta responsiva ${v.folio}`,'rem');
+      log('POST','/chats/{id}/messages (API Marty · bot Activo 360)','pub',{to:'user:'+emp,text:'Recordatorio: firma tu carta responsiva '+v.folio},'Recordatorio diario de firma de carta responsiva.')});
+    S.ast.filter(a=>a.estado==='Asignado'&&a.entrega&&diff(S.today,tiDue(a))===90).forEach(a=>{const c=colOf(a.emp);notify(c?.name||a.emp,`Tu ${a.tipo.toLowerCase()} ${a.modelo} se renueva el ${fd(tiDue(a))}. Sistemas te contactará para el cambio.`,'info');notify('Sistemas · Mesa de servicio',`Renovación programada: ${a.inv} de ${c?.name}`,'req')});
+  }
+  if(S.notifs.length>400)S.notifs.length=400;if(S.log.length>200)S.log.length=200;if(S.mails.length>200)S.mails.length=200;
+  save();render();toast(`Cierre del día ${fd(S.today)} · recordatorios enviados`);
+}
+
+/* ---------- Persistencia ligera ---------- */
+const KEY='activo360-v9';
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.items&&s.ast&&s.cfg&&s.mails&&s.prev){S=s;invSeq=Math.max(40000,...S.ast.map(a=>+a.inv.slice(3)))}else init()}catch(e){init()}}
+
+/* ---------- UI helpers ---------- */
+function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>el.hidden=true,2800)}
+const pill=st=>`<span class="pill ${ST[st]?.[1]||'p-mut'}">${ST[st]?.[0]||st}</span>`;
+function steps(e,mini){const p=stOf(e);if(DON.includes(p)){const i=p==='DONADO'?3:DFLOW.findIndex(f=>f[1]===p);
+    if(mini)return `<span class="mini">${DFLOW.map((f,k)=>`<b class="${k<i?'d':k===i?'c':''}"></b>`).join('')}</span>`;
+    return `<div class="steps">${DFLOW.map((f,k)=>`<div class="st ${k<i?'done':k===i?'cur':''}"><i>${k<i?'✓':k+1}</i><span>${f[0]}</span></div>`).join('')}</div>`}
+  let i=flowIdx(p);if(p==='ENTREGADO')i=FLOW.length;
+  if(mini)return `<span class="mini" title="${ST[p]?.[0]}">${FLOW.map((f,k)=>`<b class="${k<i?'d':k===i?'c':''}"></b>`).join('')}</span>`;
+  return `<div class="steps">${FLOW.map((f,k)=>`<div class="st ${k<i?'done':k===i?'cur':''}"><i>${k<i?'✓':k+1}</i><span>${f[0]}</span></div>`).join('')}</div>`}
+const eqName=e=>`${tipo(e)!=='Escritorio'?tipo(e)+' ':''}${e.MARCA} ${e.MODELO}`;
+const eqLine=e=>`<b>${esc(e.ID_ACTIVO)}</b> · ${esc(eqName(e))}<div class="note">${esc(e.CLINICA)} · ${esc(e.SERVICIO)} ${esc(e.UBICACION)}</div>`;
+const TIP={Asignado:'p-ok','Pendiente de devolución':'p-bad','En almacén':'p-info',Devuelto:'p-mut',Baja:'p-mut','Baja · Activo 360':'p-sd','Baja (extravío)':'p-bad'};
+const tpill=s=>`<span class="pill ${TIP[s]||'p-mut'}">${s}</span>`;
+const CST={'Firmada':'p-ok','Pendiente de firma':'p-warn','Histórica':'p-mut','Cancelada (reemplazada antes de firmar)':'p-mut','Constancia de no adeudo':'p-sd','Devolución parcial':'p-warn'};
+const cpill=s=>`<span class="pill ${CST[s]||'p-mut'}">${s}</span>`;
+function hbars(rows,opt={}){const mx=Math.max(1,...rows.map(r=>sum(r.v)));return `<div class="bars">${rows.map(r=>`<div class="bar" style="grid-template-columns:${opt.lw||150}px minmax(0,1fr) ${opt.vw||60}px"><span>${esc(r.l)}</span><div class="stack">${r.v.map((v,i)=>`<div style="width:${100*v/mx}%;background:${(opt.c||['var(--sd)'])[i]}" title="${esc(r.l)}: ${opt.fmt?opt.fmt(v):v}"></div>`).join('')}</div><b class="mono" style="text-align:right">${opt.fmt?opt.fmt(sum(r.v)):sum(r.v)}</b></div>`).join('')}</div>`}
+function gauge(segs,total,center,sub,needle){const cx=150,cy=140,r=110,sw=26;const P=f=>{const a=Math.PI*(1-Math.min(1,Math.max(0,f)));return[cx+r*Math.cos(a),cy-r*Math.sin(a)]};
+  const arc=(f0,f1,col)=>{if(f1-f0<=0.0005)return'';const[x0,y0]=P(f0),[x1,y1]=P(f1);return `<path d="M${x0.toFixed(1)} ${y0.toFixed(1)} A${r} ${r} 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)}" fill="none" stroke="${col}" stroke-width="${sw}"/>`};
+  let acc=0;const paths=segs.map(s=>{const f0=acc/total;acc+=s.v;return arc(f0,acc/total,s.c)}).join('');
+  const[nx,ny]=P(Math.min(1,needle??acc/total));
+  return `<svg viewBox="0 0 300 205" role="img" aria-label="${esc(center)}">${arc(0,1,'var(--surface2)')}${paths}
+   <line x1="${cx}" y1="${cy}" x2="${(cx+(nx-cx)*.62).toFixed(1)}" y2="${(cy+(ny-cy)*.62).toFixed(1)}" stroke="var(--fg)" stroke-width="3" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="7" fill="var(--fg)"/>
+   <text x="${cx-r}" y="${cy+20}" font-size="10" text-anchor="middle">0%</text><text x="${cx+r}" y="${cy+20}" font-size="10" text-anchor="middle">100%</text>
+   <text x="${cx}" y="${cy+38}" font-size="26" font-weight="700" text-anchor="middle" style="fill:var(--fg);font-family:var(--f-num)">${esc(center)}</text>
+   <text x="${cx}" y="${cy+57}" font-size="11" text-anchor="middle">${esc(sub)}</text></svg>`}
+const legend=items=>`<div class="legend">${items.map(([c,l])=>`<span><i style="background:${c}"></i>${l}</span>`).join('')}</div>`;
+
+/* ---------- Navegación ---------- */
+const NAVS={
+ venta:[['h','Equipo de clínicas','mv'],['panel','Panel ejecutivo'],['alertas','Alertas'],['clinicas','Activos por clínica'],['inventario','Inventario AppSheet'],['ingeniero','Ingeniero de Sistemas'],['seguimiento','Seguimiento de ventas'],['hgestion','Aprobaciones (Activo Fijo e Ingresos)'],['facturacion','Facturación'],['destruccion','Destrucción certificada'],['donacion','Donación'],['fiscal','Fiscal'],['config','Tabulador y reglas'],
+  ['h','Humand','hm'],['hbazar','Bazar de Activos'],['compra','Gestión de Servicios · compra'],['hfirma','Firma del formato de compra'],['hnotif','Notificaciones'],['h','Google'],['correos','Correos enviados'],['h','Para Humand'],['integracion','Integración técnica']],
+ ti:[['h','Inventario de Sistemas','mt'],['alertas','Alertas'],['ti','Activos por colaborador'],['carta','Carta responsiva'],
+  ['h','Humand','hm'],['hfirma','Firma de carta responsiva'],['hnotif','Notificaciones'],['h','Para Humand'],['integracion','Integración técnica']]};
+const MODV={ti:['ti','carta'],venta:['panel','clinicas','inventario','ingeniero','seguimiento','compra','facturacion','destruccion','donacion','fiscal','config','hgestion','hbazar','correos']};
+const MODTAG={venta:['VENTA DE EQUIPO DE CLÍNICAS','Equipo de cómputo de las clínicas que cumplió su vida útil: venta local, destrucción o donación.'],ti:['INVENTARIO DE SISTEMAS','Equipo asignado a cada colaborador y su carta responsiva consolidada (SGC-N4-347).']};
+const HMV=['compra','hbazar','hfirma','hnotif'];
+const pendOf=(type)=>S.reqs.filter(r=>r.state==='Pendiente'&&(Array.isArray(type)?type.includes(r.type):r.type===type)).length;
+function counts(){return{alertas:alerts().filter(x=>x.l!=='info').length,hgestion:S.reqs.filter(r=>r.state==='Pendiente'&&RT[r.type].ch==='humand').length,hbazar:S.items.filter(e=>e.p==='PUBLICADO'||e.p==='SUBASTA').length,
+  ingeniero:S.items.filter(e=>(!e.p&&soon(e))||['CONFIRMADO','AGENDA','ENTREGA','DONACION'].includes(e.p)).length,seguimiento:S.items.filter(e=>e.p&&!['ENTREGADO',...DESTR].includes(e.p)).length,
+  hnotif:S.notifs.filter(n=>n.d===S.today).length,donacion:S.items.filter(e=>['DONACION','DONADO_FACT'].includes(e.p)).length,
+  hfirma:S.mod==='ti'?Object.values(S.cartas).filter(L=>L[L.length-1].st==='Pendiente de firma').length:pendOf(['FIRMA_COL','FIRMA_JEFE']),ti:S.ast.filter(tiSoon).length,
+  facturacion:pendOf('FACTURA'),fiscal:pendOf('REVFIS'),correos:S.mails.filter(m=>m.d===S.today).length}}
+
+function renderNav(){const c=counts();$('#nav').innerHTML=NAVS[S.mod||'venta'].map(n=>n[0]==='h'?`<h6 class="${n[2]||''}">${n[1]}</h6>`:`<button data-v="${n[0]}" class="${HMV.includes(n[0])?'hmb ':''}${S.view===n[0]?'on':''}">${n[1]}${c[n[0]]!=null?`<span class="cnt ${['hgestion','hfirma','alertas'].includes(n[0])&&c[n[0]]?'hot':''}">${c[n[0]]}</span>`:''}</button>`).join('')}
+function go(v){if(MODV.ti.includes(v))S.mod='ti';else if(MODV.venta.includes(v))S.mod='venta';S.view=v;save();render();window.scrollTo(0,0)}
+function setMod(m){S.mod=m;S.view=m==='ti'?'ti':'panel';closeDrawer();save();render();window.scrollTo(0,0)}
+function render(){if(!S.mod)S.mod=MODV.ti.includes(S.view)?'ti':'venta';$('#today').textContent=fd(S.today);document.body.classList.toggle('mod-ti',S.mod==='ti');$$('#mods [data-modulo]').forEach(b=>{const on=b.dataset.modulo===S.mod;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});renderNav();const f=VIEWS[S.view]||VIEWS.panel;const t=MODTAG[S.mod];$('#main').innerHTML=`<div class="modtag"><b>${t[0]}</b><span>${t[1]}</span></div>`+f();after[S.view]?.();paintGreet()}
+const after={},VIEWS={};
+
+/* ================= PANEL EJECUTIVO ================= */
+function metrics(){
+  const it=S.items,Y=S.today.slice(0,4),endY=Y+'-12-31';
+  const yearItems=it.filter(e=>due(e)<=endY||SOLD.includes(e.p)||DESTR.includes(e.p)||DON.includes(e.p));
+  const potencial=sum(yearItems,estExp);
+  const meta=potencial*META;
+  const sold=it.filter(e=>SOLD.includes(e.p));const recuperado=sum(sold,e=>e.pay?.amount||0);
+  const proceso=sum(it.filter(e=>FROZEN.includes(e.p)),e=>e.pay?.amount||0)+sum(it.filter(e=>['PUBLICADO','SUBASTA'].includes(e.p)),e=>curPrice(e).v)+sum(it.filter(e=>e.p==='PRECIO'),e=>e.price.sug);
+  const destr=it.filter(e=>DESTR.includes(e.p));const destFunc=destr.filter(e=>e.dx?.enciende==='si');
+  const perdidoDest=sum(destFunc,e=>priceCalc(e,e.dx).sug);
+  const sinSeg=it.filter(e=>!e.p&&baseSt(e)==='VENCIDO');const perdidoSinSeg=sum(sinSeg,estValue);
+  const estanc=it.filter(e=>['PUBLICADO','SUBASTA'].includes(e.p)&&diff(e.pub,S.today)>=C().plazo.sinVenta);const perdidoEst=sum(estanc,e=>e.price.aut);
+  // red completa: escritorios que cumplen 5 años en el año
+  const sd=sold.filter(e=>tipo(e)==='Escritorio');const avgDesk=sd.length>=5?sum(sd,e=>e.pay.amount)/sd.length:sum(it.filter(e=>tipo(e)==='Escritorio'),estValue)/Math.max(1,it.filter(e=>tipo(e)==='Escritorio').length); // precio real de venta promedio cuando ya hay historial
+  const proj={};DATA.clinics.forEach(c=>{for(let k=1;k<=2;k++){const y=addY(c.acq,5*k).slice(0,4);proj[y]=(proj[y]||0)+c.pc}});
+  const redY=proj[Y]||0,redY1=proj[+Y+1]||0;
+  const cartasGen=sum(Object.values(S.cartas),L=>L.length);
+  const don=it.filter(e=>DON.includes(e.p)),donados=it.filter(e=>e.p==='DONADO');
+  const reus=[...sold,...donados];const kgReus=sum(reus,kgOf),kgDest=sum(destr,kgOf),tasaReus=reus.length/Math.max(1,reus.length+destr.length);
+  const res=S.reqs.filter(r=>r.resD),slaPct=res.length?res.filter(slaOk).length/res.length:0,fuera=S.reqs.filter(r=>r.state==='Pendiente'&&!slaOk(r)).length;
+  const surv=it.filter(e=>e.survey),sat=surv.length?sum(surv,e=>sum(e.survey.q)/3)/surv.length:0;
+  return{don,donados,valDon:sum(donados,estValue),kgReus,kgDest,tasaReus,slaPct,fuera,res,surv,sat,Y,yearItems,potencial,meta,sold,recuperado,proceso,destr,destFunc,perdidoDest,sinSeg,perdidoSinSeg,estanc,perdidoEst,avgDesk,proj,redY,redY1,
+    redPot:redY*avgDesk*C().aptos,redPot1:redY1*avgDesk*C().aptos,hhAhorro:sold.length*(HHM-HHA)+cartasGen*(HH_CARTA[0]-HH_CARTA[1]),hhAnual:redY1*C().aptos*(HHM-HHA),cartasGen};
+}
+const ICONS={"reuse": "<path d=\"M7 19H4.8a1.8 1.8 0 0 1-1.6-2.7L7.2 9\"/><path d=\"M11 19h8.2a1.8 1.8 0 0 0 1.6-2.7l-1.2-2.1\"/><path d=\"m14 16-3 3 3 3\"/><path d=\"M8.3 13.6 7.2 9 2.6 10.1\"/><path d=\"m9.3 5.6 1.1-1.9a1.8 1.8 0 0 1 3.1 0l3.9 6.8\"/><path d=\"m13.4 9.6 4.6 1.2 1.2-4.6\"/>", "coin": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9.5a2.5 2.5 0 0 0-2.5-1.5h-1a2 2 0 0 0 0 4h1a2 2 0 0 1 0 4h-1A2.5 2.5 0 0 1 9 14.5\"/><path d=\"M12 6v2m0 8v2\"/>", "clock": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>", "leaf": "<path d=\"M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z\"/><path d=\"M2 21c0-3 1.9-5.4 5.2-6.1C9.6 14.4 12 13 13 12\"/>"};
+const ico=k=>`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[k]}</svg>`;
+function heroTile(icon,col,label,val,ctx,frac,what){return `<div class="htile" style="--acc:${col}"><div class="hhead"><span class="hico">${ico(icon)}</span><span class="hlab">${label}</span></div><div class="hval">${val}</div><div class="hctx">${ctx}</div>${frac!=null?`<div class="hbar" role="img" aria-label="${Math.round(Math.min(1,frac)*100)} %"><i style="width:${Math.max(2,Math.min(100,frac*100))}%"></i></div>`:''}<div class="hwhat">${what}</div></div>`}
+function miniTile(label,val,st,what){return `<div class="mtile"><div class="row" style="gap:6px"><span class="ml">${label}</span><span class="sp"></span>${st?`<span class="pill p-${st[0]}"><b aria-hidden="true">${st[1]}</b> ${st[2]}</span>`:''}</div><div class="mval">${val}</div><div class="mwhat">${what}</div></div>`}
+VIEWS.panel=()=>{
+  const M=metrics(),it=S.items,by=k=>it.filter(e=>stOf(e)===k).length;
+  const nY=M.yearItems.length,nSold=M.sold.length,nDest=M.destr.length,nProc=M.yearItems.filter(e=>e.p&&!SOLD.includes(e.p)&&!DESTR.includes(e.p)&&e.p!=='DONADO').length;
+  const pct=M.meta?M.recuperado/M.meta:0;
+  // proyección red
+  const yrs=[0,1,2,3,4,5].map(k=>String(+M.Y+k));const nice=Math.ceil(Math.max(...yrs.map(y=>M.proj[y]||0))/500)*500||500;const W=560,Hh=190,bw=60,gap=(W-40-bw*6)/5;
+  const svg=`<svg viewBox="0 0 ${W} ${Hh+42}" style="width:100%;height:auto" role="img" aria-label="Proyección de sustitución por año">
+   ${[0,.5,1].map(t=>`<line x1="30" x2="${W}" y1="${10+Hh*(1-t)}" y2="${10+Hh*(1-t)}" stroke="var(--line)"/><text x="26" y="${14+Hh*(1-t)}" font-size="10" text-anchor="end">${(nice*t).toLocaleString('es-MX')}</text>`).join('')}
+   ${yrs.map((y,i)=>{const v=M.proj[y]||0,h=Hh*v/nice,x=40+i*(bw+gap);return `<rect x="${x}" y="${10+Hh-h}" width="${bw}" height="${h}" rx="4" fill="${i===0?'var(--hm)':'var(--sd)'}"/><text x="${x+bw/2}" y="${4+Hh-h}" font-size="11" text-anchor="middle" style="fill:var(--fg);font-weight:600">${v.toLocaleString('es-MX')}</text><text x="${x+bw/2}" y="${Hh+26}" font-size="11" text-anchor="middle">${y}</text><text x="${x+bw/2}" y="${Hh+40}" font-size="9.5" text-anchor="middle">${kmoney(v*M.avgDesk*C().aptos)}</text>`}).join('')}</svg>`;
+  // destruido por mes
+  const months=[5,4,3,2,1,0].map(k=>{const d=pd(S.today);d.setUTCDate(1);d.setUTCMonth(d.getUTCMonth()-k);return iso(d).slice(0,7)});
+  const dm=months.map(m=>{const l=M.destr.filter(e=>(e.destD||'').startsWith(m));return{l:MES[+m.slice(5)-1]+' '+m.slice(0,4),v:[l.filter(e=>e.dx?.enciende!=='si').length,l.filter(e=>e.dx?.enciende==='si').length]}});
+  const lost=[{l:'Destruidos estando funcionales',v:[M.perdidoDest]},{l:'Cumplieron vida útil sin seguimiento',v:[M.perdidoSinSeg]},{l:`En Bazar +${C().plazo.sinVenta} días sin venta`,v:[M.perdidoEst]}];
+  const lostT=M.perdidoDest+M.perdidoSinSeg+M.perdidoEst;
+  const pend=['AF','ING','FAC','SIS','FIS'].map(a=>{const rs=S.reqs.filter(r=>r.state==='Pendiente'&&RT[r.type].a===a);return{a,n:rs.length,avg:rs.length?sum(rs,r=>diff(r.created,S.today))/rs.length:0,rem:sum(rs,r=>r.rem),esc:rs.filter(r=>r.esc).length}});
+  return `<div class="row"><div><h1>Panel ejecutivo</h1><p class="sub">Recuperación de valor de equipo de cómputo sustituido · ${new Set(S.items.map(e=>e.CLINICA)).size} clínicas con inventario AppSheet · ${M.Y}</p></div><span class="sp"></span><button class="btn p" data-rep>Exportar reporte de trazabilidad</button></div>
+  <p class="sub" style="margin:-6px 0 0">Lo más importante en 30 segundos: cuántos equipos dejan de destruirse, lo que se recupera, el tiempo que se libera y el impacto ambiental.</p>
+  ${(()=>{const a=alerts(),u=a.filter(x=>x.l!=="info");return u.length?`<div class="card alist"><div class="row" style="padding:6px 0 4px"><h2>Alertas de hoy</h2><span class="pill p-bad">${a.filter(x=>x.l==="bad").length} urgentes</span><span class="pill p-warn">${a.filter(x=>x.l==="warn").length} por atender</span><span class="sp"></span><button class="btn sm" data-go="alertas">Ver todas</button></div>${a.map((x,i)=>[x,i]).filter(([x])=>x.l!=="info").slice(0,4).map(([x,i])=>alertRow(x,i)).join("")}</div>`:""})()}
+  <div class="hero">
+   ${heroTile('reuse','var(--sd)','Equipos con segunda vida',M.sold.length+M.donados.length,`de ${nY} que cumplen vida útil en ${M.Y}`,(M.sold.length+M.donados.length)/Math.max(nY,1),`${M.sold.length} vendidos a colaboradores y ${M.donados.length} donados, en lugar de destruirse.`)}
+   ${heroTile('coin','var(--amber)','Recuperado por venta',money(M.recuperado),`${Math.round(pct*100)} % de la meta ${M.Y} (${money(M.meta)})`,pct,'Lo que pagaron los colaboradores por equipo que antes se destruía sin recuperar nada.')}
+   ${heroTile('clock','var(--info)','Horas de trabajo liberadas',Math.round(M.hhAhorro).toLocaleString('es-MX')+' h',`≈ ${Math.round(M.hhAhorro/8)} jornadas de 8 horas`,null,`Tiempo que ya no se va en Excel, correos, impresiones y seguimiento manual (${(HHM-HHA).toFixed(1)} h menos por venta).`)}
+   ${heroTile('leaf','var(--ok)','Residuo electrónico evitado',Math.round(M.kgReus).toLocaleString('es-MX')+' kg',`${Math.round(M.tasaReus*100)} % del equipo se reutiliza`,M.tasaReus,'Peso del equipo vendido o donado que no terminó en destrucción.')}
+  </div>
+  <h2 class="sech">Así va la operación</h2>
+  <div class="minis">
+   ${miniTile('Tiempos cumplidos',Math.round(M.slaPct*100)+' %',M.slaPct>=.8?['ok','✓','En meta']:['warn','!','Atención'],`Solicitudes resueltas dentro del tiempo acordado. ${M.fuera} van tarde hoy.`)}
+   ${miniTile('En proceso de venta',S.items.filter(e=>['PRECIO','PUBLICADO','SUBASTA',...FROZEN].includes(e.p)).length+' equipos',null,`En precio, publicados o congelados en firma y pago · ${money(M.proceso)}.`)}
+   ${miniTile('Satisfacción',M.sat.toFixed(1)+' / 5',M.sat>=4?['ok','✓','Buena']:['warn','!','Revisar'],`Encuesta de 3 preguntas al recibir el equipo · ${M.surv.length} respuestas.`)}
+   ${miniTile('Sin seguimiento',M.sinSeg.length,M.sinSeg.length?['bad','!','Actuar']:['ok','✓','Al día'],'Cumplieron su vida útil y nadie ha iniciado el proceso.')}
+   ${miniTile('Destruidos',nDest,M.destFunc.length?['warn','!',M.destFunc.length+' funcionaban']:null,`Sin valor de venta, con certificado. Los que funcionaban se pudieron vender (${money(M.perdidoDest)}).`)}
+   ${miniTile('Valor no recuperado',money(lostT),null,'Equipo funcional destruido, sin seguimiento o detenido en el Bazar.')}
+   ${miniTile('Donados',M.donados.length,null,`A donatarias autorizadas · ${M.don.length-M.donados.length} en proceso.`)}
+   ${miniTile(`Expectativa ${+M.Y+1}`,kmoney(M.redPot1),null,`${M.redY1.toLocaleString('es-MX')} escritorios cumplen 5 años; se estima vender ${Math.round(C().aptos*100)} % a ${money(M.avgDesk)} en promedio.`)}
+  </div>
+  <div class="grid g2">
+   <div class="card gauge"><h2 style="align-self:flex-start">Recuperación ${M.Y} vs meta</h2>${gauge([{v:M.recuperado,c:'var(--sd)'},{v:Math.min(M.proceso,Math.max(0,M.meta-M.recuperado)),c:'var(--amber)'}],Math.max(M.meta,1),(pct*100).toFixed(0)+'%',`${money(M.recuperado)} de ${money(M.meta)}`,pct)}
+    ${legend([['var(--sd)','Recuperado'],['var(--amber)','En proceso'],['var(--surface2)','Por recuperar']])}</div>
+   <div class="card gauge"><h2 style="align-self:flex-start">Equipos dispuestos ${M.Y}</h2>${gauge([{v:nSold,c:'var(--sd)'},{v:M.donados.length,c:'var(--info)'},{v:nDest,c:'var(--bad)'},{v:nProc,c:'var(--hm)'}],Math.max(nY,1),Math.round(100*(nSold+nDest+M.donados.length)/Math.max(nY,1))+'%',`${nSold} vendidos · ${M.donados.length} donados · ${nDest} destruidos de ${nY}`,(nSold+nDest+M.donados.length)/Math.max(nY,1))}
+    ${legend([['var(--sd)','Vendidos'],['var(--info)','Donados'],['var(--bad)','Destruidos'],['var(--hm)','En proceso'],['var(--surface2)','Pendientes']])}</div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>Dinero que no se está recuperando</h2><p class="note">Valor de venta estimado que se pierde al destruir equipo funcional, al no dar seguimiento o que se queda detenido en el Bazar sin decisión.</p>
+    ${hbars(lost,{lw:210,vw:90,fmt:money,c:['var(--bad)']})}
+    <div style="margin-top:14px;border-top:1px solid var(--line);padding-top:12px"><h3>Si se destruyera todo (sin venta)</h3><p class="note" style="margin:4px 0 8px">Comparación sobre el valor potencial de ${M.Y}.</p>
+    ${hbars([{l:'Destruir todo',v:[0,0,M.potencial]},{l:'Con Activo 360',v:[M.recuperado,M.proceso,Math.max(0,M.potencial-M.recuperado-M.proceso)]}],{lw:110,vw:90,fmt:money,c:['var(--sd)','var(--amber)','var(--bad)']})}
+    ${legend([['var(--sd)','Recuperado'],['var(--amber)','En proceso'],['var(--bad)','No recuperado']])}</div></div>
+   <div class="card"><h2>Destruido por mes</h2><p class="note">Equipos enviados a destrucción certificada. En rojo, los que funcionaban y pudieron venderse.</p>
+    ${hbars(dm,{lw:80,vw:40,c:['var(--muted)','var(--bad)']})}${legend([['var(--muted)','No funcional'],['var(--bad)','Funcional (valor perdido)']])}
+    <p class="note" style="margin-top:10px">${M.destr.filter(e=>e.p==='DESTRUIDO').length} con certificado · ${M.destr.filter(e=>e.dx?.comp?.length).length} con recuperación de componentes · valor perdido ${money(M.perdidoDest)}</p></div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>Horas-hombre por equipo vendido</h2><p class="note">Proceso manual actual contra Activo 360. Proyección ${+M.Y+1}: <b>${Math.round(M.hhAnual).toLocaleString('es-MX')} h</b> ahorradas en la red.</p>
+    ${hbars([{l:'Proceso actual',v:[HHM]},{l:'Activo 360',v:[HHA]}],{lw:110,vw:60,fmt:v=>v.toFixed(1)+' h',c:['var(--hm)']})}
+    <details style="margin-top:10px"><summary>Supuestos por actividad</summary><div class="tbl" style="margin-top:8px"><table><tr><th>Actividad actual</th><th>Área</th><th class="n">h</th></tr>${HH_MANUAL.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="n">${r[2]}</td></tr>`).join('')}<tr><th>Con Activo 360</th><th></th><th></th></tr>${HH_A360.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="n">${r[2]}</td></tr>`).join('')}<tr><td>Carta responsiva (manual → automática)</td><td>Sistemas</td><td class="n">${HH_CARTA[0]} → ${HH_CARTA[1]}</td></tr></table></div></details></div>
+   <div class="card"><h2>Proyección de sustitución · red completa</h2><p class="note">Escritorios que cumplen 5 años por año y lo que se espera recuperar: ${Math.round(C().aptos*100)}% aptos para venta × ${money(M.avgDesk)} precio promedio.</p>${svg}</div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>Tiempos meta por área</h2><p class="note">Porcentaje resuelto dentro del tiempo meta, en días hábiles. Las metas se editan en Tabulador y reglas.</p>
+    <div class="tbl" style="margin-top:8px"><table><tr><th>Área</th><th class="n">Meta</th><th class="n">Resueltas</th><th class="n">En tiempo</th><th class="n">Prom. días</th><th class="n">Fuera de tiempo hoy</th></tr>
+    ${(()=>{const d=sisDone(),p=S.items.map(sisTask).filter(x=>x&&!x.ok).length,pc=d.length?d.filter(x=>x<=C().sla.SIS).length/d.length:0;return `<tr><td>Sistemas (diagnóstico)</td><td class="n">${C().sla.SIS} d</td><td class="n">${d.length}</td><td class="n"><span class="pill ${pc>=.8?'p-ok':pc>=.6?'p-warn':'p-bad'}">${Math.round(pc*100)}%</span></td><td class="n">${d.length?(sum(d)/d.length).toFixed(1):'—'}</td><td class="n">${p?`<span class="pill p-bad">${p}</span>`:0}</td></tr>`})()}
+    ${['AF','ING','FAC','SIS','FIS'].map(a=>{const rs=M.res.filter(r=>RT[r.type].a===a),p=S.reqs.filter(r=>r.state==='Pendiente'&&RT[r.type].a===a&&!slaOk(r)),pc=rs.length?rs.filter(slaOk).length/rs.length:0;return `<tr><td>${a==='SIS'?'Sistemas (agendar entrega)':AREAS[a]}</td><td class="n">${C().sla[a]} d</td><td class="n">${rs.length}</td><td class="n"><span class="pill ${pc>=.8?'p-ok':pc>=.6?'p-warn':'p-bad'}">${Math.round(pc*100)}%</span></td><td class="n">${rs.length?(sum(rs,reqDays)/rs.length).toFixed(1):'—'}</td><td class="n">${p.length?`<span class="pill p-bad">${p.length}</span>`:0}</td></tr>`}).join('')}</table></div></div>
+   <div class="card"><h2>Impacto ambiental</h2><p class="note">Residuo electrónico que no se destruye porque el equipo se reutiliza. Pesos promedio por tipo en Tabulador y reglas.</p>
+    ${hbars([{l:'Reutilizado (venta + donación)',v:[M.kgReus]},{l:'Enviado a destrucción',v:[M.kgDest]}],{lw:200,vw:70,fmt:v=>Math.round(v)+' kg',c:['var(--ok)']})}
+    <p class="note" style="margin-top:10px">Tasa de reutilización ${Math.round(M.tasaReus*100)}%. Si se venden los ${Math.round(C().aptos*100)}% aptos de los ${M.redY1.toLocaleString('es-MX')} escritorios de ${+M.Y+1}, se evitan ~${(M.redY1*C().aptos*C().kg['Escritorio']/1000).toFixed(1)} toneladas de residuo.</p>
+    <h3 style="margin-top:14px">Satisfacción del colaborador</h3>
+    ${hbars([['Proceso de compra',0],['Tiempo de entrega',1],['Estado del equipo',2]].map(([l,k])=>({l,v:[M.surv.length?sum(M.surv,e=>e.survey.q[k])/M.surv.length:0]})),{lw:150,vw:50,fmt:v=>v.toFixed(1),c:['var(--amber)']})}
+    ${M.surv.slice(-2).map(e=>`<p class="note" style="margin:6px 0 0">“${esc(e.survey.c)}” · ${esc((e.buyer||'').split(' · ')[0])}</p>`).join('')}</div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>Inventario por etapa</h2>${hbars(['VENCIDO','ALERTA','CONFIRMADO','PRECIO','PUBLICADO','SUBASTA','FIRMAS','PAGO','DEPOSITO','FACTURA','AGENDA','ENTREGA','ENTREGADO','DESTRUCCION','DESTRUIDO'].map(s=>({l:ST[s][0],v:[by(s)]})).concat([{l:'Donación (en proceso y donados)',v:[it.filter(e=>DON.includes(e.p)).length]}]),{lw:190,vw:40,c:['var(--sd)']})}</div>
+   <div class="card"><div class="row"><h2>Pendientes por área</h2><span class="sp"></span><button class="btn sm" data-go="seguimiento">Ver seguimiento</button></div>
+   <div class="tbl" style="margin-top:10px"><table><tr><th>Área</th><th class="n">Pendientes</th><th class="n">Días prom.</th><th class="n">Recordat.</th><th class="n">Escalados</th></tr>
+   ${pend.map(p=>`<tr><td>${AREAS[p.a]}<div class="note">${['SIS','FAC','FIS'].includes(p.a)?'aviso por correo':'aviso por bot de Humand'}</div></td><td class="n">${p.n}</td><td class="n">${p.avg.toFixed(1)}</td><td class="n">${p.rem}</td><td class="n">${p.esc?`<span class="pill p-bad">${p.esc}</span>`:'0'}</td></tr>`).join('')}</table></div></div>
+  </div>`;
+};
+
+/* ================= ACTIVOS POR CLÍNICA ================= */
+VIEWS.clinicas=()=>{
+  const g={};S.items.forEach(e=>(g[e.CLINICA]??=[]).push(e));
+  const q=S.clinQ.toLowerCase();
+  const rows=Object.entries(g).filter(([c])=>!q||c.toLowerCase().includes(q)).map(([c,l])=>{const n=k=>l.filter(e=>stOf(e)===k).length;return{c,mun:l[0].MUNICIPIO,tot:l.length,vig:n('VIGENTE'),al:n('ALERTA'),ven:n('VENCIDO'),bz:n('PUBLICADO'),fr:l.filter(e=>FROZEN.includes(e.p)).length,vd:l.filter(e=>SOLD.includes(e.p)).length,ds:l.filter(e=>DESTR.includes(e.p)).length,
+    esp:sum(l.filter(e=>due(e)<=S.today.slice(0,4)+'-12-31'||SOLD.includes(e.p)||DESTR.includes(e.p)||DON.includes(e.p)),estExp)*META,rec:sum(l.filter(e=>SOLD.includes(e.p)),e=>e.pay?.amount||0),ti:S.ast.filter(a=>a.estado==='Asignado'&&colOf(a.emp)?.ubi===c).length}}).sort((a,b)=>(b.ven+b.al)-(a.ven+a.al));
+  const T=k=>sum(rows,r=>r[k]);
+  return `<div><h1>Activos por clínica</h1><p class="sub">Visibilidad del inventario, la vida útil y el stock del Bazar de cada clínica. El stock se actualiza al congelarse y al concretarse cada venta.</p></div>
+  <div class="row"><input type="text" id="cq" placeholder="Buscar clínica…" value="${esc(S.clinQ)}" style="flex:0 1 280px"><span class="note">${rows.length} clínicas con inventario cargado</span></div>
+  <div class="tbl"><table><tr><th>Clínica</th><th class="n">Equipos</th><th class="n">Vigentes</th><th class="n">Alerta ≤3m</th><th class="n">Cumplieron</th><th class="n">En Bazar</th><th class="n">Congelados</th><th class="n">Vendidos</th><th class="n">Destruidos</th><th class="n">Esperado ${S.today.slice(0,4)}</th><th class="n">Recuperado</th><th>Avance</th></tr>
+  ${rows.map(r=>`<tr data-clin="${esc(r.c)}" style="cursor:pointer"><td><b>${esc(r.c)}</b><div class="note">${esc(r.mun)}${r.ti?` · ${r.ti} activos asignados a personal`:''}</div></td><td class="n">${r.tot}</td><td class="n">${r.vig}</td><td class="n">${r.al?`<span class="pill p-warn">${r.al}</span>`:0}</td><td class="n">${r.ven?`<span class="pill p-bad">${r.ven}</span>`:0}</td><td class="n">${r.bz}</td><td class="n">${r.fr}</td><td class="n">${r.vd}</td><td class="n">${r.ds}</td><td class="n">${money(r.esp)}</td><td class="n">${money(r.rec)}</td><td style="min-width:110px"><div class="stack"><div style="width:${r.esp?Math.min(100,100*r.rec/r.esp):0}%;background:var(--sd)"></div></div></td></tr>`).join('')}
+  <tr><th>Total</th><th class="n">${T('tot')}</th><th class="n">${T('vig')}</th><th class="n">${T('al')}</th><th class="n">${T('ven')}</th><th class="n">${T('bz')}</th><th class="n">${T('fr')}</th><th class="n">${T('vd')}</th><th class="n">${T('ds')}</th><th class="n">${money(T('esp'))}</th><th class="n">${money(T('rec'))}</th><th></th></tr></table></div>`;
+};
+after.clinicas=()=>{$('#cq').oninput=e=>{S.clinQ=e.target.value;const p=e.target.selectionStart;render();const q=$('#cq');q.focus();q.setSelectionRange(p,p)};
+  $$('[data-clin]').forEach(r=>r.onclick=()=>openClinic(r.dataset.clin))};
+function openClinic(c){const l=S.items.filter(e=>e.CLINICA===c);const grp={};l.forEach(e=>(grp[stOf(e)]??=[]).push(e));
+  const ti=S.ast.filter(a=>a.estado==='Asignado'&&colOf(a.emp)?.ubi===c);
+  $('#drawer').innerHTML=`<div class="drawer"><div><div class="row"><h2>${esc(c)}</h2><span class="sp"></span><button class="btn sm" data-close>Cerrar</button></div>
+  <p class="note">${esc(l[0]?.MUNICIPIO)}, ${esc(l[0]?.ESTADO)} · ${esc(l[0]?.INGENIERO)} · ${l.length} equipos</p>
+  ${Object.keys(ST).filter(k=>grp[k]).map(k=>`<div class="card"><div class="row">${pill(k)}<span class="note">${grp[k].length}</span></div><div class="tbl" style="margin-top:8px"><table>${grp[k].map(e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td>${eqLine(e)}</td><td class="mono note">${fd(due(e))}</td><td class="n">${SOLD.includes(e.p)?money(e.pay?.amount):e.p==='PUBLICADO'?money(curPrice(e).v):''}</td></tr>`).join('')}</table></div></div>`).join('')}
+  ${ti.length?`<div class="card"><h3>Activos tecnológicos asignados a personal de la clínica</h3><div class="tbl" style="margin-top:8px"><table>${ti.map(a=>`<tr><td>${esc(a.inv)}</td><td>${esc(a.tipo)} ${esc(a.modelo)}</td><td>${esc(colOf(a.emp)?.name)}</td></tr>`).join('')}</table></div></div>`:''}</div></div>`;bindClose()}
+
+;(window.A360_OK=window.A360_OK||[]).push('App1');
+</script>

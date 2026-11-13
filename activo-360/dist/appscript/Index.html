@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<title>Activo 360</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<?!= include('Estilos'); ?>
+
+<header class="top">
+  <div class="greet" id="greet"></div>
+  <div class="mods" id="mods" role="tablist" aria-label="Módulo"><button data-modulo="venta" role="tab"><b>Venta de equipo de clínicas</b><small>venta · destrucción · donación</small></button><button data-modulo="ti" role="tab"><b>Inventario de Sistemas</b><small>activos por colaborador · carta responsiva</small></button></div>
+  <div class="clock">
+    <button class="bell" id="bell" type="button" data-v="alertas"></button>
+    <button class="thm" id="thm" type="button" aria-label="Cambiar entre modo claro y oscuro"></button>
+    <span style="font-size:12px;color:var(--muted)">Hoy</span><span class="d" id="today"></span>
+    <span class="adm"><button id="admb" aria-expanded="false">Administración</button><div id="admm" hidden>
+      <button id="d1">Ejecutar cierre del día (recordatorios)</button>
+      <button id="d30">Ejecutar 30 cierres diarios</button>
+      <button data-rep>Exportar reporte de trazabilidad</button>
+      <button id="reset">Restablecer datos iniciales</button></div></span>
+  </div>
+</header>
+<div class="shell">
+  <aside class="rail"><img class="navlogo" src="" alt="Activo 360 · Salud Digna"><nav id="nav" aria-label="Secciones"></nav></aside>
+  <main><div class="wrap" id="main"></div></main>
+</div>
+<div id="drawer"></div>
+<div id="toast" hidden class="toast"></div>
+
+<script>window.A360_FEED=<?!= JSON.stringify(feedOn) ?>;window.A360_POLL=<?!= JSON.stringify(pollMin) ?>;window.A360_USER=<?!= JSON.stringify(userName) ?>;</script>
+<script>
+<?!= include('Xlsx1'); ?>
+<?!= include('Xlsx2'); ?>
+<?!= include('Xlsx3'); ?>
+<?!= include('Xlsx4'); ?>
+<?!= include('Xlsx5'); ?>
+;(window.A360_OK=window.A360_OK||[]).push('Xlsx');
+</script>
+<?!= include('Datos1'); ?>
+<?!= include('Datos2'); ?>
+<?!= include('Datos3'); ?>
+<?!= include('Logo'); ?>
+<?!= include('App1'); ?>
+<?!= include('App2'); ?>
+<?!= include('App3'); ?>
+<script>(function(){var ok=window.A360_OK||[],need=['Xlsx','Datos1','Datos2','Datos3','Logo','App1','App2','App3'],m=need.filter(function(n){return ok.indexOf(n)<0});
+if(m.length){var d=document.createElement('div');d.setAttribute('style','position:fixed;left:16px;right:16px;top:16px;z-index:999;padding:16px 18px;border-radius:16px;background:#fde5e1;color:#7a1d12;border:1px solid #c0392b;font:14px/1.45 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.2)');
+d.innerHTML='<b>Activo 360 no cargó completo.</b> Vuelve a pegar completo (de principio a fin) y guarda: <b>'+m.map(function(n){return n==='Xlsx'?'Xlsx1 a Xlsx5':n}).join(', ')+'</b>. Después crea una nueva versión de la implementación.';document.body.appendChild(d)}})();</script>
+
+</html>
