@@ -66,8 +66,9 @@ for k in range(3):
     files['App%d' % (k + 1)] = '<script>\n/* Activo 360 · App%d */\n' % (k + 1) + '\n'.join(A[ac[k]:ac[k + 1]]) + OK('App%d' % (k + 1)) + '</script>'
 chk = """<script>(function(){var ok=window.A360_OK||[],need=['Xlsx','Datos1','Datos2','Datos3','Logo','App1','App2','App3'],m=need.filter(function(n){return ok.indexOf(n)<0});
 if(m.length){var d=document.createElement('div');d.setAttribute('style','position:fixed;left:16px;right:16px;top:16px;z-index:999;padding:16px 18px;border-radius:16px;background:#fde5e1;color:#7a1d12;border:1px solid #c0392b;font:14px/1.45 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.2)');
-d.innerHTML='<b>Activo 360 no cargó completo.</b> Vuelve a pegar completo (de principio a fin) y guarda: <b>'+m.map(function(n){return n==='Xlsx'?'Xlsx1 a Xlsx5':n}).join(', ')+'</b>. Después crea una nueva versión de la implementación.';document.body.appendChild(d)}})();</script>"""
-scripts = ("<script>window.A360_FEED=<?!= JSON.stringify(feedOn) ?>;window.A360_POLL=<?!= JSON.stringify(pollMin) ?>;window.A360_USER=<?!= JSON.stringify(userName) ?>;</script>\n"
+d.innerHTML='<b>Activo 360 no cargó completo.</b> Vuelve a pegar completo (de principio a fin) y guarda: <b>'+m.map(function(n){return n==='Xlsx'?'Xlsx1 a Xlsx5':n}).join(', ')+'</b>. Después crea una nueva versión de la implementación.'+((window.A360_ERR||[]).length?'<br><small>Primer error: '+String(A360_ERR[0]).replace(/</g,'&lt;')+'</small>':'');document.body.appendChild(d)}})();</script>"""
+scripts = ("<script>window.A360_ERR=[];addEventListener('error',function(e){A360_ERR.push((e.message||'error')+' · línea '+(e.lineno||'?'))});</script>\n"
+           "<script>window.A360_FEED=<?!= JSON.stringify(feedOn) ?>;window.A360_POLL=<?!= JSON.stringify(pollMin) ?>;window.A360_USER=<?!= JSON.stringify(userName) ?>;</script>\n"
            + "\n".join("<?!= include('Xlsx%d'); ?>" % k for k in range(1, 6)) + "\n" + XLOAD + OK('Xlsx') + "</script>\n"
            + "\n".join("<?!= include('%s'); ?>" % n for n in ['Datos1', 'Datos2', 'Datos3', 'Logo', 'App1', 'App2', 'App3']) + "\n" + chk)
 files['Index'] = shell.replace('{{STYLES}}', "<?!= include('Estilos'); ?>").replace('{{LOGO}}', '').replace('{{SCRIPTS}}', scripts)
