@@ -218,20 +218,20 @@ function log(m,ep,src,body,desc){S.log.unshift({d:S.today,m,ep,src,body,desc})}
 function notify(to,txt,kind){S.notifs.unshift({d:S.today,to,txt,kind:kind||'info'})}
 function newReq(type,e,extra){const t=RT[type];const r={id:'SOL-'+(++S.seq),type,eq:e._i,created:S.today,last:S.today,state:'Pendiente',rem:0,esc:false,res:null,amount:extra?.amount??null,dl:extra?.dl||null};S.reqs.unshift(r);
   const who=t.a==='COL'?e.buyer:t.a==='JEFE'?(e.sale?.jefe||'Jefe inmediato'):t.a==='SIS'?e.INGENIERO:AREAS[t.a];
-  if(t.ch==='humand'){log('POST','/chats/{id}/messages (API Marty · bot Activo 360)','pub',{to:AREAS[t.a],text:`Tienes pendiente: ${t.n} · ${e.ID_ACTIVO}`,link:'https://activo360.salud-digna.interno/aprobaciones/'+r.id},'El bot de Activo 360 avisa al área en Humand; la aprobación se hace dentro de Activo 360 (Humand no permite crear solicitudes desde un sistema externo).');notify(AREAS[t.a],`Nueva solicitud: ${t.n} · ${e.ID_ACTIVO} (${e.CLINICA})`,'req')}
+  if(t.ch==='humand'){log('POST','/chats/{id}/messages (API Marty · bot Activo 360)','pub',{to:AREAS[t.a],text:`Tienes pendiente: ${t.n} · ${e.ID_ACTIVO}`,link:'https:\/\/activo360.salud-digna.interno/aprobaciones/'+r.id},'El bot de Activo 360 avisa al área en Humand; la aprobación se hace dentro de Activo 360 (Humand no permite crear solicitudes desde un sistema externo).');notify(AREAS[t.a],`Nueva solicitud: ${t.n} · ${e.ID_ACTIVO} (${e.CLINICA})`,'req')}
   else if(t.ch==='firma'){log('POST','/documents','pub',{employeeInternalId:t.a==='COL'?(e.sale?.emp||''):'jefe de '+(e.sale?.emp||''),name:`Formato SGC-N4-60 ${e.sale?.folio}.pdf`,signatureStatus:'PENDING',signatureCoordinates:[{page:1,x:t.a==='COL'?.12:.58,y:.82,width:.3,height:.06}],sendNotification:true},'Sube el formato prellenado a Documentos de Humand para firma electrónica.');notify(who,`Tienes un documento por firmar: formato de compra de ${eqName(e)} (${e.sale?.folio})`,'req')}
   else{const to=t.a==='FAC'?MAIL_FAC:t.a==='SIS'?(e.CORREO_INGENIERO||e.INGENIERO):'Fiscal (Jurídico)';mail(to,`[Activo 360] ${t.n} · ${e.sale?.folio||e.ID_ACTIVO}`,mailBody(type,e),e)}
   return r}
 function curReq(e){return S.reqs.find(r=>r.eq===e._i&&r.state==='Pendiente')}
 function closeReq(r,state){if(!r)return;r.state=state||'Aprobada';r.res=fd(S.today);r.resD=S.today}
-function mail(to,subj,body,e){S.mails.unshift({d:S.today,to,subj,body,eq:e?e._i:null});log('POST','https://gmail.googleapis.com/gmail/v1/users/me/messages/send','g',{to,subject:subj},'Aviso por correo de Google: el área entra a Activo 360 solo cuando tiene algo pendiente.')}
+function mail(to,subj,body,e){S.mails.unshift({d:S.today,to,subj,body,eq:e?e._i:null});log('POST','https:\/\/gmail.googleapis.com/gmail/v1/users/me/messages/send','g',{to,subject:subj},'Aviso por correo de Google: el área entra a Activo 360 solo cuando tiene algo pendiente.')}
 function fiscalTxt(f){if(!f||f.tipo==='publico')return 'Venta a público en general';return f.csf?`Con factura · constancia de situación fiscal: ${f.csf}`:`Con factura · RFC ${f.rfc} · ${f.nombre} · régimen ${f.regimen} · CP ${f.cp} · uso ${f.uso}`}
 function mailBody(type,e){const s=e.sale||{};
-  if(type==='FACTURA')return `Hay una venta pendiente de facturar.\nFolio: ${s.folio}\nEquipo: ${eqName(e)} · activo ${e.ID_ACTIVO} · serie ${e.NUM_SERIE}\nPrecio: ${money(e.pay?.amount)}\nComprador: ${e.buyer} (empleado ${s.emp||''})\nDatos fiscales: ${fiscalTxt(s.fiscal)}\nAdjunta el CFDI aquí: https://activo360.salud-digna.interno/facturas/${s.folio}`;
-  if(type==='AGENDA')return `La venta ${s.folio} ya está facturada. Prepara el equipo ${eqName(e)} (activo ${e.ID_ACTIVO}) y propone fecha y hora de entrega en ${e.CLINICA}.\nComprador: ${e.buyer}\nAgenda aquí: https://activo360.salud-digna.interno/entregas/${s.folio}`;
-  if(type==='REVFIS')return `Se donó el equipo ${eqName(e)} (activo ${e.ID_ACTIVO}) a ${e.don?.org}. Se adjuntó la factura de la donataria (${e.don?.factura}). Revisa que cumpla los requisitos fiscales: https://activo360.salud-digna.interno/donaciones/${e.ID_ACTIVO}`;
+  if(type==='FACTURA')return `Hay una venta pendiente de facturar.\nFolio: ${s.folio}\nEquipo: ${eqName(e)} · activo ${e.ID_ACTIVO} · serie ${e.NUM_SERIE}\nPrecio: ${money(e.pay?.amount)}\nComprador: ${e.buyer} (empleado ${s.emp||''})\nDatos fiscales: ${fiscalTxt(s.fiscal)}\nAdjunta el CFDI aquí: https:\/\/activo360.salud-digna.interno/facturas/${s.folio}`;
+  if(type==='AGENDA')return `La venta ${s.folio} ya está facturada. Prepara el equipo ${eqName(e)} (activo ${e.ID_ACTIVO}) y propone fecha y hora de entrega en ${e.CLINICA}.\nComprador: ${e.buyer}\nAgenda aquí: https:\/\/activo360.salud-digna.interno/entregas/${s.folio}`;
+  if(type==='REVFIS')return `Se donó el equipo ${eqName(e)} (activo ${e.ID_ACTIVO}) a ${e.don?.org}. Se adjuntó la factura de la donataria (${e.don?.factura}). Revisa que cumpla los requisitos fiscales: https:\/\/activo360.salud-digna.interno/donaciones/${e.ID_ACTIVO}`;
   return ''}
-function addFile(e,name){if(!e.sale)return;e.sale.files.push({d:S.today,name});log('POST','https://www.googleapis.com/upload/drive/v3/files','g',{carpeta:'Activo 360 / Ventas / '+e.sale.folio,archivo:name},'Guarda el documento en la carpeta de la venta en Drive.')}
+function addFile(e,name){if(!e.sale)return;e.sale.files.push({d:S.today,name});log('POST','https:\/\/www.googleapis.com/upload/drive/v3/files','g',{carpeta:'Activo 360 / Ventas / '+e.sale.folio,archivo:name},'Guarda el documento en la carpeta de la venta en Drive.')}
 
 /* ---------- Tabulador y diagnóstico ---------- */
 const DEFDX={enciende:'si',rend:'ok',monitor:'ok',estetica:'A',puertos:'ok',perif:'si',disco:'borrado',comp:[],obs:''};
@@ -345,7 +345,7 @@ function startSale(e,buyer,amount,fiscal,info){e.buyer=buyer;e.pay={amount};
   e.p='FIRMAS';H(e,`Solicitud de compra de ${buyer} · ${fiscalTxt(fiscal)} · equipo congelado`,'COL');
   log('GET','/service-management/service-items/{sid}/tasks','pub',{servicio:'Compra de equipo',initiatorIds:e.sale.emp,createdAtFrom:S.today},'Activo 360 lee la solicitud "Compra de equipo" que el colaborador llenó en Gestión de Servicios de Humand.');
   log('PUT','/products/'+e.ID_ACTIVO,'pub',{status:'CONGELADO',folio:e.sale.folio},'Congela el equipo en el Bazar mientras se concreta la compra.');
-  log('POST','https://www.googleapis.com/drive/v3/files','g',{carpeta:'Activo 360 / Ventas / '+e.sale.folio,mimeType:'application/vnd.google-apps.folder'},'Crea la carpeta de la venta en Drive con su folio.');
+  log('POST','https:\/\/www.googleapis.com/drive/v3/files','g',{carpeta:'Activo 360 / Ventas / '+e.sale.folio,mimeType:'application/vnd.google-apps.folder'},'Crea la carpeta de la venta en Drive con su folio.');
   addFile(e,'Formato SGC-N4-60 prellenado.pdf');if(fiscal?.csf)addFile(e,fiscal.csf);
   notify('Activo Fijo',`Solicitud de compra ${e.sale.folio}: ${eqName(e)} para ${buyer} (informativo)`,'info');
   newReq('FIRMA_COL',e)}

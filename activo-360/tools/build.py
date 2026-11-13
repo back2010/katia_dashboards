@@ -59,7 +59,8 @@ files['Datos3'] = ('<script>\n/* Activo 360 · Datos3: vista AppSheet (parte 2) 
                    + '\n]);\nconst DATA={clinics:A360_CLIN,appsheet:{cols:' + J(ash['cols']) + ',rows:A360_ROWS}};' + OK('Datos3') + '</script>')
 files['Logo'] = ("<script>\n/* Activo 360 · Logo */\ndocument.querySelector('.navlogo').src='data:image/png;base64,'+[\n"
                  + ',\n'.join("'" + logo[k:k + 120] + "'" for k in range(0, len(logo), 120)) + "\n].join('');" + OK('Logo') + '</script>')
-A = app.split('\n')
+# HtmlService corta las líneas en "://" (lo trata como comentario) y deja textos sin cerrar: se escribe ":\/\/", que en JS es igual.
+A = app.replace('://', ':\\/\\/').split('\n')
 mk = lambda t: next(i for i, l in enumerate(A) if l.startswith(t))
 ac = [0, mk('/* ================= INVENTARIO (formato'), mk('/* ================= INVENTARIO TECNOL'), len(A)]
 for k in range(3):

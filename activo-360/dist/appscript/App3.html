@@ -189,7 +189,7 @@ function resolve(id,act,val){const r=S.reqs.find(x=>x.id===id);const e=S.items[r
     if(act==='rej'){e.p='DESTRUCCION';e.destD=S.today;H(e,'Activo Fijo rechazó la venta · enviado a destrucción certificada','AF','hmn')}
     else{if(act==='mod'){e.price.aut=r50(val);r.amount=e.price.aut;H(e,`Activo Fijo modificó el precio a ${money(e.price.aut)}`,'AF','hmn')}else H(e,`Activo Fijo autorizó ${money(e.price.aut)}`,'AF','hmn');
       e.p='PUBLICADO';e.pub=S.today;H(e,`Publicado en Bazar de Activos · solo colaboradores de ${e.MUNICIPIO}`,'AF','hmn');
-      log('POST','/products','pub',{sku:e.ID_ACTIVO,name:eqName(e),price:e.price.aut,stock:1,audience:{segmentation:'Ciudad',items:[e.MUNICIPIO]},pickup:e.CLINICA,buyUrl:'https://activo360.salud-digna.interno/comprar/'+e.ID_ACTIVO},'Alta del equipo en el Bazar, visible solo para su ciudad.');
+      log('POST','/products','pub',{sku:e.ID_ACTIVO,name:eqName(e),price:e.price.aut,stock:1,audience:{segmentation:'Ciudad',items:[e.MUNICIPIO]},pickup:e.CLINICA,buyUrl:'https:\/\/activo360.salud-digna.interno/comprar/'+e.ID_ACTIVO},'Alta del equipo en el Bazar, visible solo para su ciudad.');
       log('POST','/posts','pub',{body:`Nuevo en el Bazar de Activos: ${eqName(e)} en ${e.CLINICA}`,audience:{segmentation:'Ciudad',items:[e.MUNICIPIO]},pinnedUntil:addD(S.today,7)},'Publicación en el muro de la ciudad, fijada 7 días.');
       notify('Colaboradores de '+e.MUNICIPIO,`Nuevo en el Bazar de Activos: ${eqName(e)} · ${money(e.price.aut)}`)}}
   if(r.type==='DECISION'){
@@ -256,7 +256,7 @@ after.hfirma=()=>{
 
 function sign(emp){const L=S.cartas[emp],v=L[L.length-1];v.st='Firmada';v.signed=S.today;
   log('GET','/documents/{id} (estado de firma)','req',{employeeInternalId:emp,document:v.folio,signatureStatus:'SIGNED'},'Activo 360 consulta si la carta ya se firmó. Por confirmar con Humand: hoy no hay un GET de documentos.');
-  log('POST','https://www.googleapis.com/upload/drive/v3/files','g',{carpeta:'Activo 360 / Cartas responsivas / '+emp,archivo:v.folio+'_firmada.pdf'},'Resguardo de la carta firmada; las versiones anteriores se conservan.');
+  log('POST','https:\/\/www.googleapis.com/upload/drive/v3/files','g',{carpeta:'Activo 360 / Cartas responsivas / '+emp,archivo:v.folio+'_firmada.pdf'},'Resguardo de la carta firmada; las versiones anteriores se conservan.');
   notify('Sistemas · Mesa de servicio',`${colOf(emp)?.name} firmó su carta ${v.folio}`);save();render();toast(`Carta ${v.folio} firmada y resguardada`)}
 VIEWS.hnotif=()=>`<div><h1>Notificaciones</h1><p class="sub">Lo que cada persona o área recibe en Humand: mensajes del bot de Activo 360 (pendientes, recordatorios, citas, escalamientos), publicaciones del muro y documentos por firmar.</p></div>
  ${hmFrame(`<div class="log">${S.notifs.slice(0,150).map(n=>`<div class="logi row"><span class="pill ${n.kind==='rem'?'p-warn':n.kind==='esc'?'p-bad':n.kind==='req'?'p-hm':'p-info'}">${n.kind==='rem'?'Recordatorio':n.kind==='esc'?'Escalamiento':n.kind==='req'?'Solicitud':'Aviso'}</span><span style="flex:1 1 260px;min-width:0">${esc(n.txt)}<div class="note">Para: ${esc(n.to)}</div></span><span class="mono note">${fd(n.d)}</span></div>`).join('')||'<p class="note">Sin notificaciones.</p>'}</div>`,'Bandeja de notificaciones')}`;
