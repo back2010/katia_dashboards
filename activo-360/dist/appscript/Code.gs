@@ -50,7 +50,7 @@ function nombreUsuario_() {
 
 /** Datos del archivo para saber si cambió (se consulta cada POLL_MIN minutos). */
 function getFeedInfo() {
-  if (!feedId_()) return { ok: false, msg: 'Configura FILE_ID en Code.gs con el ID del archivo de AppSheet en Drive' };
+  if (!feedId_()) return { ok: false, msg: 'Configura FILE_ID en Code.gs con el ID de la hoja de inventario' };
   const f = DriveApp.getFileById(feedId_());
   const mime = f.getMimeType();
   if (mime === MimeType.GOOGLE_SHEETS) {

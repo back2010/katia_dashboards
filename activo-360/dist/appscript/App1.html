@@ -71,7 +71,7 @@ const AS_COLS=()=>DATA.appsheet.cols;
 const AS_REQ=['CENTRO DE TRABAJO','AREA','ESTATUS','MARCA','MODELO','INSTALACION','# DE SERIE'];
 const AS_VIVOS=['ACTIVO','RESGUARDO','PLAN DE RENOVACION / ENVIADO A CSI',''];
 const ASP={'ACTIVO':'p-ok','PLAN DE RENOVACION / ENVIADO A CSI':'p-info','RESGUARDO':'p-warn','VENDIDO':'p-sd','DESTRUIDO':'p-mut','TRANSFERIDO':'p-mut','DONADO':'p-sd'};
-const aspill=s=>`<span class="pill ${ASP[s]||'p-mut'}" title="Estatus en AppSheet">${esc(s==='PLAN DE RENOVACION / ENVIADO A CSI'?'Plan de renovación':s?s.charAt(0)+s.slice(1).toLowerCase():'Sin estatus')}</span>`;
+const aspill=s=>`<span class="pill ${ASP[s]||'p-mut'}" title="Estatus en el inventario">${esc(s==='PLAN DE RENOVACION / ENVIADO A CSI'?'Plan de renovación':s?s.charAt(0)+s.slice(1).toLowerCase():'Sin estatus')}</span>`;
 const asObjs=t=>t.rows.map(r=>{const o={};t.cols.forEach((c,i)=>o[c]=r[i]??'');return o});
 const ACC={RECEPCION:'Recepción',OPTOMETRIA:'Optometría',DENSITOMETRIA:'Densitometría',MASTOGRAFIA:'Mastografía',TOMOGRAFIA:'Tomografía',MAGNETICA:'magnética',NUTRICION:'Nutrición',ALMACEN:'Almacén',CAPACITACION:'capacitación',AREA:'área'};
 const niceArea=a=>String(a||'').trim().split(/\s+/).map((w,i)=>{const n=ACC[w]||w.toLowerCase();return i?n.toLowerCase():n.charAt(0).toUpperCase()+n.slice(1)}).join(' ');
@@ -99,10 +99,10 @@ function mapAS(rows,name){
       RAM_GB:parseInt(raw['RAM(GB)'])||8,ALMACENAMIENTO:raw['DISCO DURO (HDD, SSD)']||'',MONITOR:t==='Escritorio'?'Monitor de la estación':'',SO:raw['SistemaOperativo']||'',
       FECHA_ADQUISICION:fa,COSTO_ADQUISICION:0,VIDA_UTIL_ANIOS:VIDA[t]||5,INGENIERO:ing,CORREO_INGENIERO:'',
       AS_ESTATUS:st,_p0:st==='PLAN DE RENOVACION / ENVIADO A CSI'?'CONFIRMADO':null,_d0:normDate(String(raw['MODIFICADO EL:']).slice(0,10),mdy),as:raw})});
-  return{inv,prev,bad,mdy,name:name||'AppSheet',total:rows.length}}
-let BASE0=null;const base0=()=>BASE0||(BASE0=mapAS(asObjs(DATA.appsheet),'Demo en formato AppSheet'));
+  return{inv,prev,bad,mdy,name:name||'Inventario',total:rows.length}}
+let BASE0=null;const base0=()=>BASE0||(BASE0=mapAS(asObjs(DATA.appsheet),'Demo (inventario de ejemplo)'));
 function applyAS(items){items.forEach(e=>{if(e._p0==='CONFIRMADO'&&!e.p){e.p='CONFIRMADO';const d=e._d0&&e._d0<=S.today&&diff(e._d0,S.today)<=30?e._d0:S.today;
-  e.hist.push({d,t:'Reemplazo confirmado: AppSheet en "Plan de renovación / enviado a CSI"'+(e.as?.['# DE SERIE NUEVO EQUIPO']?' · equipo nuevo '+e.as['# DE SERIE NUEVO EQUIPO']:''),a:'SIS',k:''})}})}
+  e.hist.push({d,t:'Reemplazo confirmado: inventario en "Plan de renovación / enviado a CSI"'+(e.as?.['# DE SERIE NUEVO EQUIPO']?' · equipo nuevo '+e.as['# DE SERIE NUEVO EQUIPO']:''),a:'SIS',k:''})}})}
 /* estatus que Activo 360 devuelve a AppSheet según la etapa del proceso */
 function asStatus(e){const p=e.p;if(!p)return e.AS_ESTATUS||'ACTIVO';if(SOLD.includes(p))return'VENDIDO';if(p==='DESTRUIDO')return'DESTRUIDO';if(DON.includes(p)&&p!=='DONACION')return'DONADO';
   if(p==='CONFIRMADO')return'PLAN DE RENOVACION / ENVIADO A CSI';return'RESGUARDO'}
@@ -142,8 +142,8 @@ function alerts(){if(!S)return[];const o=[],K=C(),add=(l,cat,t,d,act)=>o.push({l
   S.items.filter(e=>e.p==='DONADO_FACT'&&e.don?.d&&diff(e.don.d,S.today)>K.plazo.donFact).forEach(e=>add('warn','Activo Fijo',`Falta factura de donataria · ${e.ID_ACTIVO}`,`${e.don.org} · entregado ${fd(e.don.d)}`,{eq:e._i}));
   Object.entries(S.cartas).forEach(([emp,L])=>{const v=L[L.length-1];if(v.st==='Pendiente de firma'&&diff(v.d,S.today)>=2){const c=colOf(emp);add('warn','Cartas',`Carta responsiva sin firma · ${v.folio}`,`${c?.name||emp} · ${diff(v.d,S.today)} días · ${v.rem} recordatorio(s)`,{v:'carta'})}});
   S.col.filter(c=>c.st==='Baja laboral'&&assignedTo(c.emp).some(a=>a.estado==='Pendiente de devolución')).forEach(c=>add('bad','Sistemas',`Baja laboral con equipo sin devolver · ${c.name}`,`${assignedTo(c.emp).length} activo(s) pendiente(s) de devolución`,{v:'ti'}));
-  const pl=S.items.filter(e=>e.p==='CONFIRMADO'&&e.AS_ESTATUS==='PLAN DE RENOVACION / ENVIADO A CSI').length;if(pl)add('info','AppSheet',`${pl} equipos en plan de renovación`,'Vienen de AppSheet y esperan diagnóstico del ingeniero',{v:'ingeniero'});
-  (S.feedLog||[]).slice(0,3).forEach(f=>add('info','AppSheet',f.t,f.d,{v:'inventario'}));
+  const pl=S.items.filter(e=>e.p==='CONFIRMADO'&&e.AS_ESTATUS==='PLAN DE RENOVACION / ENVIADO A CSI').length;if(pl)add('info','Inventario',`${pl} equipos en plan de renovación`,'Vienen del inventario y esperan diagnóstico del ingeniero',{v:'ingeniero'});
+  (S.feedLog||[]).slice(0,3).forEach(f=>add('info','Inventario',f.t,f.d,{v:'inventario'}));
   const g=engCur();return g?o.filter(a=>a.act&&(a.act.eq!=null?mine(S.items[a.act.eq]):a.act.eng?g.clinicas.includes(a.act.eng):false)):o}
 const LV={bad:['p-bad','Urgente'],warn:['p-warn','Por atender'],info:['p-info','Aviso']};
 function alertRow(a,i){return `<div class="alr ${a.l}"><span class="pill ${LV[a.l][0]}">${LV[a.l][1]}</span><div class="alt"><b>${esc(a.t)}</b><div class="note">${esc(a.cat)} · ${esc(a.d)}</div></div><button class="btn sm" data-alr="${i}">Ver</button></div>`}
@@ -159,21 +159,21 @@ function mergeFeed(src){const byId={};S.items.forEach(e=>byId[e.ID_ACTIVO]=e);co
   S.items=out;S.prev=src.prev;S.src=src.name;S.dxId=null;S.buyId=null;applyAS(S.items);
   return{nNew,nCh,nOut:left.length-kept.length}}
 function feedLoad(src,stamp,silent){
-  if(!src.inv.length){toast('El archivo no tiene equipos vigentes (formato AppSheet o plantilla de Activo 360)');return}
+  if(!src.inv.length){toast('La hoja de inventario no tiene equipos vigentes');return}
   const first=!S.feedStamp||/^Demo/.test(S.src||'');let msg;
   if(first){const ti={col:S.col,ast:S.ast,cartas:S.cartas,movs:S.movs,cfg:S.cfg};init(false,src);Object.assign(S,ti);msg=`${src.inv.length} equipos vigentes · ${src.prev.length} históricos`;if(window.A360_SIM&&simulate())msg+=' · con ventas de ejemplo'}
   else{const r=mergeFeed(src);msg=`+${r.nNew} nuevos · ${r.nCh} cambiaron estatus · ${r.nOut} salieron de vigentes`}
-  S.feedStamp=stamp;(S.feedLog??=[]).unshift({t:'AppSheet actualizado desde Drive · '+fd(S.today),d:msg});S.feedLog.length=Math.min(S.feedLog.length,10);
-  log('GET','Drive · '+src.name,'g',{filas:src.total,vigentes:src.inv.length,historicos:src.prev.length},'Activo 360 lee el archivo de AppSheet guardado en Drive.');
-  save();render();toast('AppSheet actualizado · '+msg)}
+  S.feedStamp=stamp;(S.feedLog??=[]).unshift({t:'Inventario actualizado · '+fd(S.today),d:msg});S.feedLog.length=Math.min(S.feedLog.length,10);
+  log('GET','Hoja · '+src.name,'g',{filas:src.total,vigentes:src.inv.length,historicos:src.prev.length},'Activo 360 lee la hoja de inventario.');
+  save();render();toast('Inventario actualizado · '+msg)}
 function syncFeed(force){if(!GAS){toast('Disponible al publicar en Apps Script');return}
-  const fail=err=>toast('No se pudo leer el archivo de Drive: '+(err&&err.message||err));
+  const fail=err=>toast('No se pudo leer la hoja de inventario: '+(err&&err.message||err));
   google.script.run.withSuccessHandler(info=>{if(!info||!info.ok){force&&toast(info?.msg||'Configura FILE_ID en Code.gs');return}
     if(!force&&info.updated===S.feedStamp)return;force&&toast('Leyendo '+info.name+'…');
     google.script.run.withSuccessHandler(res=>{try{let rows=res.rows;
         if(!rows){const bin=atob(res.b64);let wb;if(/csv|text/i.test(res.mime)||/\.csv$/i.test(res.name)){const u=Uint8Array.from(bin,c=>c.charCodeAt(0));wb=XLSX.read(new TextDecoder('utf-8').decode(u).replace(/^\uFEFF/,''),{type:'string',raw:true})}
           else wb=XLSX.read(bin,{type:'binary',cellDates:true});rows=XLSX.utils.sheet_to_json(wb.Sheets[res.sheet&&wb.Sheets[res.sheet]?res.sheet:wb.SheetNames[0]],{defval:'',raw:false,dateNF:'dd/mm/yyyy'})}
-        feedLoad(('ID_ACTIVO' in (rows[0]||{})?mapLegacy:mapAS)(rows,'Drive · '+res.name),info.updated)}catch(e){fail(e)}}).withFailureHandler(fail).getFeedData()}).withFailureHandler(fail).getFeedInfo()}
+        feedLoad(('ID_ACTIVO' in (rows[0]||{})?mapLegacy:mapAS)(rows,'Hoja · '+res.name),info.updated)}catch(e){fail(e)}}).withFailureHandler(fail).getFeedData()}).withFailureHandler(fail).getFeedInfo()}
 function syncSheet(){syncFeed(true)}
 
 /* ---------- Estado ---------- */
@@ -186,7 +186,7 @@ const tipo=e=>e.TIPO_EQUIPO||'Escritorio';
 function freshItems(inv){return inv.map((x,i)=>({...x,TIPO_EQUIPO:/escrit/i.test(x.TIPO_EQUIPO||'Escritorio')?'Escritorio':x.TIPO_EQUIPO,_i:i,p:null,dx:null,price:null,pub:null,buyer:null,pay:null,fac:null,destD:null,hist:[]}))}
 function init(sample=true,src){src=src||base0();const lv=TRZ.live;TRZ.live=false;try{init0(sample,src)}finally{TRZ.live=lv}}
 function init0(sample,src){
-  S={cfg:defaultCfg(),meClinic:null,today:sample?T0:new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),items:freshItems(src.inv),prev:src.prev||[],src:src.name||'AppSheet',invAs:'',mod:'venta',reqs:[],notifs:[],log:[],mails:[],mailTab:'',fisDraft:null,seq:1000,view:'panel',hmTab:'ALL',city:null,engClinic:null,dxId:null,dxDraft:null,buyId:null,invQ:'',invClin:'',invSt:'',invPage:0,segArea:'',sample,
+  S={cfg:defaultCfg(),meClinic:null,today:sample?T0:new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),items:freshItems(src.inv),prev:src.prev||[],src:src.name||'Inventario',invAs:'',mod:'venta',reqs:[],notifs:[],log:[],mails:[],mailTab:'',fisDraft:null,seq:1000,view:'panel',hmTab:'ALL',city:null,engClinic:null,dxId:null,dxDraft:null,buyId:null,invQ:'',invClin:'',invSt:'',invPage:0,segArea:'',sample,
      col:[],ast:[],cartas:{},movs:[],emp:'102458',tiQ:'',tiTipo:'',tiEst:'',tiPage:0,mov:null,clinQ:''};
   applyAS(S.items);
   genTI();
@@ -479,7 +479,7 @@ const legend=items=>`<div class="legend">${items.map(([c,l])=>`<span><i style="b
 
 /* ---------- Navegación ---------- */
 const NAVS={
- venta:[['h','Equipo de clínicas','mv'],['panel','Panel ejecutivo'],['recorrido','Recorrido de un equipo'],['alertas','Alertas'],['clinicas','Activos por clínica'],['inventario','Inventario AppSheet'],['ingeniero','Ingeniero de Sistemas'],['seguimiento','Seguimiento de ventas'],['hgestion','Aprobaciones (Activo Fijo e Ingresos)'],['facturacion','Facturación'],['destruccion','Destrucción certificada'],['donacion','Donación'],['fiscal','Fiscal'],['config','Tabulador y reglas'],['ingenieros','Ingenieros y clínicas'],
+ venta:[['h','Equipo de clínicas','mv'],['panel','Panel ejecutivo'],['recorrido','Recorrido de un equipo'],['alertas','Alertas'],['clinicas','Activos por clínica'],['inventario','Inventario'],['ingeniero','Ingeniero de Sistemas'],['seguimiento','Seguimiento de ventas'],['hgestion','Aprobaciones (Activo Fijo e Ingresos)'],['facturacion','Facturación'],['destruccion','Destrucción certificada'],['donacion','Donación'],['fiscal','Fiscal'],['config','Tabulador y reglas'],['ingenieros','Ingenieros y clínicas'],
   ['h','Humand','hm'],['hbazar','Bazar de Activos'],['compra','Gestión de Servicios · compra'],['hfirma','Firma del formato de compra'],['hnotif','Notificaciones'],['h','Google'],['correos','Correos enviados'],['h','Para Humand'],['integracion','Integración técnica']],
  ing:[['h','Mis clínicas','mv'],['misequipos','Mis equipos'],['alertas','Mis alertas'],['ingeniero','Diagnóstico y entregas'],['recorrido','Recorrido de un equipo']],
  ti:[['h','Inventario de Sistemas','mt'],['alertas','Alertas'],['ti','Activos por colaborador'],['carta','Carta responsiva'],
@@ -545,7 +545,7 @@ VIEWS.panel=()=>{
   const lost=[{l:'Destruidos estando funcionales',v:[M.perdidoDest]},{l:'Cumplieron vida útil sin seguimiento',v:[M.perdidoSinSeg]},{l:`En Bazar +${C().plazo.sinVenta} días sin venta`,v:[M.perdidoEst]}];
   const lostT=M.perdidoDest+M.perdidoSinSeg+M.perdidoEst;
   const pend=['AF','ING','FAC','SIS','FIS'].map(a=>{const rs=S.reqs.filter(r=>r.state==='Pendiente'&&RT[r.type].a===a);return{a,n:rs.length,avg:rs.length?sum(rs,r=>diff(r.created,S.today))/rs.length:0,rem:sum(rs,r=>r.rem),esc:rs.filter(r=>r.esc).length}});
-  return `<div class="row"><div><h1>Panel ejecutivo</h1><p class="sub">Recuperación de valor de equipo de cómputo sustituido · ${new Set(S.items.map(e=>e.CLINICA)).size} clínicas con inventario AppSheet · ${M.Y}</p></div><span class="sp"></span><button class="btn p" data-rep>Exportar reporte de trazabilidad</button></div>
+  return `<div class="row"><div><h1>Panel ejecutivo</h1><p class="sub">Recuperación de valor de equipo de cómputo sustituido · ${new Set(S.items.map(e=>e.CLINICA)).size} clínicas en el inventario · ${M.Y}</p></div><span class="sp"></span><button class="btn p" data-rep>Exportar reporte de trazabilidad</button></div>
   <p class="sub" style="margin:-6px 0 0">Lo más importante en 30 segundos: cuántos equipos dejan de destruirse, lo que se recupera, el tiempo que se libera y el impacto ambiental.</p>
   ${(()=>{const a=alerts(),u=a.filter(x=>x.l!=="info");return u.length?`<div class="card alist"><div class="row" style="padding:6px 0 4px"><h2>Alertas de hoy</h2><span class="pill p-bad">${a.filter(x=>x.l==="bad").length} urgentes</span><span class="pill p-warn">${a.filter(x=>x.l==="warn").length} por atender</span><span class="sp"></span><button class="btn sm" data-go="alertas">Ver todas</button></div>${a.map((x,i)=>[x,i]).filter(([x])=>x.l!=="info").slice(0,4).map(([x,i])=>alertRow(x,i)).join("")}</div>`:""})()}
   <div class="hero">

@@ -345,7 +345,7 @@ function exportReport(){try{
   add('Configuración',[['Parámetro','Valor'],...Object.entries(S.cfg).flatMap(([k,v])=>typeof v==='object'&&!Array.isArray(v)?Object.entries(v).map(([k2,v2])=>[k+'.'+k2,v2]):[[k,Array.isArray(v)?v.join(' | '):v]])],[40,60]);
   add('Correos',S.mails.map(m=>({FECHA:m.d,PARA:m.to,ASUNTO:m.subj,ID_ACTIVO:m.eq!=null?S.items[m.eq].ID_ACTIVO:'',MENSAJE:m.body})));
   add('Integración',S.log.map(l=>({FECHA:l.d,METODO:l.m,ENDPOINT:l.ep,DESCRIPCION:l.desc,DATOS:l.body?JSON.stringify(l.body):''})));
-  try{const ws=XLSX.utils.json_to_sheet(asExportRows(),{header:[...AS_COLS(),'ESTATUS ACTIVO 360','PRECIO AUTORIZADO','FOLIO VENTA']});XLSX.utils.book_append_sheet(wb,ws,'AppSheet (estatus)')}catch(_){}
+  try{const ws=XLSX.utils.json_to_sheet(asExportRows(),{header:[...AS_COLS(),'ESTATUS ACTIVO 360','PRECIO AUTORIZADO','FOLIO VENTA']});XLSX.utils.book_append_sheet(wb,ws,'Inventario (estatus)')}catch(_){}
   const name=`Activo360_trazabilidad_${S.today}.xlsx`;XLSX.writeFile(wb,name);toast('Descargando '+name)}catch(err){toast('No se pudo generar el reporte en esta vista')}}
 
 /* ---------- Eventos globales ---------- */
