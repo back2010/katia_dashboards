@@ -28,12 +28,12 @@
 <div id="toast" hidden class="toast"></div>
 
 <script>window.A360_FEED=<?!= JSON.stringify(feedOn) ?>;window.A360_POLL=<?!= JSON.stringify(pollMin) ?>;window.A360_USER=<?!= JSON.stringify(userName) ?>;</script>
-<script>
 <?!= include('Xlsx1'); ?>
 <?!= include('Xlsx2'); ?>
 <?!= include('Xlsx3'); ?>
 <?!= include('Xlsx4'); ?>
 <?!= include('Xlsx5'); ?>
+<script>(function(){var t=[1,2,3,4,5].map(function(k){return document.getElementById('a360-xlsx'+k).textContent.replace(/^\n/,'').replace(/\n$/,'')}).join('\n');var s=document.createElement('script');s.text=t;document.head.appendChild(s)})();
 ;(window.A360_OK=window.A360_OK||[]).push('Xlsx');
 </script>
 <?!= include('Datos1'); ?>

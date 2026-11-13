@@ -45,8 +45,13 @@ for i, sz in enumerate(size):
     acc += sz
     if len(cuts) < 5 and acc >= tot * len(cuts) / 5: cuts.append(i + 1)
 cuts.append(n)
-for k in range(5): files['Xlsx%d' % (k + 1)] = '\n'.join(L[cuts[k]:cuts[k + 1]])
-assert '\n'.join(files['Xlsx%d' % k] for k in range(1, 6)) == xlsx
+# Cada parte va en un <script type="text/plain"> para que HtmlService la acepte como HTML válido
+# (createHtmlOutputFromFile rechaza JavaScript suelto); un cargador en Index las une y las ejecuta.
+XP = ['\n'.join(L[cuts[k]:cuts[k + 1]]) for k in range(5)]
+assert '\n'.join(XP) == xlsx and '</script' not in xlsx.lower()
+for k in range(5): files['Xlsx%d' % (k + 1)] = '<script type="text/plain" id="a360-xlsx%d">\n' % (k + 1) + XP[k] + '\n</script>'
+XLOAD = ("<script>(function(){var t=[1,2,3,4,5].map(function(k){return document.getElementById('a360-xlsx'+k).textContent.replace(/^\\n/,'').replace(/\\n$/,'')}).join('\\n');"
+         "var s=document.createElement('script');s.text=t;document.head.appendChild(s)})();")
 rows = ash['rows']; h = len(rows) // 2
 files['Datos1'] = '<script>\n/* Activo 360 · Datos1: directorio de clínicas */\nvar A360_CLIN=[\n' + ',\n'.join(J(c) for c in clin) + '\n];' + OK('Datos1') + '</script>'
 files['Datos2'] = '<script>\n/* Activo 360 · Datos2: vista AppSheet (parte 1) */\nvar A360_ROWS=[\n' + ',\n'.join(J(r) for r in rows[:h]) + '\n];' + OK('Datos2') + '</script>'
@@ -63,7 +68,7 @@ chk = """<script>(function(){var ok=window.A360_OK||[],need=['Xlsx','Datos1','Da
 if(m.length){var d=document.createElement('div');d.setAttribute('style','position:fixed;left:16px;right:16px;top:16px;z-index:999;padding:16px 18px;border-radius:16px;background:#fde5e1;color:#7a1d12;border:1px solid #c0392b;font:14px/1.45 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.2)');
 d.innerHTML='<b>Activo 360 no cargó completo.</b> Vuelve a pegar completo (de principio a fin) y guarda: <b>'+m.map(function(n){return n==='Xlsx'?'Xlsx1 a Xlsx5':n}).join(', ')+'</b>. Después crea una nueva versión de la implementación.';document.body.appendChild(d)}})();</script>"""
 scripts = ("<script>window.A360_FEED=<?!= JSON.stringify(feedOn) ?>;window.A360_POLL=<?!= JSON.stringify(pollMin) ?>;window.A360_USER=<?!= JSON.stringify(userName) ?>;</script>\n"
-           "<script>\n" + "\n".join("<?!= include('Xlsx%d'); ?>" % k for k in range(1, 6)) + OK('Xlsx') + "</script>\n"
+           + "\n".join("<?!= include('Xlsx%d'); ?>" % k for k in range(1, 6)) + "\n" + XLOAD + OK('Xlsx') + "</script>\n"
            + "\n".join("<?!= include('%s'); ?>" % n for n in ['Datos1', 'Datos2', 'Datos3', 'Logo', 'App1', 'App2', 'App3']) + "\n" + chk)
 files['Index'] = shell.replace('{{STYLES}}', "<?!= include('Estilos'); ?>").replace('{{LOGO}}', '').replace('{{SCRIPTS}}', scripts)
 for k, c in files.items():
