@@ -1,21 +1,55 @@
-# Reglas del repo (Claude Code y Codex)
+# AGENTS.md — katia_dashboards
 
-Dashboards y herramientas internas de Katia. Estas reglas aplican a cualquier agente que trabaje aquí.
+Guía para agentes de IA (Codex, Claude) que escriben o revisan código en este repo.
 
-## Organización
-- Una carpeta por proyecto en la raíz (ej. `activo-360/`). Cada carpeta tiene su propio `CLAUDE.md` o `HANDOFF.md` con contexto y comandos: léelo antes de cambiar algo.
-- Nada de archivos sueltos en la raíz salvo `README.md` y este `AGENTS.md`.
+## Contexto
+Dashboards y herramientas internas para operación de una red de clínicas (Salud Digna) y una clínica de primer nivel. Usuarios: personal operativo y médico, a menudo en tablet y con conectividad limitada.
 
-## Forma de trabajar
-- Responde en español, breve y directo. Sin narrar pasos.
-- Edita con reemplazos exactos, usando el texto de alrededor como ancla. No reescribas archivos completos si no hace falta.
-- Valida con scripts de Python (Playwright de Python para probar páginas), no con Node.
-- Cambios en una rama propia y por pull request a `main`; Codex revisa los PR.
-
-## Arquitectura de los dashboards
-- HTML autocontenido: sin servidor propio y sin dependencias externas en tiempo de ejecución (nada de CDN). Librerías, imágenes y datos van dentro del proyecto.
-- Cuando se publican en Apps Script, el único "servidor" es Apps Script (`doGet` + `include`). Archivos de Apps Script sin caracteres de control, sin BOM y en partes pequeñas para pegarlos sin errores.
-- Modo claro y oscuro en todos.
+## Reglas de arquitectura (obligatorias)
+- Cada dashboard es **un solo archivo HTML autocontenido**: HTML + CSS + JS inline.
+- **Sin servidor.** Debe funcionar abriendo el archivo local (`file://`).
+- **Sin dependencias externas en runtime**: nada de CDN, fuentes remotas, `fetch` a APIs ni imágenes remotas. Si se necesita una librería, va embebida.
+- Debe funcionar **offline**.
+- Responsive: usable en tablet (≥768 px) y escritorio.
+- Modo claro y oscuro.
+- **Excepción, proyectos grandes publicados en Apps Script** (ej. `activo-360/`): el código fuente se separa en `src/` y un `tools/build.py` genera el HTML único y los archivos de Apps Script en `dist/`. El único "servidor" es Apps Script (`doGet` + `include`). Se edita `src/`, nunca `dist/` a mano. Archivos de Apps Script sin caracteres de control, sin BOM y en partes pequeñas para pegarlos sin errores.
 
 ## Datos
-- Nunca subas datos reales de Salud Digna (exportaciones de AppSheet, nombres de pacientes, colaboradores, correos). Usa datos inventados con un generador de semilla fija.
+- **Prohibido subir datos reales de pacientes** (nombres, CURP, NSS, teléfonos, expedientes, notas clínicas). Solo datos de prueba ficticios.
+- Tampoco datos reales de Salud Digna: exportaciones de AppSheet, nombres de colaboradores o ingenieros, correos. Usa datos inventados con un generador de semilla fija.
+- Si el código maneja datos sensibles, que no los persista fuera del navegador ni los envíe a ningún lado.
+- `localStorage` solo envuelto en `try/catch`; la página debe funcionar si falla.
+
+## Qué revisar con prioridad (P0/P1)
+1. Violaciones de las reglas de arquitectura (dependencias externas, llamadas de red).
+2. Cálculos incorrectos en indicadores, porcentajes, metas, rankings o fechas (zona horaria America/Mazatlan).
+3. Datos de pacientes o credenciales en el repo.
+4. Errores de JS que rompan la carga o dejen la vista en blanco.
+5. Inyección de HTML (`innerHTML` con datos sin escapar).
+
+## Estilo
+- Interfaz y textos en español.
+- Validaciones/scripts de soporte en Python, no Node.
+- Respuestas breves y directas, sin narrar pasos.
+- Cambios mínimos y localizados, con reemplazos exactos usando el texto de alrededor como ancla; no reescribir archivos completos sin motivo.
+- Cambios en una rama propia y por pull request a `main`; Codex revisa los PR.
+- Si la carpeta tiene `CLAUDE.md` o `HANDOFF.md`, léelo antes de cambiar algo.
+
+## Estructura
+```
+katia_dashboards/
+├── AGENTS.md
+├── README.md                  # índice de proyectos
+├── activo-360/                # demo LAI; src/ → tools/build.py → dist/ (HTML único + Apps Script)
+├── turnero/
+├── digital-expert/
+├── recuperacion-pacientes/
+├── fallas-sistema-usg/        # Apps Script (.gs + .html)
+├── hub-mi-espacio/            # Apps Script
+├── diplomado-ultrasonido/
+├── imss-formatos/             # herramienta offline consulta
+└── _compartido/               # estilos/utilidades reutilizables (copiar inline, no enlazar)
+```
+- Cada carpeta: `index.html` (o `.gs` en Apps Script) + `README.md` breve (qué hace, de dónde salen los datos).
+- Datos de prueba en `<proyecto>/datos-prueba/`. Nunca datos reales.
+- Archivos sueltos en la raíz no se aceptan, salvo `AGENTS.md` y `README.md`.
