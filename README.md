@@ -4,6 +4,7 @@ Dashboards y herramientas internas. Reglas para agentes y revisión: [`AGENTS.md
 
 | Carpeta | Contenido |
 |---|---|
+| [`activo-360/`](activo-360/) | Demo del proyecto LAI: venta, destrucción o donación del equipo de cómputo sustituido en clínicas, e inventario de Sistemas. Apps Script. |
 | [`turnero/`](turnero/) | Ranking de clínicas por prioridad de instalación de turnero (cola de ultrasonido). |
 | [`digital-expert/`](digital-expert/) | Dashboard para tablet del despliegue de equipo digital. |
 | [`recuperacion-pacientes/`](recuperacion-pacientes/) | Desempeño del equipo telefónico de Recuperación de Pacientes. |
