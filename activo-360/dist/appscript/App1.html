@@ -47,7 +47,7 @@ const RT={
 const ST={
   VIGENTE:['Vigente','p-ok'],ALERTA:['Alerta: cumple vida útil en ≤3 meses','p-warn'],VENCIDO:['Cumplió vida útil','p-bad'],
   CONFIRMADO:['Por diagnosticar','p-info'],PRECIO:['En Activo Fijo (precio)','p-hm'],PUBLICADO:['Disponible en Bazar','p-sd'],SUBASTA:['En subasta','p-warn'],
-  FIRMAS:['Congelado · firmas del formato','p-hm'],PAGO:['Congelado · esperando depósito','p-warn'],DEPOSITO:['Congelado · Ingresos valida','p-hm'],
+  FIRMAS:['Apartado · firmas del formato','p-hm'],PAGO:['Apartado · esperando depósito','p-warn'],DEPOSITO:['Apartado · Ingresos valida','p-hm'],
   FACTURA:['Vendido · en Facturación','p-info'],AGENDA:['Vendido · por agendar entrega','p-info'],ENTREGA:['Vendido · cita de entrega','p-info'],
   ENTREGADO:['Vendido y entregado','p-ok'],DESTRUCCION:['Para destrucción certificada','p-mut'],RECOLECCION:['Recolección programada','p-mut'],DESTRUIDO:['Destruido (certificado)','p-mut'],
   REUSO_VB:['Reutilización · espera visto bueno','p-info'],REUSO:['Reutilización aprobada · por reasignar','p-info'],REUSADO:['Reasignado en la clínica','p-ok'],DEST_VB:['Destrucción · espera visto bueno','p-info'],
@@ -137,7 +137,7 @@ function askName(){const n=prompt('¿Cómo quieres que te salude?',userName());i
 /* ---------- Alertas ---------- */
 function alerts(){if(!S)return[];const o=[],K=C(),add=(l,cat,t,d,act)=>o.push({l,cat,t,d,act});
   const byC=(f)=>{const g={};S.items.filter(f).forEach(e=>(g[e.CLINICA]??=[]).push(e));return Object.entries(g).sort((a,b)=>b[1].length-a[1].length)};
-  byC(e=>!e.p&&baseSt(e)==='VENCIDO').forEach(([c,l])=>add('bad','Vida útil',`${c}: ${l.length} ${l.length>1?'equipos cumplieron':'equipo cumplió'} 5 años sin iniciar proceso`,`Instalados ${[...new Set(l.map(e=>e.as?.['INSTALACION']||fd(e.FECHA_ADQUISICION)))].slice(0,3).join(', ')}${l.length>3?'…':''} · ${l[0].INGENIERO}`,{eng:c}));
+  byC(e=>!e.p&&baseSt(e)==='VENCIDO').forEach(([c,l])=>add('warn','Vida útil',`${c}: ${l.length} ${l.length>1?'equipos cumplieron':'equipo cumplió'} 5 años sin iniciar proceso`,`Instalados ${[...new Set(l.map(e=>e.as?.['INSTALACION']||fd(e.FECHA_ADQUISICION)))].slice(0,3).join(', ')}${l.length>3?'…':''} · ${l[0].INGENIERO}`,{eng:c}));
   S.items.map(e=>[e,sisTask(e)]).filter(([e,t])=>t&&!t.ok).forEach(([e,t])=>add('bad','Sistemas',`Diagnóstico atrasado · ${e.ID_ACTIVO}`,`${e.CLINICA} · ${t.days} días hábiles (meta ${K.sla.SIS}) · ${e.INGENIERO}`,{eq:e._i}));
   S.reqs.filter(r=>r.state==='Pendiente'&&!slaOk(r)).forEach(r=>{const e=S.items[r.eq];if(!e)return;add('bad',AREAS[RT[r.type].a]||'Solicitud',`${RT[r.type].n} fuera de tiempo${r.esc?' · escalada':''}`,`${r.id} · ${e.ID_ACTIVO} · ${e.CLINICA} · ${reqDays(r)} días hábiles (meta ${slaOf(r)})`,{eq:e._i})});
   S.items.filter(e=>e.p==='PAGO'&&e.pay?.dl&&diff(S.today,e.pay.dl)<=1).forEach(e=>add('warn','Ingresos',`Depósito vence ${e.pay.dl===S.today?'hoy':fd(e.pay.dl)} · ${e.sale?.folio}`,`${e.buyer} · ${money(e.pay.amount)} · si no paga, el equipo regresa al Bazar`,{eq:e._i}));
@@ -362,11 +362,11 @@ function genTI(){
 /* ---------- Flujo de venta ---------- */
 function release(e,why){S.reqs.filter(r=>r.eq===e._i&&r.state==='Pendiente').forEach(r=>closeReq(r,'Cancelada'));
   H(e,why+' · el equipo regresa al Bazar','COL','rem');notify(e.buyer,`${why}. El equipo ${e.ID_ACTIVO} regresó al Bazar.`,'rem');
-  log('PUT','/products/'+e.ID_ACTIVO,'pub',{status:'DISPONIBLE',stock:1},'Descongela el equipo en el Bazar.');e.p='PUBLICADO';e.buyer=null;e.pay=null;e.sale=null}
+  log('PUT','/products/'+e.ID_ACTIVO,'pub',{status:'DISPONIBLE',stock:1},'Libera el equipo en el Bazar.');e.p='PUBLICADO';e.buyer=null;e.pay=null;e.sale=null}
 const rfcDemo=n=>{const w=nom(n).toUpperCase().normalize('NFD').replace(/[^A-Z ]/g,'').split(' ').filter(Boolean);return((w[1]||'XX').slice(0,2)+(w[0]||'XX').slice(0,2)).padEnd(4,'X')+'850312AB1'};
 function startSale(e,buyer,amount,fiscal,info){if(fiscal&&fiscal.rfc&&!info)fiscal={...fiscal,nombre:nom(buyer),rfc:rfcDemo(buyer)};e.buyer=buyer;e.pay={amount};
   e.sale={folio:'VTA-'+S.today.slice(0,4)+'-'+String(++S.seq).padStart(5,'0'),start:S.today,files:[],fiscal,emp:info?.emp||String(100000+S.seq),puesto:info?.puesto||buyer.split(' · ')[1]||'',area:info?.area||buyer.split(' · ')[1]||'',jefe:info?.jefe||JEFES[S.seq%JEFES.length],firmDl:addBiz(S.today,C().plazo.firmas)};
-  e.p='FIRMAS';H(e,`Solicitud de compra de ${buyer} · ${fiscalTxt(fiscal)} · equipo congelado`,'COL');
+  e.p='FIRMAS';H(e,`Solicitud de compra de ${buyer} · ${fiscalTxt(fiscal)} · equipo apartado`,'COL');
   log('GET','/service-management/service-items/{sid}/tasks','pub',{servicio:'Compra de equipo',initiatorIds:e.sale.emp,createdAtFrom:S.today},'Activo 360 lee la solicitud "Compra de equipo" que el colaborador llenó en Gestión de Servicios de Humand.');
   log('PUT','/products/'+e.ID_ACTIVO,'pub',{status:'CONGELADO',folio:e.sale.folio},'Congela el equipo en el Bazar mientras se concreta la compra.');
   log('POST','https://www.googleapis.com/drive/v3/files','g',{carpeta:'Activo 360 / Ventas / '+e.sale.folio,mimeType:'application/vnd.google-apps.folder'},'Crea la carpeta de la venta en Drive con su folio.');
@@ -442,6 +442,7 @@ function seed(){
   if(ex[2])at(12,()=>{const e=ex[2];conf(e);go_(1);dxr(e,'Entrega de resultados');pastReq('VB',e,S.today,1);go_(1);H(e,`Activo Fijo aprobó reutilizarlo en ${e.sal.area}`,'AF','hmn');go_(2);
     e.sal.recibe='Laura Ríos · Entrega de resultados';e.sal.fin=S.today;e.sal.de=e.SERVICIO;e.sal.acta=`Acta de reasignación ${e.ID_ACTIVO}.pdf`;e.p='REUSADO';H(e,`Reasignado a ${e.sal.area} · recibe ${e.sal.recibe} · acta firmada`,'SIS')});
   if(ex[3])at(1,()=>{const e=ex[3];conf(e);e.dx={...DEFDX,enciende:'no',comp:['RAM'],acc:[],foto:FOTO_EJ};e.sal={tipo:'DEST',d:S.today};H(e,'No enciende · se recuperan RAM · se propone destrucción','SIS');e.p='DEST_VB';newReq('VB',e)});
+  S.items.filter(e=>e.p==='PUBLICADO'&&!e.price?.adj).slice(-2).forEach(e=>e.posted=false);
   S.log=S.log.slice(0,25);S.mails=S.mails.slice(0,30);
 }
 /* Ventas simuladas sobre el inventario cargado de la hoja (demo): mismas que seed(), una sola vez. No escribe en la traza. */
@@ -516,8 +517,8 @@ const legend=items=>`<div class="legend">${items.map(([c,l])=>`<span><i style="b
 /* ---------- Navegación ---------- */
 const N_PEND=['pend','Mis pendientes'],N_EQ=['inventario','Equipos'],N_SAL=['salidas','Salidas sin venta'],N_PAN=['panel','Panel'],N_REG=['reglas','Reglas'];
 const NAVS={
- admin:[N_PEND,N_EQ,N_SAL,N_PAN,N_REG,['h','Modo presentación','hm'],['recorrido','Recorrido de un equipo'],['hbazar','Humand · equipos disponibles'],['compra','Humand · compra'],['hfirma','Humand · firmas'],['hnotif','Humand · avisos'],['correos','Anexo · correos'],['integracion','Anexo · integración']],
- ing:[N_PEND,['misequipos','Equipos']],af:[N_PEND,N_EQ,N_SAL,N_PAN],ingr:[N_PEND,N_EQ],fac:[N_PEND,N_EQ],fis:[N_PEND,N_EQ],sis:[N_PEND,N_EQ,N_SAL,N_PAN,N_REG],dir:[N_PAN,['recorrido','Recorrido de un equipo']]};
+ admin:[N_PEND,N_EQ,N_SAL,N_PAN,N_REG,['h','Modo presentación','hm'],['recorrido','Escenarios'],['hbazar','Humand · equipos disponibles'],['compra','Humand · compra'],['hfirma','Humand · firmas'],['hnotif','Humand · avisos'],['correos','Anexo · correos'],['integracion','Anexo · integración']],
+ ing:[N_PEND,['misequipos','Equipos']],af:[N_PEND,N_EQ,N_SAL,N_PAN],ingr:[N_PEND,N_EQ],fac:[N_PEND,N_EQ],fis:[N_PEND,N_EQ],sis:[N_PEND,N_EQ,N_SAL,N_PAN,N_REG],dir:[N_PAN,['recorrido','Escenarios']]};
 /* pantallas de trabajo que no están en el menú: a qué entrada pertenecen */
 const PARENT={ingeniero:'pend',hgestion:'pend',facturacion:'pend',fiscal:'pend',alertas:'pend',reuso:'salidas',donacion:'salidas',destruccion:'salidas',config:'reglas',ingenieros:'reglas',clinicas:'inventario',seguimiento:'inventario'};
 const curRole=()=>ING()?'ing':AREA()||'admin';
@@ -555,7 +556,7 @@ function tasksFor(r,all){const G=[],add=(t,items,info)=>{if(items.length)G.push(
     add('Reasignaciones por hacer',my.filter(e=>e.p==='REUSO').map(e=>({e,what:`Aprobado. Mueve el equipo a ${e.sal?.area||'su nueva área'} y registra quién lo recibe`,days:0,late:false,btn:'Registrar reasignación',act:{reu:e._i}})));
     add('Destrucciones por recoger',my.filter(e=>e.p==='DESTRUCCION').map(e=>({e,what:'Aprobado para destrucción. Pide la recolección al proveedor',days:e.destD?Math.max(0,diff(e.destD,S.today)):0,late:!!e.destD&&diff(e.destD,S.today)>30,meta:30,btn:'Pedir recolección',act:{rec:e._i}})));
     add('Certificados por subir',my.filter(e=>e.p==='RECOLECCION').map(e=>({e,what:'Ya se recolectó. Sube el certificado de destrucción para cerrar',days:0,late:false,btn:'Subir certificado',act:{cert:e._i}})))}
-  if(r==='af'){rq('VB','Salidas por aprobar','Revisar','req',e=>e.sal?.tipo==='REUSO'?`Sistemas propone reutilizarlo en ${e.sal.area}`:'Sistemas propone destruirlo: no enciende');rq('PRECIO','Precios por definir','Definir precio','req','Revisa el diagnóstico y define el precio');rq('DECISION','Equipos sin venta','Decidir','req',e=>`Lleva ${e.pub?diff(e.pub,S.today):15} días publicado sin venta. Decide qué sigue`);rq('DONFACT','Donaciones por documentar','Subir documentos','req',e=>`Sube la factura de ${e.don?.org||'la donataria'} y el acta de recepción`);}
+  if(r==='af'){if(hmMode()==='hoy')add('Publicaciones por subir a Humand',S.items.filter(e=>e.p==='PUBLICADO'&&e.posted===false).map(e=>({e,what:'Ya tiene precio. Publícalo en Humand con el texto y la foto que te dejamos listos',days:Math.max(0,diff(e.pub||S.today,S.today)),late:diff(e.pub||S.today,S.today)>1,meta:1,btn:'Preparar publicación',act:{pub:e._i}})));rq('VB','Salidas por aprobar','Revisar','req',e=>e.sal?.tipo==='REUSO'?`Sistemas propone reutilizarlo en ${e.sal.area}`:'Sistemas propone destruirlo: no enciende');rq('PRECIO','Precios por definir','Definir precio','req','Revisa el diagnóstico y define el precio');rq('DECISION','Equipos sin venta','Decidir','req',e=>`Lleva ${e.pub?diff(e.pub,S.today):15} días publicado sin venta. Decide qué sigue`);rq('DONFACT','Donaciones por documentar','Subir documentos','req',e=>`Sube la factura de ${e.don?.org||'la donataria'} y el acta de recepción`);}
   if(r==='ingr')rq('DEPOSITO','Depósitos por validar','Validar depósito','req',e=>`Revisa el váucher de ${String(e.buyer||'').split(' · ')[0]} y confirma el depósito`);
   if(r==='fac')rq('FACTURA','Ventas por facturar','Adjuntar factura',{v:'facturacion'},e=>`Emite la factura de ${e.sale?.folio||'la venta'} y adjúntala`);
   if(r==='fis')rq('REVFIS','Donaciones por revisar','Revisar',{v:'fiscal'},e=>`Revisa la factura de ${e.don?.org||'la donataria'}`);
@@ -578,7 +579,7 @@ VIEWS.pend=()=>{const r=curRole();
   ${done.length?`<details class="card tk-done"><summary>Ya resolví · últimos ${done.length}</summary>${done.map(q=>`<div class="tk-r" data-eq="${q.eq}"><span>${eqLine(S.items[q.eq])}</span><span class="note">${esc(RT[q.type].n)} · ${esc(q.state)} · ${esc(q.res||'')}</span></div>`).join('')}</details>`:''}`};
 after.pend=()=>{$$('[data-as]').forEach(b=>b.onclick=()=>b.dataset.as==='ing'?setRole('ing',engList()[0]?.id):setRole(b.dataset.as));
   const F=curRole()==='admin'?[]:tasks().flat;
-  $$('[data-tk]').forEach(b=>b.onclick=()=>{const a=F[+b.dataset.tk].act;if(a.req){openReq(a.req);return}if(a.reu!=null){fReuso(S.items[a.reu]);return}if(a.don!=null){fDonEnt(S.items[a.don]);return}if(a.rec!=null){fRecoleccion(S.items[a.rec]);return}if(a.cert!=null){fCert(S.items[a.cert]);return}if(a.eq!=null){openEq(a.eq);return}if(a.del!=null){openDelivery(a.del);return}if(a.clin){openClinic(a.clin);return}
+  $$('[data-tk]').forEach(b=>b.onclick=()=>{const a=F[+b.dataset.tk].act;if(a.req){openReq(a.req);return}if(a.pub!=null){fPublicar(S.items[a.pub]);return}if(a.reu!=null){fReuso(S.items[a.reu]);return}if(a.don!=null){fDonEnt(S.items[a.don]);return}if(a.rec!=null){fRecoleccion(S.items[a.rec]);return}if(a.cert!=null){fCert(S.items[a.cert]);return}if(a.eq!=null){openEq(a.eq);return}if(a.del!=null){openDelivery(a.del);return}if(a.clin){openClinic(a.clin);return}
     if(a.dx!=null){S.engClinic=S.items[a.dx].CLINICA;S.dxId=a.dx;if(S.dxDraft?.id!==a.dx)S.dxDraft=null;go('ingeniero');$('.dxc')?.scrollIntoView({block:'start'});return}
     if(a.eng){S.engClinic=a.eng;S.dxId=null;go('ingeniero');return}if(a.tab)S.hmTab=a.tab;if(a.sal)S.salTab=a.sal;go(a.v)})};
 
@@ -624,7 +625,7 @@ function miniTile(label,val,st,what){return `<div class="mtile"><div class="row"
 VIEWS.panel=()=>{
   const M=metrics(),it=S.items,by=k=>it.filter(e=>stOf(e)===k).length;
   const nY=M.yearItems.length,nSold=M.sold.length,nDest=M.destr.length,nProc=M.yearItems.filter(e=>e.p&&!SOLD.includes(e.p)&&!DESTR.includes(e.p)&&e.p!=='DONADO').length;
-  const pct=M.meta?M.recuperado/M.meta:0;
+  const pct=M.meta?M.recuperado/M.meta:0,nReu=it.filter(e=>e.p==='REUSADO').length,nVida=M.sold.length+M.donados.length+nReu;
   // proyección red
   const yrs=[0,1,2,3,4,5].map(k=>String(+M.Y+k));const nice=Math.ceil(Math.max(...yrs.map(y=>M.proj[y]||0))/500)*500||500;const W=560,Hh=190,bw=60,gap=(W-40-bw*6)/5;
   const svg=`<svg viewBox="0 0 ${W} ${Hh+42}" style="width:100%;height:auto" role="img" aria-label="Proyección de sustitución por año">
@@ -636,31 +637,32 @@ VIEWS.panel=()=>{
   const lost=[{l:'Destruidos estando funcionales',v:[M.perdidoDest]},{l:'Cumplieron vida útil sin seguimiento',v:[M.perdidoSinSeg]},{l:`En Bazar +${C().plazo.sinVenta} días sin venta`,v:[M.perdidoEst]}];
   const lostT=M.perdidoDest+M.perdidoSinSeg+M.perdidoEst;
   const pend=['AF','ING','FAC','SIS','FIS'].map(a=>{const rs=S.reqs.filter(r=>r.state==='Pendiente'&&RT[r.type].a===a);return{a,n:rs.length,avg:rs.length?sum(rs,r=>diff(r.created,S.today))/rs.length:0,rem:sum(rs,r=>r.rem),esc:rs.filter(r=>r.esc).length}});
-  return `<div class="row"><div><h1>Panel ejecutivo</h1><p class="sub">Recuperación de valor de equipo de cómputo sustituido · ${new Set(S.items.map(e=>e.CLINICA)).size} clínicas en el inventario · ${M.Y}</p></div><span class="sp"></span><button class="btn p" data-rep>Exportar reporte de trazabilidad</button></div>
+  return `<div class="row"><div><h1>Panel</h1><p class="sub">Recuperación de valor de equipo de cómputo sustituido · ${new Set(S.items.map(e=>e.CLINICA)).size} clínicas en el inventario · ${M.Y}</p></div><span class="sp"></span><button class="btn p" data-rep>Exportar reporte de trazabilidad</button></div>
   <p class="sub" style="margin:-6px 0 0">Lo más importante en 30 segundos: cuántos equipos dejan de destruirse, lo que se recupera, el tiempo que se libera y el impacto ambiental.</p>
-  ${(()=>{const a=alerts(),u=a.filter(x=>x.l!=="info");return u.length?`<div class="card alist"><div class="row" style="padding:6px 0 4px"><h2>Alertas de hoy</h2><span class="pill p-bad">${a.filter(x=>x.l==="bad").length} urgentes</span><span class="pill p-warn">${a.filter(x=>x.l==="warn").length} por atender</span><span class="sp"></span><button class="btn sm" data-go="alertas">Ver todas</button></div>${a.map((x,i)=>[x,i]).filter(([x])=>x.l!=="info").slice(0,4).map(([x,i])=>alertRow(x,i)).join("")}</div>`:""})()}
   <div class="hero">
-   ${heroTile('reuse','var(--sd)','Equipos con segunda vida',M.sold.length+M.donados.length,`de ${nY} que cumplen vida útil en ${M.Y}`,(M.sold.length+M.donados.length)/Math.max(nY,1),`${M.sold.length} vendidos a colaboradores y ${M.donados.length} donados, en lugar de destruirse.`)}
+   ${heroTile('reuse','var(--sd)','Equipos con segunda vida',nVida,`de ${nY} que cumplen vida útil en ${M.Y}`,nVida/Math.max(nY,1),`${M.sold.length} vendidos a colaboradores, ${M.donados.length} donados y ${nReu} ${nReu===1?'reutilizado':'reutilizados'} en su clínica, en lugar de destruirse.`)}
    ${heroTile('coin','var(--amber)','Recuperado por venta',money(M.recuperado),`${Math.round(pct*100)} % de la meta ${M.Y} (${money(M.meta)})`,pct,'Lo que pagaron los colaboradores por equipo que antes se destruía sin recuperar nada.')}
    ${heroTile('clock','var(--info)','Horas de trabajo liberadas',Math.round(M.hhAhorro).toLocaleString('es-MX')+' h',`≈ ${Math.round(M.hhAhorro/8)} jornadas de 8 horas`,null,`Tiempo que ya no se va en Excel, correos, impresiones y seguimiento manual (${(HHM-HHA).toFixed(1)} h menos por venta).`)}
    ${heroTile('leaf','var(--ok)','Residuo electrónico evitado',Math.round(M.kgReus).toLocaleString('es-MX')+' kg',`${Math.round(M.tasaReus*100)} % del equipo se reutiliza`,M.tasaReus,'Peso del equipo vendido o donado que no terminó en destrucción.')}
-  </div>
-  <h2 class="sech">Así va la operación</h2>
-  <div class="minis">
-   ${miniTile('Tiempos cumplidos',Math.round(M.slaPct*100)+' %',M.slaPct>=.8?['ok','✓','En meta']:['warn','!','Atención'],`Solicitudes resueltas dentro del tiempo acordado. ${M.fuera} van tarde hoy.`)}
-   ${miniTile('En proceso de venta',S.items.filter(e=>['PRECIO','PUBLICADO','SUBASTA',...FROZEN].includes(e.p)).length+' equipos',null,`En precio, publicados o congelados en firma y pago · ${money(M.proceso)}.`)}
-   ${miniTile('Satisfacción',M.sat.toFixed(1)+' / 5',M.sat>=4?['ok','✓','Buena']:['warn','!','Revisar'],`Encuesta de 3 preguntas al recibir el equipo · ${M.surv.length} respuestas.`)}
-   ${miniTile('Sin seguimiento',M.sinSeg.length,M.sinSeg.length?['bad','!','Actuar']:['ok','✓','Al día'],'Cumplieron su vida útil y nadie ha iniciado el proceso.')}
-   ${miniTile('Destruidos',nDest,M.destFunc.length?['warn','!',M.destFunc.length+' funcionaban']:null,`Sin valor de venta, con certificado. Los que funcionaban se pudieron vender (${money(M.perdidoDest)}).`)}
-   ${miniTile('Valor no recuperado',money(lostT),null,'Equipo funcional destruido, sin seguimiento o detenido en el Bazar.')}
-   ${miniTile('Donados',M.donados.length,null,`A donatarias autorizadas · ${M.don.length-M.donados.length} en proceso.`)}
-   ${miniTile(`Expectativa ${+M.Y+1}`,kmoney(M.redPot1),null,`${M.redY1.toLocaleString('es-MX')} escritorios cumplen 5 años; se estima vender ${Math.round(C().aptos*100)} % a ${money(M.avgDesk)} en promedio.`)}
   </div>
   <div class="grid g2">
    <div class="card gauge"><h2 style="align-self:flex-start">Recuperación ${M.Y} vs meta</h2>${gauge([{v:M.recuperado,c:'var(--sd)'},{v:Math.min(M.proceso,Math.max(0,M.meta-M.recuperado)),c:'var(--amber)'}],Math.max(M.meta,1),(pct*100).toFixed(0)+'%',`${money(M.recuperado)} de ${money(M.meta)}`,pct)}
     ${legend([['var(--sd)','Recuperado'],['var(--amber)','En proceso'],['var(--surface2)','Por recuperar']])}</div>
    <div class="card gauge"><h2 style="align-self:flex-start">Equipos dispuestos ${M.Y}</h2>${gauge([{v:nSold,c:'var(--sd)'},{v:M.donados.length,c:'var(--info)'},{v:nDest,c:'var(--bad)'},{v:nProc,c:'var(--hm)'}],Math.max(nY,1),Math.round(100*(nSold+nDest+M.donados.length)/Math.max(nY,1))+'%',`${nSold} vendidos · ${M.donados.length} donados · ${nDest} destruidos de ${nY}`,(nSold+nDest+M.donados.length)/Math.max(nY,1))}
     ${legend([['var(--sd)','Vendidos'],['var(--info)','Donados'],['var(--bad)','Destruidos'],['var(--hm)','En proceso'],['var(--surface2)','Pendientes']])}</div>
+  </div>
+  <details class="more" id="panmore" ${S.panMore?'open':''}><summary><b>Más indicadores</b><span class="note">tiempos por área, dinero no recuperado, horas por venta, inventario por etapa y proyección</span></summary><div class="more-b">
+  ${(()=>{const a=alerts(),u=a.filter(x=>x.l!=="info");return u.length?`<div class="card alist"><div class="row" style="padding:6px 0 4px"><h2>Alertas de hoy</h2><span class="pill p-bad">${a.filter(x=>x.l==="bad").length} urgentes</span><span class="pill p-warn">${a.filter(x=>x.l==="warn").length} por atender</span><span class="sp"></span><button class="btn sm" data-go="alertas">Ver todas</button></div>${a.map((x,i)=>[x,i]).filter(([x])=>x.l!=="info").slice(0,4).map(([x,i])=>alertRow(x,i)).join("")}</div>`:""})()}
+  <h2 class="sech">Así va la operación</h2>
+  <div class="minis">
+   ${miniTile('Tiempos cumplidos',Math.round(M.slaPct*100)+' %',M.slaPct>=.8?['ok','✓','En meta']:['warn','!','Atención'],`Solicitudes resueltas dentro del tiempo acordado. ${M.fuera} van tarde hoy.`)}
+   ${miniTile('En proceso de venta',S.items.filter(e=>['PRECIO','PUBLICADO','SUBASTA',...FROZEN].includes(e.p)).length+' equipos',null,`En precio, publicados o apartados en firma y pago · ${money(M.proceso)}.`)}
+   ${miniTile('Satisfacción',M.sat.toFixed(1)+' / 5',M.sat>=4?['ok','✓','Buena']:['warn','!','Revisar'],`Encuesta de 3 preguntas al recibir el equipo · ${M.surv.length} respuestas.`)}
+   ${miniTile('Sin seguimiento',M.sinSeg.length,M.sinSeg.length?['bad','!','Actuar']:['ok','✓','Al día'],'Cumplieron su vida útil y nadie ha iniciado el proceso.')}
+   ${miniTile('Destruidos',nDest,M.destFunc.length?['warn','!',M.destFunc.length+' funcionaban']:null,`Sin valor de venta, con certificado. Los que funcionaban se pudieron vender (${money(M.perdidoDest)}).`)}
+   ${miniTile('Valor no recuperado',money(lostT),null,'Equipo funcional destruido, sin seguimiento o detenido en el Bazar.')}
+   ${miniTile('Donados',M.donados.length,null,`A donatarias autorizadas · ${M.don.length-M.donados.length} en proceso.`)}
+   ${miniTile(`Expectativa ${+M.Y+1}`,kmoney(M.redPot1),null,`${M.redY1.toLocaleString('es-MX')} escritorios cumplen 5 años; se estima vender ${Math.round(C().aptos*100)} % a ${money(M.avgDesk)} en promedio.`)}
   </div>
   <div class="grid g2">
    <div class="card"><h2>Dinero que no se está recuperando</h2><p class="note">Valor de venta estimado que se pierde al destruir equipo funcional, al no dar seguimiento o que se queda detenido en el Bazar sin decisión.</p>
@@ -695,7 +697,7 @@ VIEWS.panel=()=>{
    <div class="card"><div class="row"><h2>Pendientes por área</h2><span class="sp"></span><button class="btn sm" data-go="seguimiento">Ver seguimiento</button></div>
    <div class="tbl" style="margin-top:10px"><table><tr><th>Área</th><th class="n">Pendientes</th><th class="n">Días prom.</th><th class="n">Recordat.</th><th class="n">Escalados</th></tr>
    ${pend.map(p=>`<tr><td>${AREAS[p.a]}<div class="note">${['SIS','FAC','FIS'].includes(p.a)?'aviso por correo':'aviso por bot de Humand'}</div></td><td class="n">${p.n}</td><td class="n">${p.avg.toFixed(1)}</td><td class="n">${p.rem}</td><td class="n">${p.esc?`<span class="pill p-bad">${p.esc}</span>`:'0'}</td></tr>`).join('')}</table></div></div>
-  </div>`;
+  </div></div></details>`;
 };
 
 /* ================= ACTIVOS POR CLÍNICA ================= */
@@ -705,9 +707,9 @@ VIEWS.clinicas=()=>{
   const rows=Object.entries(g).filter(([c])=>!q||c.toLowerCase().includes(q)).map(([c,l])=>{const n=k=>l.filter(e=>stOf(e)===k).length;return{c,mun:l[0].MUNICIPIO,tot:l.length,vig:n('VIGENTE'),al:n('ALERTA'),ven:n('VENCIDO'),bz:n('PUBLICADO'),fr:l.filter(e=>FROZEN.includes(e.p)).length,vd:l.filter(e=>SOLD.includes(e.p)).length,ds:l.filter(e=>DESTR.includes(e.p)).length,
     esp:sum(l.filter(e=>due(e)<=S.today.slice(0,4)+'-12-31'||SOLD.includes(e.p)||DESTR.includes(e.p)||DON.includes(e.p)),estExp)*META,rec:sum(l.filter(e=>SOLD.includes(e.p)),e=>e.pay?.amount||0),ti:S.ast.filter(a=>a.estado==='Asignado'&&colOf(a.emp)?.ubi===c).length}}).sort((a,b)=>(b.ven+b.al)-(a.ven+a.al));
   const T=k=>sum(rows,r=>r[k]);
-  return `<div><h1>Activos por clínica</h1><p class="sub">Visibilidad del inventario, la vida útil y el stock del Bazar de cada clínica. El stock se actualiza al congelarse y al concretarse cada venta.</p></div>
+  return `<div><h1>Activos por clínica</h1><p class="sub">Visibilidad del inventario, la vida útil y el stock del Bazar de cada clínica. El stock se actualiza al apartarse y al concretarse cada venta.</p></div>
   <div class="row"><input type="text" id="cq" placeholder="Buscar clínica…" value="${esc(S.clinQ)}" style="flex:0 1 280px"><span class="note">${rows.length} clínicas con inventario cargado</span></div>
-  <div class="tbl"><table><tr><th>Clínica</th><th class="n">Equipos</th><th class="n">Vigentes</th><th class="n">Alerta ≤3m</th><th class="n">Cumplieron</th><th class="n">En Bazar</th><th class="n">Congelados</th><th class="n">Vendidos</th><th class="n">Destruidos</th><th class="n">Esperado ${S.today.slice(0,4)}</th><th class="n">Recuperado</th><th>Avance</th></tr>
+  <div class="tbl"><table><tr><th>Clínica</th><th class="n">Equipos</th><th class="n">Vigentes</th><th class="n">Alerta ≤3m</th><th class="n">Cumplieron</th><th class="n">En Bazar</th><th class="n">Apartados</th><th class="n">Vendidos</th><th class="n">Destruidos</th><th class="n">Esperado ${S.today.slice(0,4)}</th><th class="n">Recuperado</th><th>Avance</th></tr>
   ${rows.map(r=>`<tr data-clin="${esc(r.c)}" style="cursor:pointer"><td><b>${esc(r.c)}</b><div class="note">${esc(r.mun)}${r.ti?` · ${r.ti} activos asignados a personal`:''}</div></td><td class="n">${r.tot}</td><td class="n">${r.vig}</td><td class="n">${r.al?`<span class="pill p-warn">${r.al}</span>`:0}</td><td class="n">${r.ven?`<span class="pill p-bad">${r.ven}</span>`:0}</td><td class="n">${r.bz}</td><td class="n">${r.fr}</td><td class="n">${r.vd}</td><td class="n">${r.ds}</td><td class="n">${money(r.esp)}</td><td class="n">${money(r.rec)}</td><td style="min-width:110px"><div class="stack"><div style="width:${r.esp?Math.min(100,100*r.rec/r.esp):0}%;background:var(--sd)"></div></div></td></tr>`).join('')}
   <tr><th>Total</th><th class="n">${T('tot')}</th><th class="n">${T('vig')}</th><th class="n">${T('al')}</th><th class="n">${T('ven')}</th><th class="n">${T('bz')}</th><th class="n">${T('fr')}</th><th class="n">${T('vd')}</th><th class="n">${T('ds')}</th><th class="n">${money(T('esp'))}</th><th class="n">${money(T('rec'))}</th><th></th></tr></table></div>`;
 };

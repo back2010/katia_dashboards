@@ -32,7 +32,10 @@ with sync_playwright() as p:
           const r2=S.items.find(x=>x.p==='REUSO');fReuso(r2);closeDrawer();const en=S.items.find(x=>x.p==='ENTREGA');if(en){openDelivery(en._i);closeDrawer()}
           const dd=S.items.find(x=>x.p==='DESTRUCCION');if(dd){fRecoleccion(dd);closeDrawer()}const dc=S.items.find(x=>x.p==='RECOLECCION');if(dc){fCert(dc);closeDrawer()}
           const dn=S.items.find(x=>x.p==='DONACION');if(dn){fDonEnt(dn);closeDrawer()}go('salidas');
-          const flujo={formularios:Object.keys(tipos).join(','),trasDiagnostico:e.p,precio:e.price&&e.price.aut};
+          setRole('admin');go('recorrido');const esc_=[];for(const x of SCN){for(const m of ['hoy','int']){S.hm=m;S.rec={sc:x[0],k:0,pick:0};openSc();const n=recSteps(recEx(),S.rec).length;for(let k=0;k<n;k++){S.rec.k=k;openSc()}if(m==='hoy')esc_.push(x[0]+':'+n)}}closeDrawer();S.hm='hoy';
+          for(const st of ['PUBLICADO','FIRMAS','PAGO','ENTREGADO','REUSADO','DONADO','DESTRUIDO','DEST_VB','CONFIRMADO']){const x=S.items.find(y=>y.p===st);if(x){openEq(x._i);S.rec={eq:x._i,k:null};openSc();closeDrawer()}}
+          setRole('af');const pb=S.items.find(y=>y.p==='PUBLICADO'&&y.posted===false);const nPub=tasks().groups?0:0;if(pb){fPublicar(pb);document.querySelector('#f-ok').click()}setRole('admin');go('hfirma');go('compra');go('hbazar');go('panel');
+          const flujo={escenarios:esc_.join(' '),publicada:!!(pb&&pb.posted),formularios:Object.keys(tipos).join(','),trasDiagnostico:e.p,precio:e.price&&e.price.aut};
           return {equipos:S.items.length,flujo,pendientes:pend,partes:window.A360_OK||'-',xlsx:typeof XLSX}}""", [VIEWS, ROLES])
         print(os.path.basename(f), info, 'ERRORES:' if errs else 'sin errores', errs[:3])
         bad += len(errs)
