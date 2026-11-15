@@ -25,7 +25,15 @@ with sync_playwright() as p:
         info = pg.evaluate("""([V,R])=>{document.querySelector('.hola')?.remove();for(const v of V)go(v);
           const pend={};for(const r of R){setRole(r);for(const n of NAVS[r])if(n[0]!=='h')go(n[0]);pend[r]=r==='dir'?'-':tasks().n}
           setRole('ing',engList()[0].id);for(const n of NAVS.ing)go(n[0]);pend.ing=tasks().n;setRole('admin');
-          return {equipos:S.items.length,historicos:S.prev.length,pendientes:pend,partes:window.A360_OK||'-',xlsx:typeof XLSX}}""", [VIEWS, ROLES])
+          // formularios: abre cada tipo de pendiente y recorre un diagnóstico completo
+          const tipos={};for(const q of S.reqs.filter(q=>q.state==='Pendiente'))if(!tipos[q.type]&&['PRECIO','DECISION','VB','DEPOSITO','DONFACT'].includes(q.type)){tipos[q.type]=1;openReq(q.id);closeDrawer()}
+          const e=S.items.find(x=>x.p==='CONFIRMADO');S.engClinic=e.CLINICA;S.dxId=e._i;S.dxDraft=null;go('ingeniero');const d=S.dxDraft;d.step=2;render();d.step=3;d.foto=FOTO_EJ;render();sendDx(e,d);
+          const rq=S.reqs.find(q=>q.eq===e._i&&q.state==='Pendiente');openReq(rq.id);document.querySelector('#f-ok').click();
+          const r2=S.items.find(x=>x.p==='REUSO');fReuso(r2);closeDrawer();const en=S.items.find(x=>x.p==='ENTREGA');if(en){openDelivery(en._i);closeDrawer()}
+          const dd=S.items.find(x=>x.p==='DESTRUCCION');if(dd){fRecoleccion(dd);closeDrawer()}const dc=S.items.find(x=>x.p==='RECOLECCION');if(dc){fCert(dc);closeDrawer()}
+          const dn=S.items.find(x=>x.p==='DONACION');if(dn){fDonEnt(dn);closeDrawer()}go('salidas');
+          const flujo={formularios:Object.keys(tipos).join(','),trasDiagnostico:e.p,precio:e.price&&e.price.aut};
+          return {equipos:S.items.length,flujo,pendientes:pend,partes:window.A360_OK||'-',xlsx:typeof XLSX}}""", [VIEWS, ROLES])
         print(os.path.basename(f), info, 'ERRORES:' if errs else 'sin errores', errs[:3])
         bad += len(errs)
     b.close()

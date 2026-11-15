@@ -23,7 +23,7 @@ Lee `HANDOFF.md` primero: contexto, reglas de negocio y pendientes.
 | 175–209 | `init` / estado global `S` |
 | 210–245 | tabulador `priceCalc` y diagnóstico |
 | 299–404 | flujo de venta, `seed()` del demo, cierre diario |
-| 405–458 | persistencia (`KEY='activo360-v9'`), helpers UI, `NAVS`, `go`, `render` |
+| 405–458 | persistencia (`KEY='activo360-v11'`), helpers UI, `NAVS`, `go`, `render` |
 | 459–1304 | vistas: `VIEWS.<id>` arma HTML, `after.<id>` conecta eventos |
 | 1305–fin | eventos globales y arranque (`load(); render(); welcome();`) |
 
