@@ -478,16 +478,65 @@ body.rol-ing .viewas{border-color:var(--sd);color:var(--sd);font-weight:600}
 .tb-tab .n{text-align:right}
 .tb-ex td{background:var(--amber-soft)}
 .tb-tab td{white-space:nowrap}
+
+/* ---- Bloque 1: Mis pendientes, pestañas y rol activo ---- */
+.viewas-l{font-size:12px;color:var(--muted)}
+.back{border:0;background:none;color:var(--sd);font-weight:600;padding:0 0 6px;cursor:pointer}
+.back:hover{text-decoration:underline}
+.tkg{display:flex;flex-direction:column;gap:10px}
+.tkg h2{display:flex;align-items:center;gap:8px;margin:4px 0 0}
+.tk{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.3fr) auto;gap:14px;align-items:center;padding:14px 18px;border-radius:18px;background:var(--glass);border:1px solid var(--glass-edge);box-shadow:var(--glass-sh);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
+.tk.late{box-shadow:inset 4px 0 0 var(--bad),var(--glass-sh)}
+.tk-w{color:var(--fg)}
+.tk-d{margin-top:4px}
+.tk .btn{white-space:nowrap}
+.tk-n{font:600 40px/1.1 var(--f-num,inherit);letter-spacing:-1px;margin:6px 0}
+.tk-n small{font:400 13px/1.3 var(--f-ui,inherit);color:var(--muted);margin-left:8px;letter-spacing:0}
+.tk-done summary{cursor:pointer;font-weight:600}
+.tk-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:9px 0;border-top:1px solid var(--line);cursor:pointer}
+.tk-done summary+.tk-r{margin-top:10px}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tv-in{display:flex;flex-direction:column;gap:16px}
+.tv-in>div:first-child h1{font-size:20px}
+@media (max-width:900px){.g3{grid-template-columns:1fr}.tk{grid-template-columns:1fr}.tk .btn{justify-self:start}}
+
+/* ---- Bloque 2: formularios por pasos, formularios de área y confirmaciones ---- */
+.ob{font-size:10.5px;font-weight:600;color:var(--sd);background:var(--sd-soft);border-radius:99px;padding:1px 7px;margin-left:4px;white-space:nowrap;vertical-align:1px}
+.fm{gap:14px}
+.fm h3{font-size:13px;font-weight:600;color:var(--muted);margin:4px 0 -6px}
+.fm-eq{padding:12px 14px;border-radius:14px;background:var(--surface2);border:1px solid var(--glass-edge)}
+.fm-g{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:6px}
+.fm-nav{margin-top:6px;gap:8px}
+.fm .fld input[type=text],.fm .fld input[type=number],.fm .fld input[type=date],.fm .fld select{width:100%}
+.dxc{border-color:var(--sd)!important;gap:12px;display:flex;flex-direction:column}
+.dxc .seg label,.fm .seg label{padding:8px 14px;font-size:13.5px}
+.seg label.dis{opacity:.45;cursor:not-allowed}
+.stp{display:flex;gap:6px;flex-wrap:wrap}
+.stp span{display:flex;align-items:center;gap:6px;padding:5px 12px 5px 5px;border-radius:99px;background:var(--surface2);border:1px solid var(--glass-edge);font-size:12.5px;color:var(--muted)}
+.stp i{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--line);font-style:normal;font-weight:700;font-size:11.5px}
+.stp .cur{color:var(--fg);font-weight:600;border-color:var(--sd)}.stp .cur i{background:var(--sd);color:#fff}
+.stp .done i{background:var(--ok);color:#fff}
+.dxr{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 14px;padding:12px 14px;border-radius:14px;background:var(--surface2);border:1px solid var(--glass-edge)}
+.dxr div{display:flex;flex-direction:column;min-width:0}.dxr b{font-weight:600;overflow-wrap:anywhere}
+.dxf{display:block;max-width:220px;border-radius:12px;border:1px solid var(--glass-edge);margin-top:6px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.opt{padding:14px 12px;border-radius:14px;border:1px solid var(--glass-edge);background:var(--surface2);font-weight:600;color:var(--fg);cursor:pointer}
+.opt.on{background:var(--sd);color:#fff;border-color:var(--sd)}
+.opt:disabled{opacity:.45;cursor:not-allowed}
+.cfm{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:16px;background:rgba(10,20,15,.4)}
+.cfm>div{width:min(420px,100%);padding:22px;border-radius:22px;background:var(--glass-hi);border:1px solid var(--glass-edge);box-shadow:0 30px 80px rgba(0,0,0,.3);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px)}
+.cfm p{margin:0 0 16px;font-size:15px}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.cfm>div{background:var(--bg)}}
+.drawer>div.fm{background:color-mix(in srgb,var(--bg) 94%,transparent)!important}
 </style>
 
 <header class="top">
   <div class="greet" id="greet"></div>
-  <div class="mods" id="mods" role="tablist" aria-label="Módulo"><button data-modulo="venta" role="tab"><b>Venta de equipo de clínicas</b><small>venta · destrucción · donación</small></button><button data-modulo="ti" role="tab"><b>Inventario de Sistemas</b><small>activos por colaborador · carta responsiva</small></button></div>
   <div class="clock">
     <button class="bell" id="bell" type="button" data-v="alertas"></button>
     <button class="thm" id="thm" type="button" aria-label="Cambiar entre modo claro y oscuro"></button>
     <span style="font-size:12px;color:var(--muted)">Hoy</span><span class="d" id="today"></span>
-    <select id="viewas" class="viewas" aria-label="Ver como"></select>
+    <label class="viewas-l" for="viewas">Estás viendo como</label><select id="viewas" class="viewas" aria-label="Estás viendo como"></select>
     <span class="adm"><button id="admb" aria-expanded="false">Administración</button><div id="admm" hidden>
       <button id="d1">Ejecutar cierre del día (recordatorios)</button>
       <button id="d30">Ejecutar 30 cierres diarios</button>
@@ -556,7 +605,7 @@ const defaultCfg=()=>({tab:{opt:{A:{min:50,d:30,dc:20},B:{min:30,d:50,dc:30},C:{
   plazo:{firmas:1,pago:2,reintento:2,sinVenta:15,subasta:5,donFact:10},subastaMin:.5,
   banco:{banco:'Por configurar',titular:'Salud Digna, A.C.',clabe:'Por configurar',concepto:'Folio de la venta'},
   kg:{'Escritorio':12,'Laptop':2.2,'Monitor':4.5,'Diadema':.2,'Hub USB-C':.15,'Memoria USB':.02,'Divisor de pantalla':.3},
-  donatarias:['Escuela Primaria Federal (SEP) · donataria autorizada','DIF Municipal','Casa Hogar comunitaria A.C. · donataria autorizada SAT','Centro Comunitario de Capacitación A.C.']});
+  donatarias:['Escuela Primaria Federal (SEP) · donataria autorizada','DIF Municipal · donataria autorizada','Casa Hogar comunitaria A.C. · donataria autorizada','Centro Comunitario de Capacitación A.C. · donataria autorizada']});
 const C=()=>S.cfg;
 const MAIL_FAC='cfdifacturacion@salud-digna.org';
 const AREAS={AF:'Activo Fijo',ING:'Ingresos',FAC:'Facturación',FIS:'Fiscal (Jurídico)',SIS:'Sistemas (ingeniero de clínica)',COL:'Colaborador',JEFE:'Jefe inmediato'};
@@ -568,7 +617,8 @@ const RT={
   DEPOSITO:{n:'Confirmación de depósito',a:'ING',ch:'humand',d:'valida el váucher del depósito'},
   FACTURA:{n:'Emisión de factura',a:'FAC',ch:'correo',d:'adjunta el CFDI en Activo 360'},
   AGENDA:{n:'Agendar entrega',a:'SIS',ch:'correo',d:'prepara el equipo y propone fecha y hora'},
-  DONFACT:{n:'Factura de la donataria',a:'AF',ch:'humand',d:'adjunta la factura emitida por la donataria'},
+  DONFACT:{n:'Factura de la donataria',a:'AF',ch:'humand',d:'adjunta la factura emitida por la donataria y el acta de recepción'},
+  VB:{n:'Visto bueno de salida',a:'AF',ch:'humand',d:'aprueba la reutilización o la destrucción que propone Sistemas'},
   REVFIS:{n:'Revisión fiscal de donación',a:'FIS',ch:'correo',d:'revisa que la factura cumpla los requisitos fiscales'},
 };
 const ST={
@@ -577,13 +627,16 @@ const ST={
   FIRMAS:['Congelado · firmas del formato','p-hm'],PAGO:['Congelado · esperando depósito','p-warn'],DEPOSITO:['Congelado · Ingresos valida','p-hm'],
   FACTURA:['Vendido · en Facturación','p-info'],AGENDA:['Vendido · por agendar entrega','p-info'],ENTREGA:['Vendido · cita de entrega','p-info'],
   ENTREGADO:['Vendido y entregado','p-ok'],DESTRUCCION:['Para destrucción certificada','p-mut'],RECOLECCION:['Recolección programada','p-mut'],DESTRUIDO:['Destruido (certificado)','p-mut'],
+  REUSO_VB:['Reutilización · espera visto bueno','p-info'],REUSO:['Reutilización aprobada · por reasignar','p-info'],REUSADO:['Reasignado en la clínica','p-ok'],DEST_VB:['Destrucción · espera visto bueno','p-info'],
   DONACION:['Donación · por entregar','p-info'],DONADO_FACT:['Donado · falta factura de la donataria','p-warn'],DONADO:['Donado','p-ok']
 };
 const SOLD=['FACTURA','AGENDA','ENTREGA','ENTREGADO'],FROZEN=['FIRMAS','PAGO','DEPOSITO'],DESTR=['DESTRUCCION','RECOLECCION','DESTRUIDO'],DON=['DONACION','DONADO_FACT','DONADO'];
 const DFLOW=[['Por entregar','DONACION'],['Factura donataria','DONADO_FACT'],['Donado','DONADO']];
+const RFLOW=[['Visto bueno','REUSO_VB'],['Reasignar','REUSO'],['Reasignado','REUSADO']],XFLOW=[['Visto bueno','DEST_VB'],['Recolección','DESTRUCCION'],['Certificado','RECOLECCION'],['Destruido','DESTRUIDO']];
+const REUS=['REUSO_VB','REUSO','REUSADO'];
 const FLOW=[['Diagnóstico','CONFIRMADO'],['Precio AF','PRECIO'],['Publicado','PUBLICADO'],['Firmas','FIRMAS'],['Depósito','PAGO'],['Ingresos','DEPOSITO'],['Factura','FACTURA'],['Agenda','AGENDA'],['Entrega','ENTREGA'],['Cerrado','ENTREGADO']];
 const flowIdx=p=>p==='SUBASTA'?2:FLOW.findIndex(f=>f[1]===p);
-const OWNER={CONFIRMADO:'SIS',PRECIO:'AF',PUBLICADO:'COL',SUBASTA:'COL',FIRMAS:'COL',PAGO:'COL',DEPOSITO:'ING',FACTURA:'FAC',AGENDA:'SIS',ENTREGA:'SIS',DONACION:'SIS',DONADO_FACT:'AF'};
+const OWNER={REUSO_VB:'AF',REUSO:'SIS',DEST_VB:'AF',DESTRUCCION:'SIS',RECOLECCION:'SIS',CONFIRMADO:'SIS',PRECIO:'AF',PUBLICADO:'COL',SUBASTA:'COL',FIRMAS:'COL',PAGO:'COL',DEPOSITO:'ING',FACTURA:'FAC',AGENDA:'SIS',ENTREGA:'SIS',DONACION:'SIS',DONADO_FACT:'AF'};
 const BUYERS=['Ana Gómez · Recepción','Luis Peña · Ultrasonido','Carla Ruiz · Optometría','Mario Soto · Almacén','Elena Vidal · Laboratorio','Iris Castro · Nutrición'];
 const JEFES=['Dra. Laura Félix','Dr. Óscar Zamora','Lic. Paola Ibarra','Ing. Raúl Montaño','Dra. Sofía Rentería','Lic. Tomás Cota'];
 const ME={name:'Karla Méndez',emp:'104582',puesto:'Recepcionista',area:'Recepción',jefe:'Lic. Paola Ibarra'};
@@ -632,7 +685,7 @@ let BASE0=null;const base0=()=>BASE0||(BASE0=mapAS(asObjs(DATA.appsheet),'Demo (
 function applyAS(items){items.forEach(e=>{if(e._p0==='CONFIRMADO'&&!e.p){e.p='CONFIRMADO';const d=e._d0&&e._d0<=S.today&&diff(e._d0,S.today)<=30?e._d0:S.today;
   e.hist.push({d,t:'Reemplazo confirmado: inventario en "Plan de renovación / enviado a CSI"'+(e.as?.['# DE SERIE NUEVO EQUIPO']?' · equipo nuevo '+e.as['# DE SERIE NUEVO EQUIPO']:''),a:'SIS',k:''})}})}
 /* estatus que Activo 360 devuelve a AppSheet según la etapa del proceso */
-function asStatus(e){const p=e.p;if(!p)return e.AS_ESTATUS||'ACTIVO';if(SOLD.includes(p))return'VENDIDO';if(p==='DESTRUIDO')return'DESTRUIDO';if(DON.includes(p)&&p!=='DONACION')return'DONADO';
+function asStatus(e){const p=e.p;if(!p)return e.AS_ESTATUS||'ACTIVO';if(p==='REUSADO')return'ACTIVO';if(SOLD.includes(p))return'VENDIDO';if(p==='DESTRUIDO')return'DESTRUIDO';if(DON.includes(p)&&p!=='DONACION')return'DONADO';
   if(p==='CONFIRMADO')return'PLAN DE RENOVACION / ENVIADO A CSI';return'RESGUARDO'}
 function asExportRows(){const now=new Date(),z=n=>String(n).padStart(2,'0'),[y,m,d]=S.today.split('-');const ts=`${d}/${m}/${y} ${z(now.getHours())}:${z(now.getMinutes())}:${z(now.getSeconds())}`;
   return[...S.items.filter(e=>e.as).map(e=>{const o={...e.as};const ns=asStatus(e);if(ns!==o['ESTATUS']){o['ESTATUS']=ns;o['MODIFICADO EL:']=ts}o['ESTATUS ACTIVO 360']=ST[stOf(e)][0];o['PRECIO AUTORIZADO']=e.price?.aut??'';o['FOLIO VENTA']=e.sale?.folio||'';return o}),
@@ -715,7 +768,7 @@ const tipo=e=>e.TIPO_EQUIPO||'Escritorio';
 function freshItems(inv){return inv.map((x,i)=>({...x,TIPO_EQUIPO:/escrit/i.test(x.TIPO_EQUIPO||'Escritorio')?'Escritorio':x.TIPO_EQUIPO,_i:i,p:null,dx:null,price:null,pub:null,buyer:null,pay:null,fac:null,destD:null,hist:[]}))}
 function init(sample=true,src){src=src||base0();const lv=TRZ.live;TRZ.live=false;try{init0(sample,src)}finally{TRZ.live=lv}}
 function init0(sample,src){
-  S={cfg:defaultCfg(),meClinic:null,today:sample?T0:new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),items:freshItems(src.inv),prev:src.prev||[],src:src.name||'Inventario',invAs:'',mod:'venta',reqs:[],notifs:[],log:[],mails:[],mailTab:'',fisDraft:null,seq:1000,view:'panel',hmTab:'ALL',city:null,engClinic:null,dxId:null,dxDraft:null,buyId:null,invQ:'',invClin:'',invSt:'',invPage:0,segArea:'',sample,
+  S={cfg:defaultCfg(),meClinic:null,today:sample?T0:new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),items:freshItems(src.inv),prev:src.prev||[],src:src.name||'Inventario',invAs:'',mod:'venta',reqs:[],notifs:[],log:[],mails:[],mailTab:'',fisDraft:null,seq:1000,view:'pend',hmTab:'ALL',city:null,engClinic:null,dxId:null,dxDraft:null,buyId:null,invQ:'',invClin:'',invSt:'',invPage:0,segArea:'',sample,
      col:[],ast:[],cartas:{},movs:[],emp:'102458',tiQ:'',tiTipo:'',tiEst:'',tiPage:0,mov:null,clinQ:''};
   applyAS(S.items);
   genTI();
@@ -747,15 +800,18 @@ const engLabel=g=>{const cl=g.clinicas||[];if(cl.length===1)return tCase(cl[0]);
   const z=S.items.find(e=>e.CLINICA===cl[0]);return `${tCase(z?.DIVISION||z?.ZONA||'Zona')} · ${cl.length} clínicas`};
 const engCur=()=>S&&S.role==='ing'?engList().find(g=>g.id===S.asEng)||null:null;
 const ING=()=>!!engCur();
-const AREA=()=>S&&(S.role==='fac'||S.role==='fis')?S.role:null;
+const ROLES={admin:'Administrador',af:'Activo Fijo',ingr:'Ingresos',fac:'Facturación',fis:'Fiscal (Jurídico)',sis:'Sistemas corporativo',dir:'Dirección'};
+const AREA=()=>S&&S.role&&S.role!=='admin'&&S.role!=='ing'&&ROLES[S.role]?S.role:null;
 const mine=e=>{const g=engCur();return!g||g.clinicas.includes(e.CLINICA)};
 const ING_V=['misequipos','alertas','ingeniero','recorrido'];
-const ROLE_V={ing:ING_V,fac:['facturacion','alertas','recorrido'],fis:['fiscal','alertas','recorrido']};
-const ROLE_CAT={fac:'Facturación',fis:'Fiscal (Jurídico)'};
-function setRole(r,id){S.role=r;S.asEng=r==='ing'?id:null;S.engClinic=null;S.dxId=null;S.rec=null;closeDrawer();go(ROLE_V[r]?ROLE_V[r][0]:'panel')}
+const ROLE_V={ing:['pend','misequipos','ingeniero','recorrido','alertas'],af:['pend','inventario','salidas','panel','hgestion','reuso','donacion','destruccion','seguimiento','clinicas','recorrido','alertas'],
+  ingr:['pend','inventario','hgestion','seguimiento','alertas'],fac:['pend','inventario','facturacion','alertas'],fis:['pend','inventario','fiscal','alertas'],
+  sis:['pend','inventario','salidas','panel','reglas','ingenieros','clinicas','reuso','donacion','destruccion','recorrido','alertas'],dir:['panel','recorrido']};
+const ROLE_CAT={fac:'Facturación',fis:'Fiscal (Jurídico)',af:'Activo Fijo',ingr:'Ingresos',sis:'Sistemas',dir:'—'};
+function setRole(r,id){S.role=r;S.asEng=r==='ing'?id:null;S.engClinic=null;S.dxId=null;S.rec=null;closeDrawer();go(ROLE_V[r]?ROLE_V[r][0]:'pend')}
 function paintViewAs(){const el=$('#viewas');if(!el)return;const L=engList(),v=ING()?S.asEng:AREA()?'area:'+AREA():'admin';
-  el.innerHTML=`<option value="admin">Ver como: Administrador</option><optgroup label="Sistemas · por clínica">${L.map(g=>`<option value="${g.id}">${esc(engLabel(g))}</option>`).join('')}</optgroup>
-   <optgroup label="Otras áreas que actúan aquí"><option value="area:fac">Facturación</option><option value="area:fis">Fiscal (Jurídico)</option></optgroup>`;el.value=v;
+  el.innerHTML=`<option value="admin">Administrador</option><optgroup label="Sistemas · ingeniero de clínica">${L.map(g=>`<option value="${g.id}">${esc(engLabel(g))}</option>`).join('')}</optgroup>
+   <optgroup label="Áreas">${['af','ingr','fac','fis','sis','dir'].map(k=>`<option value="area:${k}">${ROLES[k]}</option>`).join('')}</optgroup>`;el.value=v;
   el.onchange=()=>el.value==='admin'?setRole('admin'):el.value.startsWith('area:')?setRole(el.value.slice(5)):setRole('ing',el.value)}
 function trzFlush(){if(!GAS||!TRZ.q.length)return;const rows=TRZ.q.splice(0);trzSend(rows,null,m=>{TRZ.q.unshift(...rows);toast('No se pudo escribir la traza: '+m)})}
 function log(m,ep,src,body,desc){S.log.unshift({d:S.today,m,ep,src,body,desc})}
@@ -884,7 +940,8 @@ function genTI(){
 function release(e,why){S.reqs.filter(r=>r.eq===e._i&&r.state==='Pendiente').forEach(r=>closeReq(r,'Cancelada'));
   H(e,why+' · el equipo regresa al Bazar','COL','rem');notify(e.buyer,`${why}. El equipo ${e.ID_ACTIVO} regresó al Bazar.`,'rem');
   log('PUT','/products/'+e.ID_ACTIVO,'pub',{status:'DISPONIBLE',stock:1},'Descongela el equipo en el Bazar.');e.p='PUBLICADO';e.buyer=null;e.pay=null;e.sale=null}
-function startSale(e,buyer,amount,fiscal,info){e.buyer=buyer;e.pay={amount};
+const rfcDemo=n=>{const w=nom(n).toUpperCase().normalize('NFD').replace(/[^A-Z ]/g,'').split(' ').filter(Boolean);return((w[1]||'XX').slice(0,2)+(w[0]||'XX').slice(0,2)).padEnd(4,'X')+'850312AB1'};
+function startSale(e,buyer,amount,fiscal,info){if(fiscal&&fiscal.rfc&&!info)fiscal={...fiscal,nombre:nom(buyer),rfc:rfcDemo(buyer)};e.buyer=buyer;e.pay={amount};
   e.sale={folio:'VTA-'+S.today.slice(0,4)+'-'+String(++S.seq).padStart(5,'0'),start:S.today,files:[],fiscal,emp:info?.emp||String(100000+S.seq),puesto:info?.puesto||buyer.split(' · ')[1]||'',area:info?.area||buyer.split(' · ')[1]||'',jefe:info?.jefe||JEFES[S.seq%JEFES.length],firmDl:addBiz(S.today,C().plazo.firmas)};
   e.p='FIRMAS';H(e,`Solicitud de compra de ${buyer} · ${fiscalTxt(fiscal)} · equipo congelado`,'COL');
   log('GET','/service-management/service-items/{sid}/tasks','pub',{servicio:'Compra de equipo',initiatorIds:e.sale.emp,createdAtFrom:S.today},'Activo 360 lee la solicitud "Compra de equipo" que el colaborador llenó en Gestión de Servicios de Humand.');
@@ -907,7 +964,7 @@ function startAuction(e,min){e.p='SUBASTA';e.auc={min:r50(min),end:addBiz(S.toda
 /* ---------- Datos iniciales de operación ---------- */
 function seed(){
   const V=S.items.filter(e=>!e.p&&diff(S.today,due(e))<=75).sort((a,b)=>due(a)<due(b)?-1:1).slice(5); // los 5 más vencidos quedan sin seguimiento
-  const mk=(e,dxo)=>{const dx={...DEFDX,...(dxo||{})};e.dx=dx;e.price={...priceCalc(e,dx)};e.price.aut=e.price.sug;H(e,'Reemplazo confirmado: equipos nuevos recibidos en clínica','SIS');H(e,`Diagnóstico registrado · destino venta · sugerido ${money(e.price.sug)}`,'SIS')};
+  const mk=(e,dxo)=>{const dx={...DEFDX,acc:[...ACC_OF(tipo(e))],foto:FOTO_EJ,...(dxo||{})};e.dx=dx;e.price={...priceCalc(e,dx)};e.price.aut=Math.round(e.price.sug);H(e,'Reemplazo confirmado: equipos nuevos recibidos en clínica','SIS');H(e,`Diagnóstico registrado · destino venta · sugerido ${money(e.price.sug)}`,'SIS')};
   const at=(n,fn)=>{const keep=S.today;S.today=addD(keep,-n);fn();S.today=keep};
   const go_=n=>S.today=addD(S.today,n);
   const pastReq=(type,e,cr,dd,amount)=>S.reqs.push({id:'SOL-'+(++S.seq),type,eq:e._i,created:cr,last:cr,state:type.startsWith('FIRMA')?'Firmada':'Aprobada',rem:Math.max(0,dd-1),esc:dd>=4,res:fd(addD(cr,dd)),resD:addD(cr,dd),amount});
@@ -954,6 +1011,14 @@ function seed(){
     e.don={org:C().donatarias[i%4],fecha:addBiz(S.today,2)};e.p='DONACION';H(e,`Sin venta · Activo Fijo decidió donarlo a ${e.don.org} (entrega ${fd(e.don.fecha)})`,'AF','hmn');
     if(i>0){S.today=e.don.fecha;e.don.d=S.today;e.p='DONADO_FACT';H(e,`Entregado a ${e.don.org} · sale del stock`,'SIS');const r=newReq('DONFACT',e,{dl:addD(S.today,C().plazo.donFact)});
       if(i>1){go_(4);closeReq(r,'Adjuntada');e.don.factura='Factura_donataria_'+e.ID_ACTIVO+'.pdf';H(e,`Se adjuntó la factura de la donataria (${e.don.factura})`,'AF');e.p='DONADO';const rf=newReq('REVFIS',e);if(i>2){go_(3);closeReq(rf);e.don.fiscal='Revisada sin observaciones';H(e,'Fiscal revisó la factura de la donación: sin observaciones','FIS')}}}}));
+  // salidas sin venta de ejemplo: reutilización (en visto bueno, aprobada y cerrada) y destrucción en visto bueno
+  const ex=S.items.filter(e=>!e.p&&baseSt(e)==='VENCIDO').slice(-4),conf=e=>H(e,'Reemplazo confirmado: equipos nuevos recibidos en clínica','SIS');
+  const dxr=(e,area)=>{e.dx={...DEFDX,acc:[...ACC_OF(tipo(e))],foto:FOTO_EJ,reuso:'si',area};e.sal={tipo:'REUSO',area,d:S.today};H(e,`Diagnóstico registrado · se propone reutilizarlo en ${area}`,'SIS')};
+  if(ex[0])at(1,()=>{const e=ex[0];conf(e);dxr(e,'Almacén');e.p='REUSO_VB';newReq('VB',e)});
+  if(ex[1])at(4,()=>{const e=ex[1];conf(e);go_(1);dxr(e,'Repuesto para la clínica');pastReq('VB',e,S.today,1);go_(1);H(e,`Activo Fijo aprobó reutilizarlo en ${e.sal.area}`,'AF','hmn');e.p='REUSO'});
+  if(ex[2])at(12,()=>{const e=ex[2];conf(e);go_(1);dxr(e,'Entrega de resultados');pastReq('VB',e,S.today,1);go_(1);H(e,`Activo Fijo aprobó reutilizarlo en ${e.sal.area}`,'AF','hmn');go_(2);
+    e.sal.recibe='Laura Ríos · Entrega de resultados';e.sal.fin=S.today;e.sal.de=e.SERVICIO;e.sal.acta=`Acta de reasignación ${e.ID_ACTIVO}.pdf`;e.p='REUSADO';H(e,`Reasignado a ${e.sal.area} · recibe ${e.sal.recibe} · acta firmada`,'SIS')});
+  if(ex[3])at(1,()=>{const e=ex[3];conf(e);e.dx={...DEFDX,enciende:'no',comp:['RAM'],acc:[],foto:FOTO_EJ};e.sal={tipo:'DEST',d:S.today};H(e,'No enciende · se recuperan RAM · se propone destrucción','SIS');e.p='DEST_VB';newReq('VB',e)});
   S.log=S.log.slice(0,25);S.mails=S.mails.slice(0,30);
 }
 /* Ventas simuladas sobre el inventario cargado de la hoja (demo): mismas que seed(), una sola vez. No escribe en la traza. */
@@ -990,14 +1055,18 @@ function tick(days){
 }
 
 /* ---------- Persistencia ligera ---------- */
-const KEY='activo360-v10';
+const KEY='activo360-v11';
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.items&&s.ast&&s.cfg&&s.mails&&s.prev){S=s;if(!S.cfg.tab)S.cfg.tab=defaultCfg().tab;invSeq=Math.max(40000,...S.ast.map(a=>+a.inv.slice(3)))}else init()}catch(e){init()}}
 
 /* ---------- UI helpers ---------- */
 function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>el.hidden=true,2800)}
 const pill=st=>`<span class="pill ${ST[st]?.[1]||'p-mut'}">${ST[st]?.[0]||st}</span>`;
-function steps(e,mini){const p=stOf(e);if(DON.includes(p)){const i=p==='DONADO'?3:DFLOW.findIndex(f=>f[1]===p);
+function steps(e,mini){const p=stOf(e);const alt=REUS.includes(p)?RFLOW:(DESTR.includes(p)||p==='DEST_VB')?XFLOW:null;
+  if(alt){const last=alt.length-1,k0=alt.findIndex(f=>f[1]===p),i=k0===last?alt.length:k0;
+    if(mini)return `<span class="mini">${alt.map((f,k)=>`<b class="${k<i?'d':k===i?'c':''}"></b>`).join('')}</span>`;
+    return `<div class="steps">${alt.map((f,k)=>`<div class="st ${k<i?'done':k===i?'cur':''}"><i>${k<i?'✓':k+1}</i><span>${f[0]}</span></div>`).join('')}</div>`}
+  if(DON.includes(p)){const i=p==='DONADO'?3:DFLOW.findIndex(f=>f[1]===p);
     if(mini)return `<span class="mini">${DFLOW.map((f,k)=>`<b class="${k<i?'d':k===i?'c':''}"></b>`).join('')}</span>`;
     return `<div class="steps">${DFLOW.map((f,k)=>`<div class="st ${k<i?'done':k===i?'cur':''}"><i>${k<i?'✓':k+1}</i><span>${f[0]}</span></div>`).join('')}</div>`}
   let i=flowIdx(p);if(p==='ENTREGADO')i=FLOW.length;
@@ -1022,31 +1091,84 @@ function gauge(segs,total,center,sub,needle){const cx=150,cy=140,r=110,sw=26;con
 const legend=items=>`<div class="legend">${items.map(([c,l])=>`<span><i style="background:${c}"></i>${l}</span>`).join('')}</div>`;
 
 /* ---------- Navegación ---------- */
+const N_PEND=['pend','Mis pendientes'],N_EQ=['inventario','Equipos'],N_SAL=['salidas','Salidas sin venta'],N_PAN=['panel','Panel'],N_REG=['reglas','Reglas'];
 const NAVS={
- venta:[['h','Equipo de clínicas','mv'],['panel','Panel ejecutivo'],['recorrido','Recorrido de un equipo'],['alertas','Alertas'],['clinicas','Activos por clínica'],['inventario','Inventario'],['ingeniero','Ingeniero de Sistemas'],['seguimiento','Seguimiento de ventas'],['hgestion','Aprobaciones (Activo Fijo e Ingresos)'],['facturacion','Facturación'],['destruccion','Destrucción certificada'],['donacion','Donación'],['fiscal','Fiscal'],['config','Tabulador y reglas'],['ingenieros','Accesos por clínica'],
-  ['h','Humand','hm'],['hbazar','Bazar de Activos'],['compra','Gestión de Servicios · compra'],['hfirma','Firma del formato de compra'],['hnotif','Notificaciones'],['h','Google'],['correos','Correos enviados'],['h','Para Humand'],['integracion','Integración técnica']],
- fac:[['h','Facturación','mv'],['facturacion','Facturas por emitir'],['alertas','Mis alertas'],['recorrido','Recorrido de un equipo']],
- fis:[['h','Fiscal (Jurídico)','mv'],['fiscal','Revisión fiscal'],['alertas','Mis alertas'],['recorrido','Recorrido de un equipo']],
- ing:[['h','Mis clínicas','mv'],['misequipos','Mis equipos'],['alertas','Mis alertas'],['ingeniero','Diagnóstico y entregas'],['recorrido','Recorrido de un equipo']],
- ti:[['h','Inventario de Sistemas','mt'],['alertas','Alertas'],['ti','Activos por colaborador'],['carta','Carta responsiva'],
-  ['h','Humand','hm'],['hfirma','Firma de carta responsiva'],['hnotif','Notificaciones'],['h','Para Humand'],['integracion','Integración técnica']]};
+ admin:[N_PEND,N_EQ,N_SAL,N_PAN,N_REG,['h','Modo presentación','hm'],['recorrido','Recorrido de un equipo'],['hbazar','Humand · equipos disponibles'],['compra','Humand · compra'],['hfirma','Humand · firmas'],['hnotif','Humand · avisos'],['correos','Anexo · correos'],['integracion','Anexo · integración']],
+ ing:[N_PEND,['misequipos','Equipos']],af:[N_PEND,N_EQ,N_SAL,N_PAN],ingr:[N_PEND,N_EQ],fac:[N_PEND,N_EQ],fis:[N_PEND,N_EQ],sis:[N_PEND,N_EQ,N_SAL,N_PAN,N_REG],dir:[N_PAN,['recorrido','Recorrido de un equipo']]};
+/* pantallas de trabajo que no están en el menú: a qué entrada pertenecen */
+const PARENT={ingeniero:'pend',hgestion:'pend',facturacion:'pend',fiscal:'pend',alertas:'pend',reuso:'salidas',donacion:'salidas',destruccion:'salidas',config:'reglas',ingenieros:'reglas',clinicas:'inventario',seguimiento:'inventario'};
+const curRole=()=>ING()?'ing':AREA()||'admin';
 const MODV={ti:['ti','carta'],venta:['panel','recorrido','misequipos','ingenieros','clinicas','inventario','ingeniero','seguimiento','compra','facturacion','destruccion','donacion','fiscal','config','hgestion','hbazar','correos']};
 const MODTAG={venta:['VENTA DE EQUIPO DE CLÍNICAS','Equipo de cómputo de las clínicas que cumplió su vida útil: venta local, destrucción o donación.'],ti:['INVENTARIO DE SISTEMAS','Equipo asignado a cada colaborador y su carta responsiva consolidada (SGC-N4-347).']};
 const HMV=['compra','hbazar','hfirma','hnotif'];
 const pendOf=(type)=>S.reqs.filter(r=>r.state==='Pendiente'&&(Array.isArray(type)?type.includes(r.type):r.type===type)).length;
-function counts(){return{alertas:alerts().filter(x=>x.l!=='info').length,hgestion:S.reqs.filter(r=>r.state==='Pendiente'&&RT[r.type].ch==='humand').length,hbazar:S.items.filter(e=>e.p==='PUBLICADO'||e.p==='SUBASTA').length,
+function counts(){return{pend:curRole()==='admin'||curRole()==='dir'?null:tasks().n,alertas:alerts().filter(x=>x.l!=='info').length,hgestion:S.reqs.filter(r=>r.state==='Pendiente'&&RT[r.type].ch==='humand').length,hbazar:S.items.filter(e=>e.p==='PUBLICADO'||e.p==='SUBASTA').length,
   misequipos:ING()?S.items.filter(e=>mine(e)&&!e.p&&soon(e)).length:null,
   ingeniero:S.items.filter(e=>mine(e)&&((!e.p&&soon(e))||['CONFIRMADO','AGENDA','ENTREGA','DONACION'].includes(e.p))).length,seguimiento:S.items.filter(e=>e.p&&!['ENTREGADO',...DESTR].includes(e.p)).length,
   hnotif:S.notifs.filter(n=>n.d===S.today).length,donacion:S.items.filter(e=>['DONACION','DONADO_FACT'].includes(e.p)).length,
   hfirma:S.mod==='ti'?Object.values(S.cartas).filter(L=>L[L.length-1].st==='Pendiente de firma').length:pendOf(['FIRMA_COL','FIRMA_JEFE']),ti:S.ast.filter(tiSoon).length,
   facturacion:pendOf('FACTURA'),fiscal:pendOf('REVFIS'),correos:S.mails.filter(m=>m.d===S.today).length}}
 
-function renderNav(){const c=counts();$('#nav').innerHTML=NAVS[ING()?'ing':AREA()||S.mod||'venta'].map(n=>n[0]==='h'?`<h6 class="${n[2]||''}">${n[1]}</h6>`:`<button data-v="${n[0]}" class="${HMV.includes(n[0])?'hmb ':''}${S.view===n[0]?'on':''}">${n[1]}${c[n[0]]!=null?`<span class="cnt ${['hgestion','hfirma','alertas'].includes(n[0])&&c[n[0]]?'hot':''}">${c[n[0]]}</span>`:''}</button>`).join('')}
-function go(v){if(MODV.ti.includes(v))S.mod='ti';else if(MODV.venta.includes(v))S.mod='venta';S.view=v;save();render();window.scrollTo(0,0)}
+function renderNav(){const c=counts(),L=NAVS[curRole()],act=L.some(n=>n[0]===S.view)?S.view:PARENT[S.view];
+  $('#nav').innerHTML=L.map(n=>n[0]==='h'?`<h6 class="${n[2]||''}">${n[1]}</h6>`:`<button data-v="${n[0]}" class="${HMV.includes(n[0])?'hmb ':''}${act===n[0]?'on':''}">${n[1]}${n[0]==='pend'&&c.pend?`<span class="cnt hot">${c.pend}</span>`:''}</button>`).join('')}
+function go(v){S.mod='venta';S.view=v;save();render();window.scrollTo(0,0)}
 function setMod(m){S.mod=m;S.view=m==='ti'?'ti':'panel';closeDrawer();save();render();window.scrollTo(0,0)}
-function render(){const rl=ING()?'ing':AREA();if(rl){S.mod='venta';if(!ROLE_V[rl].includes(S.view))S.view=ROLE_V[rl][0]}document.body.classList.toggle('rol-ing',!!rl);paintViewAs();
-  if(!S.mod)S.mod=MODV.ti.includes(S.view)?'ti':'venta';$('#today').textContent=fd(S.today);document.body.classList.toggle('mod-ti',S.mod==='ti');$$('#mods [data-modulo]').forEach(b=>{const on=b.dataset.modulo===S.mod;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});renderNav();const f=VIEWS[S.view]||VIEWS.panel;const t=MODTAG[S.mod];$('#main').innerHTML=`<div class="modtag"><b>${t[0]}</b><span>${t[1]}</span></div>`+f();after[S.view]?.();paintGreet()}
+function render(){const rl=ING()?'ing':AREA();S.mod='venta';if(rl){if(!ROLE_V[rl].includes(S.view))S.view=ROLE_V[rl][0]}else if(MODV.ti.includes(S.view)||!VIEWS[S.view])S.view='pend';document.body.classList.toggle('rol-ing',!!rl);paintViewAs();
+  if(!S.mod)S.mod=MODV.ti.includes(S.view)?'ti':'venta';$('#today').textContent=fd(S.today);document.body.classList.toggle('mod-ti',S.mod==='ti');$$('#mods [data-modulo]').forEach(b=>{const on=b.dataset.modulo===S.mod;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});renderNav();const f=VIEWS[S.view]||VIEWS.pend;const inNav=NAVS[curRole()].some(n=>n[0]===S.view),bk=!inNav&&PARENT[S.view]&&NAVS[curRole()].find(n=>n[0]===PARENT[S.view]);
+  $('#main').innerHTML=(bk?`<button class="back" data-v="${bk[0]}">← ${bk[1]}</button>`:'')+f();after[S.view]?.();paintGreet()}
 const after={},VIEWS={};
+
+/* ================= MIS PENDIENTES ================= */
+/* Lista de tareas del rol: grupos [{t,items:[{e|title,sub,what,days,late,btn,act}]}] */
+function tasksFor(r,all){const G=[],add=(t,items,info)=>{if(items.length)G.push({t,info:!!info,items:items.sort((a,b)=>(b.late-a.late)||(b.days-a.days))})};
+  const rq=(type,t,btn,act,what)=>add(t,S.reqs.filter(q=>q.state==='Pendiente'&&q.type===type&&S.items[q.eq]).map(q=>{const e=S.items[q.eq];return{e,what:typeof what==='function'?what(e,q):what,days:reqDays(q),late:!slaOk(q),meta:slaOf(q),btn,act:act==='req'?{req:q.id}:act,extra:q.amount!=null?money2(q.amount):''}}));
+  if(r==='ing'){const my=S.items.filter(e=>all||mine(e)),K=C();
+    const byC={};my.filter(e=>!e.p&&soon(e)).forEach(e=>(byC[e.CLINICA]??=[]).push(e));
+    add('Equipos por sustituir',Object.entries(byC).map(([c,l])=>{const v=l.filter(e=>baseSt(e)==='VENCIDO').length;return{title:tCase(c),sub:`${l.length} equipo${l.length>1?'s':''}: ${v} ya cumplieron 5 años, ${l.length-v} los cumplen en 3 meses o menos`,what:'Cuando llegue el equipo nuevo, confirma para empezar el diagnóstico',days:0,late:false,btn:'Ver clínica',act:{eng:c}}}),true);
+    add('Falta diagnóstico',my.filter(e=>e.p==='CONFIRMADO').map(e=>{const t=sisTask(e);return{e,what:e.dxQ?`Activo Fijo pregunta: ${e.dxQ}`:'Revisa el equipo y llena el diagnóstico',days:t.days,late:!t.ok,meta:K.sla.SIS,btn:'Diagnosticar',act:{dx:e._i}}}));
+    add('Entregas por agendar',my.filter(e=>e.p==='AGENDA').map(e=>{const q=curReq(e);return{e,what:`Pagado y facturado. Propón fecha y hora a ${String(e.buyer||'').split(' · ')[0]}`,days:q?reqDays(q):0,late:q?!slaOk(q):false,meta:K.sla.SIS,btn:'Agendar',act:{eng:e.CLINICA}}}));
+    add('Entregas agendadas',my.filter(e=>e.p==='ENTREGA').map(e=>({e,what:`Cita el ${fd(e.cita?.d)} a las ${e.cita?.h||''} con ${String(e.buyer||'').split(' · ')[0]}`,days:e.cita?Math.max(0,diff(e.cita.d,S.today)):0,late:!!e.cita&&e.cita.d<S.today,btn:'Registrar entrega',act:{del:e._i}})));
+    add('Donaciones por entregar',my.filter(e=>e.p==='DONACION').map(e=>({e,what:`Entregar a ${e.don?.org||'la donataria'} el ${fd(e.don?.d)}`,days:0,late:!!e.don?.d&&e.don.d<S.today,btn:'Entregar',act:{don:e._i}})));
+    add('Reasignaciones por hacer',my.filter(e=>e.p==='REUSO').map(e=>({e,what:`Aprobado. Mueve el equipo a ${e.sal?.area||'su nueva área'} y registra quién lo recibe`,days:0,late:false,btn:'Registrar reasignación',act:{reu:e._i}})));
+    add('Destrucciones por recoger',my.filter(e=>e.p==='DESTRUCCION').map(e=>({e,what:'Aprobado para destrucción. Pide la recolección al proveedor',days:e.destD?Math.max(0,diff(e.destD,S.today)):0,late:!!e.destD&&diff(e.destD,S.today)>30,meta:30,btn:'Pedir recolección',act:{rec:e._i}})));
+    add('Certificados por subir',my.filter(e=>e.p==='RECOLECCION').map(e=>({e,what:'Ya se recolectó. Sube el certificado de destrucción para cerrar',days:0,late:false,btn:'Subir certificado',act:{cert:e._i}})))}
+  if(r==='af'){rq('VB','Salidas por aprobar','Revisar','req',e=>e.sal?.tipo==='REUSO'?`Sistemas propone reutilizarlo en ${e.sal.area}`:'Sistemas propone destruirlo: no enciende');rq('PRECIO','Precios por definir','Definir precio','req','Revisa el diagnóstico y define el precio');rq('DECISION','Equipos sin venta','Decidir','req',e=>`Lleva ${e.pub?diff(e.pub,S.today):15} días publicado sin venta. Decide qué sigue`);rq('DONFACT','Donaciones por documentar','Subir documentos','req',e=>`Sube la factura de ${e.don?.org||'la donataria'} y el acta de recepción`);}
+  if(r==='ingr')rq('DEPOSITO','Depósitos por validar','Validar depósito','req',e=>`Revisa el váucher de ${String(e.buyer||'').split(' · ')[0]} y confirma el depósito`);
+  if(r==='fac')rq('FACTURA','Ventas por facturar','Adjuntar factura',{v:'facturacion'},e=>`Emite la factura de ${e.sale?.folio||'la venta'} y adjúntala`);
+  if(r==='fis')rq('REVFIS','Donaciones por revisar','Revisar',{v:'fiscal'},e=>`Revisa la factura de ${e.don?.org||'la donataria'}`);
+  if(r==='sis'){add('Diagnósticos atrasados',S.items.filter(e=>e.p==='CONFIRMADO'&&!sisTask(e).ok).map(e=>({e,what:`Lleva ${sisTask(e).days} días hábiles sin diagnóstico · ${tCase(e.INGENIERO)}`,days:sisTask(e).days,late:true,meta:C().sla.SIS,btn:'Ver equipo',act:{eq:e._i}})));
+    const byC={};S.items.filter(e=>!e.p&&baseSt(e)==='VENCIDO').forEach(e=>(byC[e.CLINICA]??=[]).push(e));
+    add('Clínicas con equipo acumulado',Object.entries(byC).filter(([c,l])=>l.length>=2).sort((a,b)=>b[1].length-a[1].length).slice(0,8).map(([c,l])=>({title:tCase(c),sub:`${l.length} equipos ya cumplieron 5 años y no han iniciado proceso`,what:'Revisar con el ingeniero si ya llegó el reemplazo',days:0,late:false,btn:'Ver clínica',act:{clin:c}})),true)}
+  G.sort((a,b)=>a.info-b.info);const flat=G.flatMap(g=>g.items),todo=G.filter(g=>!g.info).flatMap(g=>g.items);return{G,flat,n:todo.length,late:todo.filter(x=>x.late).length}}
+const tasks=()=>tasksFor(curRole());
+function taskCard(x,i){const d=x.days>0?`<span class="pill ${x.late?'p-bad':'p-mut'}">${x.late?'Va tarde · ':''}${x.days} día${x.days===1?'':'s'}${x.meta&&x.late?`, debían ser ${x.meta}`:''}</span>`:(x.late?'<span class="pill p-bad">Va tarde</span>':'');
+  return `<div class="tk ${x.late?'late':''}"><div class="tk-m">${x.e?eqLine(x.e):`<b>${esc(x.title)}</b><div class="note">${esc(x.sub||'')}</div>`}</div><div class="tk-w">${esc(x.what)}${x.extra?` · <b>${esc(x.extra)}</b>`:''}<div class="tk-d">${d}</div></div><button class="btn p" data-tk="${i}">${esc(x.btn)}</button></div>`}
+VIEWS.pend=()=>{const r=curRole();
+  if(r==='admin'){const L=[['af'],['ingr'],['fac'],['fis'],['sis'],['ing',true]].map(([k,all])=>({k,t:tasksFor(k,all)}));
+    return `<div><h1>Mis pendientes</h1><p class="sub">Como administrador ves el resumen de todas las áreas. Para trabajar un pendiente, entra como el área que lo resuelve.</p></div>
+    <div class="grid g3">${L.map(o=>`<div class="card"><div class="row"><h2>${o.k==='ing'?'Sistemas · ingenieros de clínica':ROLES[o.k]}</h2></div><div class="tk-n">${o.t.n}<small>pendiente${o.t.n===1?'':'s'}${o.t.late?` · <b style="color:var(--bad)">${o.t.late} va${o.t.late===1?'':'n'} tarde</b>`:''}</small></div>
+      <div class="note">${o.t.G.map(g=>`${esc(g.t)}: ${g.items.length}`).join(' · ')||'Sin pendientes'}</div><div class="row" style="margin-top:10px"><button class="btn sm" data-as="${o.k}">Ver como ${o.k==='ing'?'ingeniero':ROLES[o.k]}</button></div></div>`).join('')}</div>`}
+  const T=tasks(),who=r==='ing'?engLabel(engCur()):ROLES[r];let i=0;
+  const done=r==='ing'?[]:S.reqs.filter(q=>q.state!=='Pendiente'&&({af:['PRECIO','DECISION','DONFACT'],ingr:['DEPOSITO'],fac:['FACTURA'],fis:['REVFIS']}[r]||[]).includes(q.type)&&S.items[q.eq]).slice(0,10);
+  return `<div><h1>Mis pendientes</h1><p class="sub">${esc(who)} · ${T.n?`Tienes ${T.n} pendiente${T.n===1?'':'s'}${T.late?`; ${T.late} va${T.late===1?'':'n'} tarde`:''}.`:'No tienes pendientes.'}</p></div>
+  ${T.flat.length?T.G.map(g=>`<section class="tkg"><h2>${esc(g.t)} <span class="cnt">${g.items.length}</span>${g.info?'<span class="note" style="font-weight:400">Aviso, no cuenta como pendiente</span>':''}</h2>${g.items.map(x=>taskCard(x,i++)).join('')}</section>`).join(''):`<div class="card"><p style="margin:0">Todo al día. Puedes revisar el estado de cualquier equipo en <a href="#" data-v="${NAVS[r][1]?.[0]||'inventario'}">Equipos</a>.</p></div>`}
+  ${done.length?`<details class="card tk-done"><summary>Ya resolví · últimos ${done.length}</summary>${done.map(q=>`<div class="tk-r" data-eq="${q.eq}"><span>${eqLine(S.items[q.eq])}</span><span class="note">${esc(RT[q.type].n)} · ${esc(q.state)} · ${esc(q.res||'')}</span></div>`).join('')}</details>`:''}`};
+after.pend=()=>{$$('[data-as]').forEach(b=>b.onclick=()=>b.dataset.as==='ing'?setRole('ing',engList()[0]?.id):setRole(b.dataset.as));
+  const F=curRole()==='admin'?[]:tasks().flat;
+  $$('[data-tk]').forEach(b=>b.onclick=()=>{const a=F[+b.dataset.tk].act;if(a.req){openReq(a.req);return}if(a.reu!=null){fReuso(S.items[a.reu]);return}if(a.don!=null){fDonEnt(S.items[a.don]);return}if(a.rec!=null){fRecoleccion(S.items[a.rec]);return}if(a.cert!=null){fCert(S.items[a.cert]);return}if(a.eq!=null){openEq(a.eq);return}if(a.del!=null){openDelivery(a.del);return}if(a.clin){openClinic(a.clin);return}
+    if(a.dx!=null){S.engClinic=S.items[a.dx].CLINICA;S.dxId=a.dx;if(S.dxDraft?.id!==a.dx)S.dxDraft=null;go('ingeniero');$('.dxc')?.scrollIntoView({block:'start'});return}
+    if(a.eng){S.engClinic=a.eng;S.dxId=null;go('ingeniero');return}if(a.tab)S.hmTab=a.tab;if(a.sal)S.salTab=a.sal;go(a.v)})};
+
+/* ================= SALIDAS SIN VENTA y REGLAS (pantallas con pestañas) ================= */
+function tabView(key,tabs,title,sub){const cur=tabs.some(t=>t[0]===S[key])?S[key]:(S[key]=tabs[0][0]);
+  return `<div><h1>${title}</h1><p class="sub">${sub}</p></div><div class="tabs" id="tv-${key}">${tabs.map(t=>`<button data-tab="${t[0]}" class="${t[0]===cur?'on':''}">${t[1]}</button>`).join('')}</div><div class="tv-in">${VIEWS[cur]()}</div>`}
+function tabAfter(key){$$(`#tv-${key} [data-tab]`).forEach(b=>b.onclick=()=>{S[key]=b.dataset.tab;save();render()});after[S[key]]?.()}
+const SAL_T=[['reuso','Reutilización'],['donacion','Donación'],['destruccion','Destrucción']];
+VIEWS.salidas=()=>tabView('salTab',SAL_T,'Salidas sin venta','Equipo que no se vendió o que no enciende. Cada salida se cierra con su documento.');
+after.salidas=()=>tabAfter('salTab');
+const REG_T=()=>curRole()==='sis'?[['ingenieros','Accesos por clínica']]:[['config','Tabulador y plazos'],['ingenieros','Accesos por clínica']];
+VIEWS.reglas=()=>tabView('regTab',REG_T(),'Reglas','Lo que define cómo se calcula el precio, los plazos de cada área y quién atiende cada clínica.');
+after.reglas=()=>tabAfter('regTab');
 
 /* ================= PANEL EJECUTIVO ================= */
 function metrics(){
@@ -1273,44 +1395,15 @@ VIEWS.ingeniero=()=>{
   <div class="card"><h2>Equipos de la clínica</h2><div class="tbl" style="margin-top:10px;max-height:420px"><table><tr><th>Equipo</th><th>Sustituir</th><th>Estatus</th></tr>${its.map(e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td>${eqLine(e)}</td><td class="mono">${fd(due(e))}</td><td>${pill(stOf(e))}</td></tr>`).join('')}</table></div></div>`;
 };
 
-function dxForm(e){const d=S.dxDraft||(S.dxDraft={...DEFDX,comp:[],fotos:''});const t=tipo(e),pc=t==='Escritorio'||t==='Laptop';
-  const seg=(k,opts)=>`<div class="seg">${opts.map(([v,l])=>`<label><input type="radio" name="${k}" value="${v}" ${d[k]===v?'checked':''}>${l}</label>`).join('')}</div>`;
-  const dest=destino(d),pr=priceCalc(e,d);const needDisk=pc||t==='Memoria USB';
-  return `<div class="card" style="border-color:var(--sd)"><div class="row"><h2>Diagnóstico · ${esc(e.ID_ACTIVO)}</h2><span class="pill p-mut">${esc(t)}</span><span class="sp"></span><button class="btn sm" id="dxx">Cerrar</button></div>
-  <p class="note">${esc(e.MARCA)} ${esc(e.MODELO)}${pc?` · ${esc(e.PROCESADOR)} · ${e.RAM_GB} GB · ${esc(e.ALMACENAMIENTO)}`:''}${t==='Escritorio'?' · '+esc(e.MONITOR):''} · serie ${esc(e.NUM_SERIE)} · adquirido ${fd(e.FECHA_ADQUISICION)}</p>
-  <form id="dxf" class="form" style="margin-top:10px">
-   <div class="fld"><span class="lb">${pc?'¿Enciende y arranca el sistema?':'¿Funciona correctamente?'}</span>${seg('enciende',[['si','Sí'],['no','No']])}</div>
-   ${d.enciende==='si'?`
-   ${pc?`<div class="fld"><span class="lb">Rendimiento en prueba</span>${seg('rend',[['ok','Óptimo'],['lento','Lento']])}</div>`:''}
-   ${t==='Escritorio'?`<div class="fld"><span class="lb">Monitor</span>${seg('monitor',[['ok','Funciona'],['fallas','Con fallas'],['no','No incluido']])}</div>`:''}
-   <div class="fld"><span class="lb">Estética</span>${seg('estetica',[['A','A · como nuevo'],['B','B · detalles'],['C','C · golpes']])}</div>
-   ${pc||t==='Hub USB-C'?`<div class="fld"><span class="lb">Puertos USB / red / video</span>${seg('puertos',[['ok','Todos funcionan'],['falla','Alguno falla']])}</div>`:''}
-   <div class="fld"><span class="lb">${t==='Escritorio'?'Teclado y mouse':t==='Laptop'?'Cargador':'Cables y accesorios'}</span>${seg('perif',[['si','Incluidos'],['no','No incluidos']])}</div>
-   ${needDisk?`<div class="fld"><span class="lb">Almacenamiento (seguridad de información)</span>${seg('disco',[['borrado','Borrado seguro hecho'],['pend','Pendiente'],['retirado','Retirado y destruido']])}</div>`:''}`:`
-   <div class="fld"><span class="lb">Componentes recuperables</span><div class="seg">${(pc?['RAM','Disco','Fuente','Monitor']:['Cables','Piezas']).map(c=>`<label><input type="checkbox" name="comp" value="${c}" ${d.comp.includes(c)?'checked':''}>${c}</label>`).join('')}</div></div>`}
-   <div class="fld"><label for="fotos">Evidencia fotográfica</label><input type="file" id="fotos" accept="image/*" multiple><span class="note">${esc(d.fotos||'Sin archivos')}</span></div>
-   <div class="fld"><label for="obs">Observaciones</label><input type="text" id="obs" value="${esc(d.obs)}" placeholder="Opcional"></div>
-  </form>
-  <div class="${dest==='VENTA'&&!(needDisk&&d.disco==='pend')?'result':'result bad'}" style="margin-top:12px">
-   ${dest==='VENTA'?(needDisk&&d.disco==='pend'?`<b>Falta el borrado seguro.</b> Para enviarlo a venta, el almacenamiento debe estar borrado o retirado.`:
-   `<div class="row"><div><div class="note">Destino: <b>Venta local en ${esc(e.MUNICIPIO)}</b></div>${pr.tab?tabBox(pr):`<div class="pr">${money(pr.sug)}</div><div class="note">Rango sugerido ${money(pr.min)} – ${money(pr.max)} · tabulador de Activo Fijo</div>`}</div><span class="sp"></span><button class="btn h" id="dxsend">Enviar a Activo Fijo por Humand</button></div>`)
-   :`<div class="row"><div><div class="note">Destino</div><b>${dest==='RECUP'?'Recuperar componentes ('+d.comp.join(', ')+') y destruir el remanente':'Destrucción certificada'}</b></div><span class="sp"></span><button class="btn" id="dxsend">Enviar a destrucción</button></div>`}
-  </div></div>`}
 after.ingeniero=()=>{
   $('#ec').onchange=e=>{S.engClinic=e.target.value;S.dxId=null;render()};
   $('#confAll')&&($('#confAll').onclick=()=>{const l=S.items.filter(e=>e.CLINICA===S.engClinic&&!e.p&&soon(e));l.forEach(e=>{e.p='CONFIRMADO';H(e,'Reemplazo confirmado: equipos nuevos recibidos en clínica','SIS')});save();render();toast(`${l.length} equipos listos para diagnóstico`)});
-  $$('[data-dx]').forEach(b=>b.onclick=()=>{S.dxId=+b.dataset.dx;S.dxDraft=null;render();$('#dxf').scrollIntoView({block:'center'})});
+  $$('[data-dx]').forEach(b=>b.onclick=()=>{S.dxId=+b.dataset.dx;if(S.dxDraft?.id!==S.dxId)S.dxDraft=null;render();$('.dxc')?.scrollIntoView({block:'start'})});
   $$('[data-del]').forEach(b=>b.onclick=()=>openDelivery(+b.dataset.del));
   $$('[data-ag]').forEach(b=>b.onclick=()=>{const e=S.items[+b.dataset.ag],d=$('#cd-'+e._i).value;if(!d||d<S.today){toast('Elige una fecha a partir de hoy');return}schedule(e,d,$('#ch-'+e._i).value);save();render();toast('Cita enviada al comprador por Humand')});
   $$('[data-rp]').forEach(b=>b.onclick=()=>openResched(+b.dataset.rp));
-  $$('[data-dent]').forEach(b=>b.onclick=()=>{deliverDon(S.items[+b.dataset.dent]);save();render();toast('Donación entregada · Activo Fijo tiene 10 días para adjuntar la factura')});
-  if(!$('#dxf'))return;
-  $('#dxx').onclick=()=>{S.dxId=null;render()};
-  $('#dxf').onchange=ev=>{const d=S.dxDraft;const t=ev.target;if(t.name==='comp')d.comp=$$('input[name=comp]:checked').map(x=>x.value);else if(t.id==='fotos')d.fotos=[...t.files].map(f=>f.name).join(', ');else if(t.id==='obs')d.obs=t.value;else if(t.name)d[t.name]=t.value;render()};
-  $('#dxsend')&&($('#dxsend').onclick=()=>{const e=S.items[S.dxId],d={...S.dxDraft};e.dx=d;const dest=destino(d);
-    if(dest==='VENTA'){e.price=priceCalc(e,d);e.price.aut=e.price.sug;e.p='PRECIO';H(e,`Diagnóstico registrado · destino venta · sugerido ${money(e.price.sug)}`,'SIS');newReq('PRECIO',e,{amount:e.price.sug});toast('Solicitud enviada a la bandeja de Activo Fijo en Humand')}
-    else{e.p='DESTRUCCION';e.destD=S.today;H(e,dest==='RECUP'?`No funciona · se recuperan ${d.comp.join(', ')} · remanente a destrucción`:'No funciona · destrucción certificada','SIS');toast('Equipo enviado a destrucción certificada')}
-    S.dxId=null;S.dxDraft=null;save();render()});
+  $$('[data-dent]').forEach(b=>b.onclick=()=>fDonEnt(S.items[+b.dataset.dent]));
+  bindDx();
 };
 function openResched(i){const e=S.items[i];const hrs=['9:00','10:00','11:00','12:00','13:00','16:00','17:00'];
  $('#drawer').innerHTML=`<div class="drawer"><div><div class="row"><h2>Reprogramar entrega</h2><span class="sp"></span><button class="btn sm" data-close>Cerrar</button></div>${eqLine(e)}
@@ -1318,18 +1411,225 @@ function openResched(i){const e=S.items[i];const hrs=['9:00','10:00','11:00','12
  <div class="form"><div class="fld"><label for="rpd">Nueva fecha</label><input type="date" id="rpd" value="${addBiz(S.today,1)}" min="${S.today}"></div><div class="fld"><label for="rph">Hora</label><select id="rph">${hrs.map(h=>`<option>${h}</option>`).join('')}</select></div></div>
  <button class="btn p" id="rpok">Guardar y avisar al comprador</button></div></div>`;bindClose();
  $('#rpok').onclick=()=>{const d=$('#rpd').value;if(!d||d<S.today){toast('Elige una fecha a partir de hoy');return}schedule(e,d,$('#rph').value,true);closeDrawer();save();render();toast('Nueva cita enviada por Humand')}}
-function openDelivery(i){const e=S.items[i];$('#drawer').innerHTML=`<div class="drawer"><div><div class="row"><h2>Entrega en clínica</h2><span class="sp"></span><button class="btn sm" data-close>Cerrar</button></div>
- ${eqLine(e)}<div class="card"><div class="note">Entregar a</div><b>${esc(e.buyer)}</b><div class="note">${esc(e.sale?.folio||'')} · factura ${esc(e.fac||'')} · ${money(e.pay?.amount||0)} · cita ${fd(e.cita?.d)} ${esc(e.cita?.h||'')}</div></div>
- <label class="chk"><input type="checkbox" id="c1"> Verifiqué identificación / gafete del colaborador</label>
- <label class="chk"><input type="checkbox" id="c2"> El colaborador revisó el equipo y firma de conformidad (equipo usado, sin garantía)</label>
- <div class="fld"><label for="fir">Nombre de quien recibe (firma digital)</label><input type="text" id="fir" value="${esc((e.buyer||'').split(' · ')[0])}"></div>
- <button class="btn p" id="okDel" disabled>Marcar como entregado</button></div></div>`;
- const chk=()=>$('#okDel').disabled=!($('#c1').checked&&$('#c2').checked&&$('#fir').value.trim());['#c1','#c2','#fir'].forEach(s=>$(s).oninput=chk);
- $('#okDel').onclick=()=>{e.p='ENTREGADO';H(e,`Equipo entregado a ${$('#fir').value.trim()} · expediente cerrado`,'SIS');addFile(e,'Acta de entrega firmada.pdf');notify(e.buyer,`Entrega registrada de ${e.ID_ACTIVO}. Cuéntanos cómo te fue en la encuesta de 3 preguntas.`,'req');log('PATCH','/inventario/'+e.ID_ACTIVO,'int',{estatus:'ENTREGADO',baja:true},'Cierre del activo en el inventario.');closeDrawer();save();render();toast('Entrega registrada · venta concluida')};
- bindClose()}
+function openDelivery(i,st){const e=S.items[i];st=st||{acc:[...(e.dx?.acc||ACC_OF(tipo(e)))],foto:'',c1:false,c2:false};const all=e.dx?.acc||ACC_OF(tipo(e));
+ fDrawer('Entrega en clínica',`${fEq(e)}<div class="dxr"><div><span class="note">Recibe</span><b>${esc(nom(e.buyer))}</b></div><div><span class="note">Folio y factura</span><b>${esc(e.sale?.folio||'')} · ${esc(e.fac||'')}</b></div><div><span class="note">Pagó, IVA incluido</span><b>${money(e.pay?.amount||0)}</b></div><div><span class="note">Cita</span><b>${fd(e.cita?.d)} ${esc(e.cita?.h||'')}</b></div></div>
+ <label class="chk"><input type="checkbox" id="c1" ${st.c1?'checked':''}> <span>${ob('Verifiqué su gafete o identificación')}</span></label>
+ <div class="fld"><span class="lb">Accesorios que se entregan</span><div class="seg">${all.map(a=>`<label><input type="checkbox" name="dacc" value="${a}" ${st.acc.includes(a)?'checked':''}>${a}</label>`).join('')||'<span class="note">Sin accesorios en el diagnóstico.</span>'}</div><span class="note">Vienen del diagnóstico. Desmarca lo que falte.</span></div>
+ <label class="chk"><input type="checkbox" id="c2" ${st.c2?'checked':''}> <span>${ob('Revisó el equipo y lo recibe de conformidad: usado y sin garantía')}</span></label>
+ ${fotoFld('f-foto',st.foto)}
+ <div class="row fm-nav"><span class="sp"></span><button class="btn p" id="okDel">Marcar como entregado</button></div>`);
+ $('#c1').onchange=ev=>st.c1=ev.target.checked;$('#c2').onchange=ev=>st.c2=ev.target.checked;$$('input[name=dacc]').forEach(x=>x.onchange=()=>st.acc=$$('input[name=dacc]:checked').map(y=>y.value));
+ $('#f-foto').onchange=ev=>ev.target.files[0]&&readFoto(ev.target.files[0],u=>{st.foto=u;openDelivery(i,st)});$$('.fm [data-fotoej]').forEach(a=>a.onclick=ev=>{ev.preventDefault();st.foto=FOTO_EJ;openDelivery(i,st)});
+ $('#okDel').onclick=()=>{if(!st.c1){toast('Falta verificar el gafete o identificación');return}if(!st.c2){toast('Falta la conformidad de quien recibe');return}if(!st.foto){toast('Falta la foto de la entrega');return}
+  e.ent={acc:st.acc,foto:st.foto,d:S.today};e.p='ENTREGADO';H(e,`Equipo entregado a ${nom(e.buyer)}${st.acc.length?' con '+st.acc.join(', ').toLowerCase():''} · expediente cerrado`,'SIS');addFile(e,'Acta de entrega firmada.pdf');notify(e.buyer,`Entrega registrada de ${e.ID_ACTIVO}. Cuéntanos cómo te fue en la encuesta de 3 preguntas.`,'req');log('PATCH','/inventario/'+e.ID_ACTIVO,'int',{estatus:'ENTREGADO',baja:true},'Cierre del activo en el inventario.');closeDrawer();save();render();toast('Entrega registrada. Venta cerrada')}}
 
 function closeDrawer(){$('#drawer').innerHTML=''}
 function bindClose(){$$('[data-close]').forEach(b=>b.onclick=closeDrawer);const d=document.querySelector('.drawer');d&&(d.onclick=ev=>{if(ev.target===d)closeDrawer()})}
+
+/* ================= FORMULARIOS ================= */
+/* Diagnóstico por pasos, formularios de Activo Fijo e Ingresos, y cierres con documento de las salidas sin venta. */
+const FOTO_EJ='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http:/'+'/www.w3.org/2000/svg" width="320" height="220"><rect width="320" height="220" fill="#dfe8e3"/><rect x="60" y="36" width="200" height="124" rx="8" fill="#2f3b36"/><rect x="72" y="48" width="176" height="100" fill="#9fc7b3"/><rect x="132" y="160" width="56" height="14" fill="#2f3b36"/><rect x="100" y="174" width="120" height="8" rx="4" fill="#2f3b36"/><text x="160" y="206" font-size="12" text-anchor="middle" fill="#56675e" font-family="sans-serif">Foto de ejemplo</text></svg>');
+const ACC_OF=t=>t==='Escritorio'?['Teclado','Mouse','Cable de corriente','Cable de video']:t==='Laptop'?['Cargador']:['Cables'];
+const CUENTAS=['Cuenta concentradora 1','Cuenta concentradora 2','Cuenta concentradora 3','Cuenta concentradora 4'];
+const MOT_DEP=['El monto no coincide','La referencia está equivocada','No aparece en la cuenta'];
+const ob=l=>`${l} <span class="ob">Obligatorio</span>`;
+const nom=s=>String(s||'').split(' · ')[0];
+function readFoto(file,cb){const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,360/im.width),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.6))};im.onerror=()=>cb(FOTO_EJ);im.src=rd.result};rd.readAsDataURL(file)}
+function fDrawer(title,body){$('#drawer').innerHTML=`<div class="drawer"><div class="fm"><div class="row"><h2>${title}</h2><span class="sp"></span><button class="btn sm" data-close>Cerrar</button></div>${body}</div></div>`;bindClose()}
+const fEq=e=>`<div class="fm-eq">${eqLine(e)}<div class="note">${esc(e.PROCESADOR||'')} · ${e.RAM_GB} GB · ${esc(e.ALMACENAMIENTO||'')} · instalado ${fd(e.FECHA_ADQUISICION)}</div></div>`;
+function confirmBox(msg,okTxt,fn){const el=document.createElement('div');el.className='cfm';el.innerHTML=`<div role="alertdialog" aria-label="Confirmar"><p>${msg}</p><div class="row" style="justify-content:flex-end"><button class="btn" data-n>Regresar</button><button class="btn p" data-y>${okTxt}</button></div></div>`;
+  document.body.appendChild(el);el.querySelector('[data-n]').onclick=()=>el.remove();el.querySelector('[data-y]').onclick=()=>{el.remove();fn()}}
+function fotoFld(id,url){return `<div class="fld"><label for="${id}">${ob('Foto')}</label><input type="file" id="${id}" accept="image/png,image/jpeg" capture="environment"><span class="note">${url?'Foto lista.':'Tómala con el celular o elige un archivo.'} <a href="#" data-fotoej="${id}">Usar foto de ejemplo</a></span>${url?`<img class="dxf" src="${url}" alt="Foto">`:''}</div>`}
+function dxResumen(e){const d=e.dx||{},t=tipo(e),L=[];const a=(k,v)=>L.push(`<div><span class="note">${k}</span><b>${esc(v)}</b></div>`);
+  a('Enciende',d.enciende==='no'?'No':'Sí');
+  if(d.enciende!=='no'){a('Rendimiento',d.rend==='lento'?'Lento':'Óptimo');a('Estética',({A:'A · como nuevo',B:'B · con detalles',C:'C · con golpes'})[d.estetica]||'A · como nuevo');a('Puertos',d.puertos==='falla'?'Alguno falla':'Todos funcionan');
+    if(t==='Escritorio')a('Monitor',({ok:'Funciona',fallas:'Con fallas',no:'No incluido'})[d.monitor]||'Funciona');a('Se entrega con',d.acc?(d.acc.join(', ')||'Sin accesorios'):(d.perif==='no'?'Sin accesorios':'Accesorios completos'));
+    a('Disco',({borrado:'Borrado seguro hecho',pend:'Borrado pendiente',retirado:'Retirado y destruido'})[d.disco]||'Borrado seguro hecho')}
+  else a('Piezas que se recuperan',(d.comp||[]).join(', ')||'Ninguna');
+  if(d.fallas||d.obs)a('Fallas que debe saber el comprador',d.fallas||d.obs);
+  return `<div class="dxr">${L.join('')}</div>${d.foto?`<img class="dxf" src="${d.foto}" alt="Foto del equipo">`:''}`}
+
+/* ---------- 1. Diagnóstico en pasos (ingeniero) ---------- */
+const dxSteps=d=>d.reuso==='si'?['Destino','Evidencia']:['Destino','Estado','Evidencia'];
+function dxMissing(e,d){const t=tipo(e),cur=dxSteps(d)[d.step-1],needDisk=t==='Escritorio'||t==='Laptop'||t==='Memoria USB';
+  if(cur==='Destino'&&d.reuso==='si'&&!d.area)return'Elige el área donde se va a usar';
+  if(cur==='Estado'&&d.enciende==='si'&&needDisk&&d.disco==='pend')return'Falta el borrado seguro del disco. Sin eso no se puede enviar a venta';
+  if(cur==='Evidencia'&&!d.foto)return'Falta la foto del equipo';
+  if(cur==='Evidencia'&&e.dxQ&&!String(d.resp||'').trim())return'Falta tu respuesta a la pregunta de Activo Fijo';return''}
+function dxForm(e){const t=tipo(e),pc=t==='Escritorio'||t==='Laptop';
+  const d=S.dxDraft||(S.dxDraft={...DEFDX,comp:[],reuso:'no',area:'',acc:[...ACC_OF(t)],fallas:'',foto:'',resp:'',...(e.dx||{}),step:1,id:e._i});if(!d.acc)d.acc=[...ACC_OF(t)];if(!d.comp)d.comp=[];
+  const L=dxSteps(d);if(d.step>L.length)d.step=L.length;const cur=L[d.step-1],needDisk=pc||t==='Memoria USB';
+  const seg=(k,opts)=>`<div class="seg">${opts.map(([v,l])=>`<label><input type="radio" name="${k}" value="${v}" ${d[k]===v?'checked':''}>${l}</label>`).join('')}</div>`;
+  const chk=(k,list)=>`<div class="seg">${list.map(c=>`<label><input type="checkbox" name="${k}" value="${c}" ${d[k].includes(c)?'checked':''}>${c}</label>`).join('')}</div>`;
+  const areas=[...new Set(S.items.filter(x=>x.CLINICA===e.CLINICA&&x.SERVICIO!==e.SERVICIO).map(x=>x.SERVICIO))].sort();
+  let body='';
+  if(cur==='Destino')body=`<div class="fld"><span class="lb">${ob(pc?'¿Enciende y arranca?':'¿Funciona?')}</span>${seg('enciende',[['si','Sí'],['no','No']])}</div>
+    ${d.enciende==='si'?`<div class="fld"><span class="lb">${ob('¿La clínica lo necesita en otra área o como repuesto?')}</span>${seg('reuso',[['no','No, ya no se necesita'],['si','Sí, se queda en la clínica']])}<span class="note">Si se queda, no se ofrece en venta.</span></div>
+    ${d.reuso==='si'?`<div class="fld"><label for="area">${ob('¿En qué área se va a usar?')}</label><select id="area"><option value="">Elige un área</option>${[...areas,'Repuesto para la clínica'].map(a=>`<option ${d.area===a?'selected':''}>${esc(a)}</option>`).join('')}</select></div>`:''}`:''}`;
+  if(cur==='Estado')body=d.enciende==='si'?`
+    ${pc?`<div class="fld"><span class="lb">${ob('Rendimiento en la prueba')}</span>${seg('rend',[['ok','Óptimo'],['lento','Lento']])}</div>`:''}
+    <div class="fld"><span class="lb">${ob('Estética')}</span>${seg('estetica',[['A','A · como nuevo'],['B','B · con detalles'],['C','C · con golpes']])}</div>
+    ${pc||t==='Hub USB-C'?`<div class="fld"><span class="lb">${ob('Puertos USB, red y video')}</span>${seg('puertos',[['ok','Todos funcionan'],['falla','Alguno falla']])}</div>`:''}
+    ${t==='Escritorio'?`<div class="fld"><span class="lb">${ob('Monitor')}</span>${seg('monitor',[['ok','Funciona'],['fallas','Con fallas'],['no','No incluido']])}</div>`:''}
+    <div class="fld"><span class="lb">Qué se entrega con el equipo</span>${chk('acc',ACC_OF(t))}<span class="note">Desmarca lo que falte.</span></div>
+    ${needDisk?`<div class="fld"><span class="lb">${ob('Disco (seguridad de la información)')}</span>${seg('disco',[['borrado','Borrado seguro hecho'],['pend','Pendiente'],['retirado','Retirado y destruido']])}</div>`:''}
+    <div class="fld"><label for="fallas">Fallas que debe saber el comprador <span class="note">Opcional</span></label><input type="text" id="fallas" value="${esc(d.fallas||'')}" placeholder="Ejemplo: el ventilador hace ruido"></div>`
+   :`<div class="fld"><span class="lb">Piezas que se pueden recuperar <span class="note">Opcional</span></span>${chk('comp',pc?['RAM','Disco','Fuente','Monitor']:['Cables','Piezas'])}</div>
+    <div class="fld"><label for="fallas">Qué falla <span class="note">Opcional</span></label><input type="text" id="fallas" value="${esc(d.fallas||'')}" placeholder="Ejemplo: no da video"></div>`;
+  const dest=d.reuso==='si'&&d.enciende==='si'?`Se propone <b>reutilizarlo en ${esc(d.area||'la clínica')}</b>. Activo Fijo da el visto bueno.`:d.enciende==='no'?`Se propone <b>destrucción</b>${d.comp.length?' y recuperar '+esc(d.comp.join(', ')):''}. Activo Fijo da el visto bueno.`:`Se envía a <b>venta en ${esc(tCase(e.MUNICIPIO))}</b>. Activo Fijo define el precio.`;
+  if(cur==='Evidencia')body=`${fotoFld('foto',d.foto)}
+    ${e.dxQ?`<div class="fld"><label for="resp">${ob('Tu respuesta a Activo Fijo')}</label><input type="text" id="resp" value="${esc(d.resp||'')}"></div>`:''}
+    <div class="fld" style="grid-column:1/-1"><span class="lb">Resumen</span><div class="result">${dest}</div></div>`;
+  return `<div class="card dxc"><div class="row"><h2>Diagnóstico</h2><span class="pill p-mut">${esc(t)}</span><span class="sp"></span><button class="btn sm" id="dxx">Guardar y cerrar</button></div>
+  ${fEq(e)}${e.dxQ?`<div class="result bad"><b>Activo Fijo regresó este equipo con una pregunta:</b> ${esc(e.dxQ)}</div>`:''}
+  <div class="stp" aria-label="Paso ${d.step} de ${L.length}">${L.map((s,i)=>`<span class="${i+1<d.step?'done':i+1===d.step?'cur':''}"><i>${i+1<d.step?'✓':i+1}</i>${s}</span>`).join('')}</div>
+  <form id="dxf" class="form fm-g" onsubmit="return false">${body}</form>
+  <div class="row fm-nav">${d.step>1?'<button class="btn" id="dxprev">Atrás</button>':''}<span class="sp"></span>${d.step<L.length?'<button class="btn p" id="dxnext">Siguiente</button>':'<button class="btn p" id="dxsend">Enviar a Activo Fijo</button>'}</div></div>`}
+function sendDx(e,d){const t=tipo(e),ess=t==='Laptop'?['Cargador']:t==='Escritorio'?['Teclado','Mouse']:[];const dx={...d};delete dx.step;delete dx.id;delete dx.resp;
+  dx.perif=ess.every(a=>(d.acc||[]).includes(a))?'si':'no';dx.obs=d.fallas||'';e.dx=dx;
+  if(e.dxQ){H(e,`Respuesta del ingeniero a Activo Fijo: ${String(d.resp||'').trim()}`,'SIS');e.dxQ=null}
+  if(d.enciende==='si'&&d.reuso==='si'){e.p='REUSO_VB';e.sal={tipo:'REUSO',area:d.area,d:S.today};H(e,`Diagnóstico registrado · se propone reutilizarlo en ${d.area}`,'SIS');newReq('VB',e);toast('Enviado. Activo Fijo dará el visto bueno')}
+  else if(d.enciende==='no'){e.p='DEST_VB';e.sal={tipo:'DEST',d:S.today};H(e,(d.comp.length?`No enciende · se recuperan ${d.comp.join(', ')} · `:'No enciende · ')+'se propone destrucción','SIS');newReq('VB',e);toast('Enviado. Activo Fijo dará el visto bueno')}
+  else{e.price=priceCalc(e,dx);e.price.aut=Math.round(e.price.sug);e.p='PRECIO';H(e,'Diagnóstico registrado · se envía a Activo Fijo para definir precio','SIS');newReq('PRECIO',e,{amount:e.price.aut});toast('Enviado. Activo Fijo definirá el precio')}
+  S.dxId=null;S.dxDraft=null;save();render()}
+function bindDx(){if(!$('#dxf'))return;const e=S.items[S.dxId],d=S.dxDraft;
+  $('#dxx').onclick=()=>{S.dxId=null;save();render();toast('Diagnóstico guardado como borrador')};
+  $('#dxf').onchange=ev=>{const x=ev.target;if(x.name==='comp')d.comp=$$('input[name=comp]:checked').map(i=>i.value);else if(x.name==='acc')d.acc=$$('input[name=acc]:checked').map(i=>i.value);
+    else if(x.id==='foto'){if(x.files[0])readFoto(x.files[0],u=>{d.foto=u;save();render()});return}else if(x.id==='fallas'){d.fallas=x.value;save();return}else if(x.id==='resp'){d.resp=x.value;save();return}
+    else if(x.id==='area')d.area=x.value;else if(x.name)d[x.name]=x.value;save();render()};
+  $$('[data-fotoej]').forEach(a=>a.onclick=ev=>{ev.preventDefault();d.foto=FOTO_EJ;save();render()});
+  $('#dxprev')&&($('#dxprev').onclick=()=>{d.step--;save();render()});
+  $('#dxnext')&&($('#dxnext').onclick=()=>{const m=dxMissing(e,d);if(m){toast(m);return}d.step++;save();render()});
+  $('#dxsend')&&($('#dxsend').onclick=()=>{const m=dxMissing(e,d);if(m){toast(m);return}sendDx(e,d)})}
+
+/* ---------- Formularios de las áreas: un pendiente, una decisión ---------- */
+function openReq(id){const r=S.reqs.find(x=>x.id===id);if(!r||r.state!=='Pendiente')return;const e=S.items[r.eq];({PRECIO:fPrecio,DECISION:fDecision,VB:fVB,DEPOSITO:fDeposito,DONFACT:fDonFact})[r.type]?.(r,e)}
+const segF=(name,cur,opts)=>`<div class="seg">${opts.map(([v,l,dis])=>`<label class="${dis?'dis':''}"><input type="radio" name="${name}" value="${v}" ${cur===v?'checked':''} ${dis?'disabled':''}>${l}</label>`).join('')}</div>`;
+const donFld=st=>`<div class="fld"><label for="f-org">${ob('Donataria autorizada')}</label><select id="f-org">${C().donatarias.map(o=>`<option ${st.org===o?'selected':''}>${esc(o)}</option>`).join('')}</select></div>
+  <div class="fld"><label for="f-fecha">${ob('Fecha de entrega')}</label><input type="date" id="f-fecha" value="${st.fecha}" min="${S.today}"></div>`;
+const motFld=(st,l)=>`<div class="fld"><label for="f-mot">${ob(l||'Motivo')}</label><input type="text" id="f-mot" value="${esc(st.mot||'')}"></div>`;
+function bindF(st,again){$$('.fm [data-k]').forEach(x=>{const k=x.dataset.k;x.onchange=()=>{st[k]=x.type==='number'?(x.value===''?null:+x.value):x.value;if(x.dataset.re!=null)again()}});
+  $$('.fm input[type=radio]').forEach(x=>x.onchange=()=>{st[x.name]=x.value;again()});
+  [['#f-org','org'],['#f-fecha','fecha'],['#f-mot','mot'],['#f-q','q']].forEach(([s,k])=>{const x=$(s);if(x)x.oninput=()=>st[k]=x.value})}
+/* 3. Definir precio */
+function fPrecio(r,e,st){st=st||{val:valorLibros(e).v,precio:null,dec:'ok',mot:'',q:'',sal:'don',org:C().donatarias[0],fecha:addBiz(S.today,2)};
+  const keep=e.VALOR_LIBROS;e.VALOR_LIBROS=st.val||0;const pr=priceCalc(e,e.dx||DEFDX);e.VALOR_LIBROS=keep;const prop=Math.round(pr.sug),precio=st.precio??prop,dif=precio!==prop;
+  fDrawer('Definir precio',`${fEq(e)}<h3>Diagnóstico del ingeniero</h3>${dxResumen(e)}
+   <div class="fld"><label for="f-val">${ob('Valor del equipo según Activo Fijo')}</label><input type="number" id="f-val" data-k="val" data-re min="0" step="0.01" value="${st.val??''}"><span class="note">El valor que Activo Fijo toma de sus libros. El tabulador parte de aquí.</span></div>
+   ${pr.tab?tabBox(pr):''}
+   <div class="fld"><label for="f-pre">${ob('Precio al colaborador, IVA incluido')}</label><input type="number" id="f-pre" data-k="precio" data-re min="1" step="1" value="${precio}"><span class="note">Propuesta del tabulador: ${money(prop)}. El desglose del IVA lo hace Facturación en la factura.</span></div>
+   ${dif&&st.dec==='ok'?motFld(st,'Motivo del cambio de precio'):''}
+   <div class="fld"><span class="lb">${ob('Decisión')}</span>${segF('dec',st.dec,[['ok','Autorizar y publicar'],['back','Regresar al ingeniero con una pregunta'],['no','No vender']])}</div>
+   ${st.dec==='back'?`<div class="fld"><label for="f-q">${ob('¿Qué necesitas saber?')}</label><input type="text" id="f-q" value="${esc(st.q)}" placeholder="Ejemplo: ¿el monitor tiene rayones en la pantalla?"></div>`:''}
+   ${st.dec==='no'?`<div class="fld"><span class="lb">${ob('¿Qué salida tendrá?')}</span>${segF('sal',st.sal,[['don','Donar'],['dest','Destruir']])}</div>${st.sal==='don'?donFld(st):''}${motFld(st,'Motivo para no venderlo')}`:''}
+   <div class="row fm-nav"><span class="sp"></span><button class="btn p" id="f-ok">${st.dec==='ok'?'Autorizar precio':st.dec==='back'?'Regresar al ingeniero':'Confirmar salida'}</button></div>`);
+  bindF(st,()=>fPrecio(r,e,st));
+  $('#f-ok').onclick=()=>{const mot=String(st.mot||'').trim();
+    if(st.dec==='ok'){if(!(st.val>0)){toast('Falta el valor del equipo');return}if(!(precio>0)){toast('Falta el precio');return}if(dif&&!mot){toast('Falta el motivo del cambio de precio');return}
+      e.VALOR_LIBROS=st.val;e.price=priceCalc(e,e.dx||DEFDX);e.price.aut=Math.round(precio);r.amount=e.price.aut;if(dif){e.price.mot=mot;H(e,`Activo Fijo ajustó el precio a ${money(e.price.aut)} (el tabulador proponía ${money(prop)}) · motivo: ${mot}`,'AF','hmn')}
+      closeDrawer();resolve(r.id,'ap');return}
+    if(st.dec==='back'){const q=String(st.q||'').trim();if(!q){toast('Escribe la pregunta para el ingeniero');return}backToEng(r,e,q);return}
+    if(!mot){toast('Falta el motivo');return}if(st.sal==='don'&&(!st.fecha||st.fecha<S.today)){toast('Elige una fecha de entrega a partir de hoy');return}
+    confirmBox(st.sal==='don'?`Vas a donar <b>${esc(e.ID_ACTIVO)}</b> a ${esc(st.org)}. No se ofrecerá en venta.`:`Vas a mandar a destrucción <b>${esc(e.ID_ACTIVO)}</b>, un equipo que sí enciende. No se ofrecerá en venta.`,st.sal==='don'?'Sí, donar':'Sí, destruir',()=>{
+      closeReq(r,'No vender');e.price=null;if(st.sal==='don'){H(e,`Activo Fijo decidió no venderlo · motivo: ${mot}`,'AF','hmn');startDon(e,st.org,st.fecha)}
+      else{e.p='DESTRUCCION';e.destD=S.today;H(e,`Activo Fijo decidió no venderlo y aprobó su destrucción · motivo: ${mot}`,'AF','hmn')}
+      closeDrawer();save();render();toast(st.sal==='don'?'Donación registrada. El ingeniero recibió el aviso':'Destrucción aprobada. El ingeniero pedirá la recolección')})}}
+function backToEng(r,e,q){closeReq(r,'Devuelta');e.p='CONFIRMADO';e.dxQ=q;e.price=null;H(e,`Devuelto por Activo Fijo con una pregunta: ${q}`,'AF','hmn');
+  mail(e.CORREO_INGENIERO||e.INGENIERO,`[Activo 360] Activo Fijo tiene una pregunta · ${e.ID_ACTIVO}`,`Activo Fijo regresó el equipo ${eqName(e)} (${e.ID_ACTIVO}) con esta pregunta: ${q}`,e);closeDrawer();save();render();toast('Regresó al ingeniero con tu pregunta')}
+/* 4. Equipo sin venta */
+function fDecision(r,e,st){st=st||{op:'',modo:'pct',pct:20,monto:null,min:r50(e.price.aut*C().subastaMin),mot:'',org:C().donatarias[0],fecha:addBiz(S.today,2)};
+  const rondas=e.rounds||0,tope=rondas>=2,dias=e.pub?diff(e.pub,S.today):C().plazo.sinVenta;
+  fDrawer('Equipo sin venta',`${fEq(e)}<div class="result ${tope?'bad':''}">Lleva <b>${dias} días</b> publicado en ${money(e.price.aut)} sin comprador. ${tope?'Ya tuvo dos rondas: ahora toca donarlo o destruirlo.':`Ronda ${rondas+1} de 2.`}</div>
+   <div class="fld"><span class="lb">${ob('¿Qué sigue?')}</span><div class="opts">${[['precio','Bajar precio',tope],['auc','Subasta',tope],['don','Donar',false],['dest','Destruir',false]].map(([k,l,dis])=>`<button type="button" class="opt ${st.op===k?'on':''}" data-op="${k}" ${dis?'disabled':''}>${l}</button>`).join('')}</div></div>
+   ${st.op==='precio'?`<div class="fld"><span class="lb">${ob('Cómo bajarlo')}</span>${segF('modo',st.modo,[['pct','Por porcentaje'],['amt','Nuevo precio']])}</div>
+     ${st.modo==='pct'?`<div class="fld"><label for="f-pct">${ob('Porcentaje de descuento')}</label><input type="number" id="f-pct" data-k="pct" min="1" max="90" step="5" value="${st.pct??''}"></div>`:`<div class="fld"><label for="f-monto">${ob('Nuevo precio, IVA incluido')}</label><input type="number" id="f-monto" data-k="monto" min="50" step="50" value="${st.monto??''}"></div>`}`:''}
+   ${st.op==='auc'?`<div class="fld"><label for="f-min">${ob('Precio de salida de la subasta')}</label><input type="number" id="f-min" data-k="min" min="50" step="50" value="${st.min??''}"><span class="note">Dura ${C().plazo.subasta} días hábiles entre colaboradores de ${esc(tCase(e.MUNICIPIO))}.</span></div>`:''}
+   ${st.op==='don'?donFld(st):''}
+   ${st.op?motFld(st):''}
+   <div class="row fm-nav"><span class="sp"></span><button class="btn p" id="f-ok" ${st.op?'':'disabled'}>Confirmar</button></div>`);
+  bindF(st,()=>fDecision(r,e,st));$$('.fm [data-op]').forEach(b=>b.onclick=()=>{st.op=b.dataset.op;fDecision(r,e,st)});
+  $('#f-ok').onclick=()=>{const mot=String(st.mot||'').trim();let act,val,txt;
+    if(st.op==='precio'){if(st.modo==='pct'){if(!(st.pct>0&&st.pct<100)){toast('Escribe un porcentaje entre 1 y 99');return}act='pct';val=st.pct}else{if(!(st.monto>=50)){toast('Escribe el nuevo precio (mínimo $50)');return}act='amt';val=st.monto}}
+    if(st.op==='auc'){if(!(st.min>=50)){toast('El precio de salida mínimo es $50');return}act='auc';val=st.min}
+    if(st.op==='don'){if(!st.fecha||st.fecha<S.today){toast('Elige una fecha de entrega a partir de hoy');return}act='don';val={org:st.org,fecha:st.fecha};txt=`Vas a donar <b>${esc(e.ID_ACTIVO)}</b> a ${esc(st.org)}. Sale del Bazar.`}
+    if(st.op==='dest'){act='dest';txt=`Vas a mandar a destrucción <b>${esc(e.ID_ACTIVO)}</b>. Sale del Bazar.`}
+    if(!mot){toast('Falta el motivo');return}
+    const go_=()=>{if(act==='pct'||act==='amt'||act==='auc')e.rounds=rondas+1;closeDrawer();resolve(r.id,act,val);H(e,`Motivo de Activo Fijo: ${mot}`,'AF','hmn');save();render()};
+    txt?confirmBox(txt,act==='don'?'Sí, donar':'Sí, destruir',go_):go_()}}
+/* 5. Visto bueno de una salida propuesta por Sistemas */
+function fVB(r,e,st){st=st||{dec:'ok',q:''};const reu=e.sal?.tipo==='REUSO';
+  fDrawer('Visto bueno de la salida',`${fEq(e)}<div class="result">${reu?`Sistemas propone <b>reutilizarlo en ${esc(e.sal.area)}</b>, dentro de ${esc(tCase(e.CLINICA))}. No se vende.`:`Sistemas propone <b>destruirlo</b>: no enciende${e.dx?.comp?.length?' y se recuperan '+esc(e.dx.comp.join(', ')):''}.`}</div>
+   <h3>Diagnóstico del ingeniero</h3>${dxResumen(e)}
+   <div class="fld"><span class="lb">${ob('Decisión')}</span>${segF('dec',st.dec,[['ok',reu?'Aprobar la reutilización':'Aprobar la destrucción'],['back','Regresar al ingeniero con una pregunta']])}</div>
+   ${st.dec==='back'?`<div class="fld"><label for="f-q">${ob('¿Qué necesitas saber?')}</label><input type="text" id="f-q" value="${esc(st.q)}"></div>`:''}
+   <div class="row fm-nav"><span class="sp"></span><button class="btn p" id="f-ok">${st.dec==='ok'?'Aprobar':'Regresar al ingeniero'}</button></div>`);
+  bindF(st,()=>fVB(r,e,st));
+  $('#f-ok').onclick=()=>{if(st.dec==='back'){const q=String(st.q||'').trim();if(!q){toast('Escribe la pregunta para el ingeniero');return}backToEng(r,e,q);return}
+    const ok=()=>{closeReq(r,'Aprobada');if(reu){e.p='REUSO';H(e,`Activo Fijo aprobó reutilizarlo en ${e.sal.area}`,'AF','hmn')}else{e.p='DESTRUCCION';e.destD=S.today;H(e,'Activo Fijo aprobó la destrucción','AF','hmn')}
+      mail(e.CORREO_INGENIERO||e.INGENIERO,`[Activo 360] Salida aprobada · ${e.ID_ACTIVO}`,reu?`Activo Fijo aprobó reutilizar el equipo en ${e.sal.area}. Registra la reasignación con el acta firmada.`:'Activo Fijo aprobó la destrucción. Pide la recolección al proveedor de tu ciudad.',e);closeDrawer();save();render();toast(reu?'Reutilización aprobada':'Destrucción aprobada')};
+    reu?ok():confirmBox(`Vas a aprobar la destrucción de <b>${esc(e.ID_ACTIVO)}</b>.`,'Sí, aprobar',ok)}}
+/* 8. Validar depósito (Ingresos) */
+function fDeposito(r,e,st){st=st||{res:'ok',cuenta:'',motd:''};
+  fDrawer('Validar depósito',`<div class="dxr"><div><span class="note">Folio de venta</span><b>${esc(e.sale?.folio||'')}</b></div><div><span class="note">Comprador</span><b>${esc(nom(e.buyer))}</b></div><div><span class="note">Monto esperado, IVA incluido</span><b>${money(e.pay?.amount)}</b></div>
+    <div><span class="note">Referencia</span><b>${esc(e.sale?.folio||'')}</b></div><div><span class="note">Fecha del depósito</span><b>${fd(e.pay?.date)}</b></div><div><span class="note">Váucher</span><b>${esc(e.pay?.file||'')}</b></div></div>
+   <div class="fld"><span class="lb">${ob('Resultado')}</span>${segF('res',st.res,[['ok','Depósito recibido'],['no','No se encuentra']])}</div>
+   ${st.res==='ok'?`<div class="fld"><label for="f-cta">${ob('Cuenta donde se recibió')}</label><select id="f-cta" data-k="cuenta"><option value="">Elige la cuenta</option>${CUENTAS.map(c=>`<option ${st.cuenta===c?'selected':''}>${c}</option>`).join('')}</select></div>`
+     :`<div class="fld"><label for="f-md">${ob('Motivo')}</label><select id="f-md" data-k="motd"><option value="">Elige el motivo</option>${MOT_DEP.map(c=>`<option ${st.motd===c?'selected':''}>${c}</option>`).join('')}</select><span class="note">El comprador recibe el aviso y tiene ${C().plazo.reintento} días naturales para corregir.</span></div>`}
+   <div class="row fm-nav"><span class="sp"></span><button class="btn p" id="f-ok">${st.res==='ok'?'Confirmar depósito':'Avisar al comprador'}</button></div>`);
+  bindF(st,()=>fDeposito(r,e,st));
+  $('#f-ok').onclick=()=>{if(st.res==='ok'){if(!st.cuenta){toast('Elige la cuenta donde se recibió');return}e.pay.cuenta=st.cuenta;closeDrawer();resolve(r.id,'ap');H(e,`Depósito recibido en ${st.cuenta}`,'ING','hmn')}
+    else{if(!st.motd){toast('Elige el motivo');return}e.pay.motRej=st.motd;closeDrawer();resolve(r.id,'rej');H(e,`Motivo de Ingresos: ${st.motd}`,'ING','hmn')}save();render()}}
+/* 11. Cierre de donación: factura de la donataria y acta de recepción */
+function fDonFact(r,e){const st={fac:'',acta:''};
+  fDrawer('Documentos de la donación',`${fEq(e)}<div class="result">Donado a <b>${esc(e.don?.org||'')}</b>, entregado el ${fd(e.don?.d)}${e.don?.recibe?' a '+esc(e.don.recibe):''}. Sin estos dos documentos la donación no se puede cerrar.</div>
+   <div class="fld"><label for="f-fac">${ob('Factura de la donataria (PDF o XML)')}</label><input type="file" id="f-fac" accept=".pdf,.xml"></div>
+   <div class="fld"><label for="f-acta">${ob('Acta de recepción firmada')}</label><input type="file" id="f-acta" accept=".pdf,image/png,image/jpeg"></div>
+   <div class="row fm-nav"><a href="#" class="note" id="f-ej">Usar documentos de ejemplo</a><span class="sp"></span><button class="btn p" id="f-ok">Cerrar donación</button></div>`);
+  $('#f-fac').onchange=ev=>st.fac=ev.target.files[0]?.name||'';$('#f-acta').onchange=ev=>st.acta=ev.target.files[0]?.name||'';
+  $('#f-ej').onclick=ev=>{ev.preventDefault();st.fac=`Factura_donataria_${e.ID_ACTIVO}.pdf`;st.acta=`Acta_recepcion_${e.ID_ACTIVO}.pdf`;toast('Documentos de ejemplo listos')};
+  $('#f-ok').onclick=()=>{if(!st.fac){toast('Falta la factura de la donataria');return}if(!st.acta){toast('Falta el acta de recepción');return}e.don.acta=st.acta;H(e,`Acta de recepción adjunta (${st.acta})`,'AF');attachDonFact(e,st.fac);closeDrawer();save();render();toast('Donación cerrada. Fiscal recibió el aviso para revisar')}}
+
+/* ---------- Ejecución de las salidas (ingeniero) ---------- */
+/* 10. Reutilización */
+function fReuso(e){fDrawer('Registrar reasignación',`${fEq(e)}<div class="dxr"><div><span class="note">Área destino</span><b>${esc(e.sal?.area||'')}</b></div><div><span class="note">Fecha</span><b>${fd(S.today)}</b></div></div>
+   <div class="fld"><label for="f-rec">${ob('Responsable que recibe')}</label><input type="text" id="f-rec" placeholder="Nombre y puesto"></div>
+   <label class="chk"><input type="checkbox" id="f-c1"> <span>${ob('Quien recibe firmó el acta de reasignación')}</span></label>
+   <p class="note">La herramienta genera el acta con estos datos y la guarda en el expediente.</p>
+   <div class="row fm-nav"><span class="sp"></span><button class="btn p" id="f-ok">Cerrar reasignación</button></div>`);
+  $('#f-ok').onclick=()=>{const n=$('#f-rec').value.trim();if(!n){toast('Falta el nombre de quien recibe');return}if(!$('#f-c1').checked){toast('Falta confirmar que firmó el acta');return}
+    e.sal.recibe=n;e.sal.fin=S.today;e.sal.acta=`Acta de reasignación ${e.ID_ACTIVO}.pdf`;e.sal.de=e.SERVICIO;e.p='REUSADO';H(e,`Reasignado a ${e.sal.area} · recibe ${n} · acta firmada`,'SIS');
+    log('PATCH','/inventario/'+e.ID_ACTIVO,'int',{area:e.sal.area,estatus:'ACTIVO'},'Actualiza el área del equipo en el inventario.');closeDrawer();save();render();toast('Reasignación cerrada con su acta')}}
+/* 11. Entrega de la donación */
+function fDonEnt(e,st){st=st||{foto:'',rec:''};
+  fDrawer('Entregar donación',`${fEq(e)}<div class="result">Se entrega a <b>${esc(e.don?.org||'')}</b> el ${fd(e.don?.fecha)}.</div>
+   <div class="fld"><label for="f-rec">${ob('Nombre de quien recibe')}</label><input type="text" id="f-rec" value="${esc(st.rec)}"></div>${fotoFld('f-foto',st.foto)}
+   <div class="row fm-nav"><span class="sp"></span><button class="btn p" id="f-ok">Registrar entrega</button></div>`);
+  $('#f-rec').oninput=ev=>st.rec=ev.target.value;$('#f-foto').onchange=ev=>ev.target.files[0]&&readFoto(ev.target.files[0],u=>{st.foto=u;fDonEnt(e,st)});
+  $$('.fm [data-fotoej]').forEach(a=>a.onclick=ev=>{ev.preventDefault();st.foto=FOTO_EJ;fDonEnt(e,st)});
+  $('#f-ok').onclick=()=>{if(!st.rec.trim()){toast('Falta el nombre de quien recibe');return}if(!st.foto){toast('Falta la foto de la entrega');return}e.don.recibe=st.rec.trim();e.don.foto=st.foto;deliverDon(e);closeDrawer();save();render();toast(`Donación entregada. Activo Fijo tiene ${C().plazo.donFact} días para subir la factura y el acta`)}}
+/* 12. Destrucción: recolección y certificado */
+function fRecoleccion(e){fDrawer('Pedir recolección',`${fEq(e)}<div class="result">Destrucción aprobada por Activo Fijo${e.destD?' el '+fd(e.destD):''}.</div>
+   <div class="fld"><label for="f-prov">${ob('Proveedor autorizado')}</label><input type="text" id="f-prov" value="Proveedor autorizado de ${esc(tCase(e.MUNICIPIO))}"></div>
+   <div class="fld"><label for="f-fecha">${ob('Fecha de recolección')}</label><input type="date" id="f-fecha" value="${addBiz(S.today,2)}" min="${S.today}"></div>
+   <div class="row fm-nav"><span class="sp"></span><button class="btn p" id="f-ok">Programar recolección</button></div>`);
+  $('#f-ok').onclick=()=>{const p=$('#f-prov').value.trim(),f=$('#f-fecha').value;if(!p){toast('Falta el proveedor');return}if(!f||f<S.today){toast('Elige una fecha a partir de hoy');return}
+    e.sal={...(e.sal||{}),tipo:'DEST',prov:p,rec:f};e.p='RECOLECCION';H(e,`Recolección programada con ${p} para el ${fd(f)}`,'SIS');closeDrawer();save();render();toast('Recolección programada')}}
+function fCert(e){const st={file:''};fDrawer('Subir certificado de destrucción',`${fEq(e)}<div class="result">Recolectado por ${esc(e.sal?.prov||'el proveedor autorizado')}. El equipo se cierra cuando subas el certificado.</div>
+   <div class="fld"><label for="f-cert">${ob('Certificado de destrucción con manejo ambiental (PDF)')}</label><input type="file" id="f-cert" accept=".pdf,image/png,image/jpeg"></div>
+   <div class="fld"><label for="f-fol">Folio del certificado <span class="note">Opcional</span></label><input type="text" id="f-fol"></div>
+   <div class="row fm-nav"><a href="#" class="note" id="f-ej">Usar certificado de ejemplo</a><span class="sp"></span><button class="btn p" id="f-ok">Cerrar destrucción</button></div>`);
+  $('#f-cert').onchange=ev=>st.file=ev.target.files[0]?.name||'';$('#f-ej').onclick=ev=>{ev.preventDefault();st.file=`Certificado_destruccion_${e.ID_ACTIVO}.pdf`;toast('Certificado de ejemplo listo')};
+  $('#f-ok').onclick=()=>{if(!st.file){toast('Falta el certificado de destrucción');return}closeCert(e,st.file,$('#f-fol').value.trim());closeDrawer();save();render();toast('Destrucción cerrada con su certificado')}}
+function closeCert(e,file,folio){e.sal={...(e.sal||{}),tipo:'DEST',cert:file,folio:folio||''};e.p='DESTRUIDO';e.destD=S.today;H(e,`Destruido · certificado ${folio?folio+' ':''}integrado al expediente (${file})`,'SIS')}
+
+/* ---------- Salidas sin venta: reutilización ---------- */
+VIEWS.reuso=()=>{const vb=S.items.filter(e=>e.p==='REUSO_VB'),ap=S.items.filter(e=>e.p==='REUSO'),ok=S.items.filter(e=>e.p==='REUSADO');
+  const t=(l,f)=>`<div class="tbl" style="margin-top:8px"><table>${l.map(f).join('')||'<tr><td class="note">Nada por ahora.</td></tr>'}</table></div>`;
+  return `<div><h1>Reutilización</h1><p class="sub">Equipo sustituido que la clínica todavía necesita en otra área. No se ofrece en venta y se cierra con el acta de reasignación.</p></div>
+  <div class="grid g3"><div class="card kpi"><div class="l">Esperan visto bueno</div><div class="v">${vb.length}</div><div class="s">Activo Fijo</div></div><div class="card kpi"><div class="l">Por reasignar</div><div class="v">${ap.length}</div><div class="s">Ingeniero de clínica</div></div><div class="card kpi"><div class="l">Reasignados</div><div class="v" style="color:var(--ok)">${ok.length}</div><div class="s">con acta firmada</div></div></div>
+  <div class="grid g2"><div class="card"><h2>Esperan visto bueno</h2>${t(vb,e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td>${eqLine(e)}</td><td>${esc(e.sal?.area||'')}</td></tr>`)}</div>
+  <div class="card"><h2>Por reasignar</h2>${t(ap,e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td>${eqLine(e)}</td><td>${esc(e.sal?.area||'')}</td></tr>`)}</div></div>
+  <div class="card"><h2>Reasignados</h2>${t(ok,e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td>${eqLine(e)}</td><td>${esc(e.sal?.de||'')} → <b>${esc(e.sal?.area||'')}</b></td><td>${esc(e.sal?.recibe||'')}<div class="note">${fd(e.sal?.fin)}</div></td><td class="mono note">${esc(e.sal?.acta||'')}</td></tr>`)}</div>`};
 
 /* ================= SEGUIMIENTO ================= */
 const ownerOf=e=>e.p==='FIRMAS'&&e.sale?.colSig?'JEFE':OWNER[e.p];
@@ -1554,15 +1854,15 @@ function attachCFDI(id,file){const r=S.reqs.find(x=>x.id===id);const e=S.items[r
 
 /* ================= DESTRUCCIÓN ================= */
 VIEWS.destruccion=()=>{
-  const l=S.items.filter(e=>DESTR.includes(e.p));const g={};l.forEach(e=>(g[e.MUNICIPIO]??=[]).push(e));
-  return `<div><h1>Destrucción certificada</h1><p class="sub">Equipos sin valor de venta, agrupados por ciudad para una sola recolección con proveedor local autorizado. El certificado queda en el expediente del activo.</p></div>
+  const l=S.items.filter(e=>DESTR.includes(e.p)||e.p==='DEST_VB');const g={};l.forEach(e=>(g[e.MUNICIPIO]??=[]).push(e));
+  return `<div><h1>Destrucción certificada</h1><p class="sub">Sistemas propone, Activo Fijo aprueba y el ingeniero pide la recolección al proveedor autorizado de su ciudad. El equipo se cierra hasta que se sube el certificado de destrucción con manejo ambiental.</p></div>
   ${Object.keys(g).length?Object.entries(g).map(([c,es])=>{const pend=es.filter(e=>e.p==='DESTRUCCION'),rec=es.filter(e=>e.p==='RECOLECCION'),id=c.replace(/\W/g,'');return `<div class="card"><div class="row"><h2>${esc(c)}</h2><span class="note">${es.length} equipos</span><span class="sp"></span>
-   ${pend.length?`<button class="btn" data-rec="${esc(c)}">Solicitar recolección (${pend.length})</button>`:''}${rec.length?`<input type="text" id="cert-${id}" placeholder="Folio del certificado" value="CERT-${S.today.replace(/-/g,'')}"> <button class="btn p" data-cert="${esc(c)}">Registrar certificado (${rec.length})</button>`:''}</div>
+   ${pend.length?`<button class="btn" data-rec="${esc(c)}">Solicitar recolección (${pend.length})</button>`:''}${rec.length?`<label class="btn sm">Certificado (PDF)<input type="file" id="certf-${id}" hidden accept=".pdf,image/png,image/jpeg"></label><input type="text" id="cert-${id}" placeholder="Folio (opcional)" style="width:130px"> <button class="btn p" data-cert="${esc(c)}">Cerrar con certificado (${rec.length})</button>`:''}</div>
    <div class="tbl" style="margin-top:10px"><table>${es.map(e=>`<tr><td>${eqLine(e)}</td><td>${esc(e.hist[e.hist.length-1]?.t||'')}</td><td>${e.dx?.enciende==='si'?'<span class="pill p-bad">Funcional</span>':''}</td><td>${pill(e.p)}</td></tr>`).join('')}</table></div></div>`}).join(''):'<div class="card note">No hay equipos enviados a destrucción.</div>'}`;
 };
 after.destruccion=()=>{
   $$('[data-rec]').forEach(b=>b.onclick=()=>{S.items.filter(e=>e.MUNICIPIO===b.dataset.rec&&e.p==='DESTRUCCION').forEach(e=>{e.p='RECOLECCION';H(e,`Recolección programada con proveedor autorizado local (${fd(addD(S.today,2))})`,'SIS')});save();render();toast('Recolección solicitada')});
-  $$('[data-cert]').forEach(b=>b.onclick=()=>{const c=b.dataset.cert,f=$('#cert-'+c.replace(/\W/g,'')).value||'CERT';S.items.filter(e=>e.MUNICIPIO===c&&e.p==='RECOLECCION').forEach(e=>{e.p='DESTRUIDO';e.destD=S.today;H(e,`Destruido · certificado ${f} integrado al expediente`,'AF')});save();render();toast('Certificado registrado')});
+  $$('[data-cert]').forEach(b=>b.onclick=()=>{const c=b.dataset.cert,id=c.replace(/\W/g,''),file=$('#certf-'+id).files[0]?.name;if(!file){toast('Falta adjuntar el certificado de destrucción');return}const f=$('#cert-'+id).value.trim();S.items.filter(e=>e.MUNICIPIO===c&&e.p==='RECOLECCION').forEach(e=>closeCert(e,file,f));save();render();toast('Destrucción cerrada con su certificado')});
 };
 
 /* ================= DONACIÓN ================= */
@@ -1577,13 +1877,14 @@ VIEWS.donacion=()=>{
   const cand=S.items.filter(e=>(['PUBLICADO','SUBASTA'].includes(e.p)&&diff(e.pub,S.today)>=C().plazo.sinVenta)||(e.p==='DESTRUCCION'&&e.dx?.enciende==='si'));
   const ent=S.items.filter(e=>e.p==='DONACION'),fac=S.items.filter(e=>e.p==='DONADO_FACT'),done=S.items.filter(e=>e.p==='DONADO');
   const opts=C().donatarias.map(d=>`<option>${esc(d)}</option>`).join('');const d2=addBiz(S.today,2);
-  return `<div><h1>Donación</h1><p class="sub">Activo Fijo elige la donataria y la fecha; Sistemas entrega y el equipo sale del stock. Después hay ${C().plazo.donFact} días naturales para adjuntar la factura de la donataria, que se envía por correo a Fiscal para su revisión.</p></div>
+  return `<div><h1>Donación</h1><p class="sub">Activo Fijo elige la donataria y la fecha; Sistemas entrega y el equipo sale del stock. Después hay ${C().plazo.donFact} días naturales para subir la factura de la donataria y el acta de recepción. Fiscal recibe el aviso para revisarlas.</p></div>
   <div class="grid g4"><div class="card kpi"><div class="l">Candidatos</div><div class="v">${cand.length}</div><div class="s">funcionales sin venta</div></div><div class="card kpi"><div class="l">Por entregar</div><div class="v">${ent.length}</div></div><div class="card kpi"><div class="l">Falta factura</div><div class="v" style="color:var(--warn)">${fac.length}</div></div><div class="card kpi"><div class="l">Donados</div><div class="v" style="color:var(--ok)">${done.length}</div><div class="s">${money(sum(done,estValue))} valor estimado · ${Math.round(sum(done,kgOf))} kg reutilizados</div></div></div>
-  <div class="card"><h2>Candidatos a donación</h2><p class="note">Equipos sin venta en ${C().plazo.sinVenta} días o funcionales que iban a destrucción. También se puede decidir desde la solicitud “Equipo sin venta” en Humand.</p><div class="tbl" style="margin-top:8px"><table>${cand.map(e=>`<tr><td>${eqLine(e)}</td><td>${pill(e.p)}</td><td class="n">${money(estValue(e))}</td><td><div class="row" style="gap:4px"><select id="dorg-${e._i}">${opts}</select><input type="date" id="dfe-${e._i}" value="${d2}" min="${S.today}"><button class="btn sm p" data-prop="${e._i}">Donar</button></div></td></tr>`).join('')||'<tr><td class="note">Sin candidatos por ahora.</td></tr>'}</table></div></div>
+  <div class="card"><h2>Candidatos a donación</h2><p class="note">Equipos sin venta en ${C().plazo.sinVenta} días o funcionales que iban a destrucción. La decisión la toma Activo Fijo en su pendiente “Equipos sin venta”.</p><div class="tbl" style="margin-top:8px"><table>${cand.map(e=>`<tr><td>${eqLine(e)}</td><td>${pill(e.p)}</td><td class="n">${money(estValue(e))}</td><td class="note">${diff(e.pub||S.today,S.today)} días sin venta</td></tr>`).join('')||'<tr><td class="note">Sin candidatos por ahora.</td></tr>'}</table></div></div>
   <div class="grid g2"><div class="card"><h2>Por entregar (Sistemas)</h2><div class="tbl" style="margin-top:8px"><table>${ent.map(e=>`<tr><td>${eqLine(e)}</td><td>${esc(e.don.org)}<div class="note">${fd(e.don.fecha)}</div></td></tr>`).join('')||'<tr><td class="note">Nada por entregar.</td></tr>'}</table></div></div>
-  <div class="card"><h2>Falta factura de la donataria</h2><div class="tbl" style="margin-top:8px"><table>${fac.map(e=>{const r=S.reqs.find(x=>x.eq===e._i&&x.type==='DONFACT'&&x.state==='Pendiente');const left=r?.dl?diff(S.today,r.dl):0;return `<tr><td>${eqLine(e)}<div class="note">${esc(e.don.org)} · entregado ${fd(e.don.d)}</div></td><td>${left>=0?`<span class="pill ${left<=3?'p-warn':'p-info'}">${left} d restantes</span>`:`<span class="pill p-bad">${-left} d vencida</span>`}</td><td><label class="btn sm p">Adjuntar factura<input type="file" data-dfac="${e._i}" hidden accept=".pdf,.xml"></label></td></tr>`}).join('')||'<tr><td class="note">Sin facturas pendientes.</td></tr>'}</table></div></div></div>
+  <div class="card"><h2>Faltan factura y acta de recepción</h2><div class="tbl" style="margin-top:8px"><table>${fac.map(e=>{const r=S.reqs.find(x=>x.eq===e._i&&x.type==='DONFACT'&&x.state==='Pendiente');const left=r?.dl?diff(S.today,r.dl):0;return `<tr><td>${eqLine(e)}<div class="note">${esc(e.don.org)} · entregado ${fd(e.don.d)}</div></td><td>${left>=0?`<span class="pill ${left<=3?'p-warn':'p-info'}">${left} d restantes</span>`:`<span class="pill p-bad">${-left} d vencida</span>`}</td><td>${r?`<button class="btn sm p" data-open="${r.id}">Subir documentos</button>`:''}</td></tr>`}).join('')||'<tr><td class="note">Sin documentos pendientes.</td></tr>'}</table></div></div></div>
   <div class="card"><h2>Donados</h2><div class="tbl" style="margin-top:8px"><table><tr><th>Equipo</th><th>Donataria</th><th>Entregado</th><th>Factura</th><th>Revisión fiscal</th></tr>${done.map(e=>`<tr data-eq="${e._i}" style="cursor:pointer"><td>${eqLine(e)}</td><td>${esc(e.don.org)}</td><td>${fd(e.don.d)}</td><td class="mono note">${esc(e.don.factura||'')}</td><td>${e.don.fiscal?`<span class="pill ${/sin obs/i.test(e.don.fiscal)?'p-ok':'p-warn'}">${esc(e.don.fiscal)}</span>`:'<span class="pill p-info">En revisión</span>'}</td></tr>`).join('')||'<tr><td class="note">Aún no hay donaciones.</td></tr>'}</table></div></div>`};
 after.donacion=()=>{
+  $$('[data-open]').forEach(b=>b.onclick=()=>openReq(b.dataset.open));
   $$('[data-prop]').forEach(b=>b.onclick=()=>{const e=S.items[+b.dataset.prop],f=$('#dfe-'+e._i).value;if(!f||f<S.today){toast('Elige una fecha a partir de hoy');return}startDon(e,$('#dorg-'+e._i).value,f);save();render();toast('Donación registrada · Sistemas recibió el correo para entregar')});
   $$('[data-dfac]').forEach(inp=>inp.onchange=()=>{if(!inp.files[0])return;attachDonFact(S.items[+inp.dataset.dfac],inp.files[0].name);save();render();toast('Factura adjunta · Fiscal recibió el correo para revisión')});
 };
@@ -1830,7 +2131,7 @@ VIEWS.hgestion=()=>{
    <td class="mono">${fd(r.created)}</td><td>${eqLine(e)}${e.buyer&&r.type==='DEPOSITO'?`<div class="note">Colaborador: ${esc(e.buyer)} · ${esc(e.sale?.folio||'')}</div>`:''}${r.type==='DECISION'&&e.pub?`<div class="note">${diff(e.pub,S.today)} días publicado sin venta</div>`:''}</td>
    <td class="n">${r.amount!=null?money(r.amount):'—'}${r.type==='PRECIO'&&e.price?`<div class="note">rango ${money(e.price.min)}–${money(e.price.max)}</div>`:''}${r.type==='DONFACT'&&e.don?`<div class="note">${esc(e.don.org)}</div>`:''}${r.type==='DEPOSITO'&&e.pay?.file?`<div class="note">${esc(e.pay.file)}<br>concepto ${esc(e.sale?.folio||'')}</div>`:''}</td>
    <td class="n">${r.state==='Pendiente'?`${age} d${r.rem?`<div class="note">${r.rem} recordat.</div>`:''}`:esc(r.res||'')}<div style="margin-top:4px">${slaPill(r)}</div></td>
-   <td>${r.state==='Pendiente'?actions(r):''}</td></tr>`};
+   <td>${r.state==='Pendiente'?`<button class="btn sm p" data-open="${r.id}">Abrir</button>`:''}</td></tr>`};
   return `<div><h1>Aprobaciones de Activo Fijo e Ingresos</h1><p class="sub">Humand no permite que un sistema externo cree solicitudes de aprobación, así que Activo Fijo e Ingresos aprueban aquí, en Activo 360. El aviso les llega en Humand por un mensaje del bot de Activo 360 con la liga directa a su pendiente.</p></div>
   <div class="card"><div class="tabs">${tabs.map(([k,l])=>`<button data-ht="${k}" class="${S.hmTab===k?'on':''}">${l}</button>`).join('')}</div>
    <h2 style="margin:18px 0 10px;font-size:20px">Tipos de solicitudes</h2>
@@ -1872,6 +2173,7 @@ function resolve(id,act,val){const r=S.reqs.find(x=>x.id===id);const e=S.items[r
       log('DELETE','/products/'+e.ID_ACTIVO,'pub',null,'Retira el equipo vendido del Bazar.');newReq('FACTURA',e,{amount:e.pay.amount})}}
   save();render();toast(`${r.id} ${r.state.toLowerCase()} · ${ST[e.p][0]}`)}
 after.hgestion=()=>{
+  $$('[data-open]').forEach(b=>b.onclick=()=>openReq(b.dataset.open));
   $$('[data-ht]').forEach(b=>b.onclick=()=>{S.hmTab=b.dataset.ht;render()});
   $$('[data-ap]').forEach(b=>b.onclick=()=>resolve(b.dataset.ap,'ap'));
   $$('[data-rej]').forEach(b=>b.onclick=()=>resolve(b.dataset.rej,'rej'));

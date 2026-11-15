@@ -23,11 +23,11 @@ Lee `HANDOFF.md` primero: contexto, reglas de negocio y pendientes.
 | 175–209 | `init` / estado global `S` |
 | 210–245 | tabulador `priceCalc` y diagnóstico |
 | 299–404 | flujo de venta, `seed()` del demo, cierre diario |
-| 405–458 | persistencia (`KEY='activo360-v9'`), helpers UI, `NAVS`, `go`, `render` |
+| 405–458 | persistencia (`KEY='activo360-v11'`), helpers UI, `NAVS`, `go`, `render` |
 | 459–1304 | vistas: `VIEWS.<id>` arma HTML, `after.<id>` conecta eventos |
 | 1305–fin | eventos globales y arranque (`load(); render(); welcome();`) |
 
-Para agregar una vista: `VIEWS.x=()=>'html'`, `after.x=()=>{...}`, agregar `['x','Nombre']` en `NAVS` y el id en `MODV` del módulo.
+Para agregar una vista: `VIEWS.x=()=>'html'` y `after.x=()=>{...}`. Si va en el menú, agrégala en `NAVS` al rol que la ve; si es pantalla de trabajo, agrégala en `ROLE_V` de cada rol y en `PARENT` con su entrada del menú. Los pendientes de cada rol salen de `tasksFor(rol)`; `salidas` y `reglas` son pantallas con pestañas (`tabView`).
 
 ## Reglas para no romper Apps Script
 - `build.py` divide `app.js` en App1/App2/App3 por las líneas que empiezan con `/* ================= INVENTARIO (formato` y `/* ================= INVENTARIO TECNOL`. No renombres esos comentarios.

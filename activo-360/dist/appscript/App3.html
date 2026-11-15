@@ -162,7 +162,7 @@ VIEWS.hgestion=()=>{
    <td class="mono">${fd(r.created)}</td><td>${eqLine(e)}${e.buyer&&r.type==='DEPOSITO'?`<div class="note">Colaborador: ${esc(e.buyer)} · ${esc(e.sale?.folio||'')}</div>`:''}${r.type==='DECISION'&&e.pub?`<div class="note">${diff(e.pub,S.today)} días publicado sin venta</div>`:''}</td>
    <td class="n">${r.amount!=null?money(r.amount):'—'}${r.type==='PRECIO'&&e.price?`<div class="note">rango ${money(e.price.min)}–${money(e.price.max)}</div>`:''}${r.type==='DONFACT'&&e.don?`<div class="note">${esc(e.don.org)}</div>`:''}${r.type==='DEPOSITO'&&e.pay?.file?`<div class="note">${esc(e.pay.file)}<br>concepto ${esc(e.sale?.folio||'')}</div>`:''}</td>
    <td class="n">${r.state==='Pendiente'?`${age} d${r.rem?`<div class="note">${r.rem} recordat.</div>`:''}`:esc(r.res||'')}<div style="margin-top:4px">${slaPill(r)}</div></td>
-   <td>${r.state==='Pendiente'?actions(r):''}</td></tr>`};
+   <td>${r.state==='Pendiente'?`<button class="btn sm p" data-open="${r.id}">Abrir</button>`:''}</td></tr>`};
   return `<div><h1>Aprobaciones de Activo Fijo e Ingresos</h1><p class="sub">Humand no permite que un sistema externo cree solicitudes de aprobación, así que Activo Fijo e Ingresos aprueban aquí, en Activo 360. El aviso les llega en Humand por un mensaje del bot de Activo 360 con la liga directa a su pendiente.</p></div>
   <div class="card"><div class="tabs">${tabs.map(([k,l])=>`<button data-ht="${k}" class="${S.hmTab===k?'on':''}">${l}</button>`).join('')}</div>
    <h2 style="margin:18px 0 10px;font-size:20px">Tipos de solicitudes</h2>
@@ -204,6 +204,7 @@ function resolve(id,act,val){const r=S.reqs.find(x=>x.id===id);const e=S.items[r
       log('DELETE','/products/'+e.ID_ACTIVO,'pub',null,'Retira el equipo vendido del Bazar.');newReq('FACTURA',e,{amount:e.pay.amount})}}
   save();render();toast(`${r.id} ${r.state.toLowerCase()} · ${ST[e.p][0]}`)}
 after.hgestion=()=>{
+  $$('[data-open]').forEach(b=>b.onclick=()=>openReq(b.dataset.open));
   $$('[data-ht]').forEach(b=>b.onclick=()=>{S.hmTab=b.dataset.ht;render()});
   $$('[data-ap]').forEach(b=>b.onclick=()=>resolve(b.dataset.ap,'ap'));
   $$('[data-rej]').forEach(b=>b.onclick=()=>resolve(b.dataset.rej,'rej'));
