@@ -12,8 +12,9 @@ idx = re.sub(r"<\?!= include\('(\w+)'\); \?>", lambda m: open(G + m.group(1) + '
 idx = idx.replace('<?!= JSON.stringify(feedOn) ?>', 'false').replace('<?!= JSON.stringify(pollMin) ?>', '5').replace('<?!= JSON.stringify(userName) ?>', '"Prueba"').replace('<?!= JSON.stringify(simOn) ?>', 'false')
 assert '<?' not in idx.split('<script>')[0]
 sim = R + 'dist/_appscript_sim.html'; open(sim, 'w', encoding='utf-8').write(idx)
-VIEWS = ['panel', 'alertas', 'clinicas', 'inventario', 'ingeniero', 'seguimiento', 'hgestion', 'facturacion', 'destruccion', 'donacion',
-         'fiscal', 'config', 'hbazar', 'compra', 'hfirma', 'hnotif', 'correos', 'integracion', 'ti', 'carta']
+VIEWS = ['pend', 'inventario', 'salidas', 'panel', 'reglas', 'recorrido', 'alertas', 'clinicas', 'ingeniero', 'seguimiento', 'hgestion', 'facturacion',
+         'destruccion', 'donacion', 'fiscal', 'config', 'ingenieros', 'hbazar', 'compra', 'hfirma', 'hnotif', 'correos', 'integracion']
+ROLES = ['af', 'ingr', 'fac', 'fis', 'sis', 'dir']
 bad = 0
 with sync_playwright() as p:
     b = p.chromium.launch()
@@ -21,8 +22,10 @@ with sync_playwright() as p:
         pg = b.new_page(viewport={'width': 1440, 'height': 900}); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e)))
         pg.goto('file://' + f); pg.wait_for_timeout(1200)
-        info = pg.evaluate("""(V)=>{document.querySelector('.hola')?.remove();for(const v of V)go(v);go('panel');
-          return {equipos:S.items.length,historicos:S.prev.length,alertas:alerts().length,partes:window.A360_OK||'-',xlsx:typeof XLSX}}""", VIEWS)
+        info = pg.evaluate("""([V,R])=>{document.querySelector('.hola')?.remove();for(const v of V)go(v);
+          const pend={};for(const r of R){setRole(r);for(const n of NAVS[r])if(n[0]!=='h')go(n[0]);pend[r]=r==='dir'?'-':tasks().n}
+          setRole('ing',engList()[0].id);for(const n of NAVS.ing)go(n[0]);pend.ing=tasks().n;setRole('admin');
+          return {equipos:S.items.length,historicos:S.prev.length,pendientes:pend,partes:window.A360_OK||'-',xlsx:typeof XLSX}}""", [VIEWS, ROLES])
         print(os.path.basename(f), info, 'ERRORES:' if errs else 'sin errores', errs[:3])
         bad += len(errs)
     b.close()

@@ -187,7 +187,7 @@ const tipo=e=>e.TIPO_EQUIPO||'Escritorio';
 function freshItems(inv){return inv.map((x,i)=>({...x,TIPO_EQUIPO:/escrit/i.test(x.TIPO_EQUIPO||'Escritorio')?'Escritorio':x.TIPO_EQUIPO,_i:i,p:null,dx:null,price:null,pub:null,buyer:null,pay:null,fac:null,destD:null,hist:[]}))}
 function init(sample=true,src){src=src||base0();const lv=TRZ.live;TRZ.live=false;try{init0(sample,src)}finally{TRZ.live=lv}}
 function init0(sample,src){
-  S={cfg:defaultCfg(),meClinic:null,today:sample?T0:new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),items:freshItems(src.inv),prev:src.prev||[],src:src.name||'Inventario',invAs:'',mod:'venta',reqs:[],notifs:[],log:[],mails:[],mailTab:'',fisDraft:null,seq:1000,view:'panel',hmTab:'ALL',city:null,engClinic:null,dxId:null,dxDraft:null,buyId:null,invQ:'',invClin:'',invSt:'',invPage:0,segArea:'',sample,
+  S={cfg:defaultCfg(),meClinic:null,today:sample?T0:new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),items:freshItems(src.inv),prev:src.prev||[],src:src.name||'Inventario',invAs:'',mod:'venta',reqs:[],notifs:[],log:[],mails:[],mailTab:'',fisDraft:null,seq:1000,view:'pend',hmTab:'ALL',city:null,engClinic:null,dxId:null,dxDraft:null,buyId:null,invQ:'',invClin:'',invSt:'',invPage:0,segArea:'',sample,
      col:[],ast:[],cartas:{},movs:[],emp:'102458',tiQ:'',tiTipo:'',tiEst:'',tiPage:0,mov:null,clinQ:''};
   applyAS(S.items);
   genTI();
@@ -219,15 +219,18 @@ const engLabel=g=>{const cl=g.clinicas||[];if(cl.length===1)return tCase(cl[0]);
   const z=S.items.find(e=>e.CLINICA===cl[0]);return `${tCase(z?.DIVISION||z?.ZONA||'Zona')} · ${cl.length} clínicas`};
 const engCur=()=>S&&S.role==='ing'?engList().find(g=>g.id===S.asEng)||null:null;
 const ING=()=>!!engCur();
-const AREA=()=>S&&(S.role==='fac'||S.role==='fis')?S.role:null;
+const ROLES={admin:'Administrador',af:'Activo Fijo',ingr:'Ingresos',fac:'Facturación',fis:'Fiscal (Jurídico)',sis:'Sistemas corporativo',dir:'Dirección'};
+const AREA=()=>S&&S.role&&S.role!=='admin'&&S.role!=='ing'&&ROLES[S.role]?S.role:null;
 const mine=e=>{const g=engCur();return!g||g.clinicas.includes(e.CLINICA)};
 const ING_V=['misequipos','alertas','ingeniero','recorrido'];
-const ROLE_V={ing:ING_V,fac:['facturacion','alertas','recorrido'],fis:['fiscal','alertas','recorrido']};
-const ROLE_CAT={fac:'Facturación',fis:'Fiscal (Jurídico)'};
-function setRole(r,id){S.role=r;S.asEng=r==='ing'?id:null;S.engClinic=null;S.dxId=null;S.rec=null;closeDrawer();go(ROLE_V[r]?ROLE_V[r][0]:'panel')}
+const ROLE_V={ing:['pend','misequipos','ingeniero','recorrido','alertas'],af:['pend','inventario','salidas','panel','hgestion','donacion','destruccion','seguimiento','clinicas','recorrido','alertas'],
+  ingr:['pend','inventario','hgestion','seguimiento','alertas'],fac:['pend','inventario','facturacion','alertas'],fis:['pend','inventario','fiscal','alertas'],
+  sis:['pend','inventario','salidas','panel','reglas','ingenieros','clinicas','donacion','destruccion','recorrido','alertas'],dir:['panel','recorrido']};
+const ROLE_CAT={fac:'Facturación',fis:'Fiscal (Jurídico)',af:'Activo Fijo',ingr:'Ingresos',sis:'Sistemas',dir:'—'};
+function setRole(r,id){S.role=r;S.asEng=r==='ing'?id:null;S.engClinic=null;S.dxId=null;S.rec=null;closeDrawer();go(ROLE_V[r]?ROLE_V[r][0]:'pend')}
 function paintViewAs(){const el=$('#viewas');if(!el)return;const L=engList(),v=ING()?S.asEng:AREA()?'area:'+AREA():'admin';
-  el.innerHTML=`<option value="admin">Ver como: Administrador</option><optgroup label="Sistemas · por clínica">${L.map(g=>`<option value="${g.id}">${esc(engLabel(g))}</option>`).join('')}</optgroup>
-   <optgroup label="Otras áreas que actúan aquí"><option value="area:fac">Facturación</option><option value="area:fis">Fiscal (Jurídico)</option></optgroup>`;el.value=v;
+  el.innerHTML=`<option value="admin">Administrador</option><optgroup label="Sistemas · ingeniero de clínica">${L.map(g=>`<option value="${g.id}">${esc(engLabel(g))}</option>`).join('')}</optgroup>
+   <optgroup label="Áreas">${['af','ingr','fac','fis','sis','dir'].map(k=>`<option value="area:${k}">${ROLES[k]}</option>`).join('')}</optgroup>`;el.value=v;
   el.onchange=()=>el.value==='admin'?setRole('admin'):el.value.startsWith('area:')?setRole(el.value.slice(5)):setRole('ing',el.value)}
 function trzFlush(){if(!GAS||!TRZ.q.length)return;const rows=TRZ.q.splice(0);trzSend(rows,null,m=>{TRZ.q.unshift(...rows);toast('No se pudo escribir la traza: '+m)})}
 function log(m,ep,src,body,desc){S.log.unshift({d:S.today,m,ep,src,body,desc})}
@@ -494,31 +497,82 @@ function gauge(segs,total,center,sub,needle){const cx=150,cy=140,r=110,sw=26;con
 const legend=items=>`<div class="legend">${items.map(([c,l])=>`<span><i style="background:${c}"></i>${l}</span>`).join('')}</div>`;
 
 /* ---------- Navegación ---------- */
+const N_PEND=['pend','Mis pendientes'],N_EQ=['inventario','Equipos'],N_SAL=['salidas','Salidas sin venta'],N_PAN=['panel','Panel'],N_REG=['reglas','Reglas'];
 const NAVS={
- venta:[['h','Equipo de clínicas','mv'],['panel','Panel ejecutivo'],['recorrido','Recorrido de un equipo'],['alertas','Alertas'],['clinicas','Activos por clínica'],['inventario','Inventario'],['ingeniero','Ingeniero de Sistemas'],['seguimiento','Seguimiento de ventas'],['hgestion','Aprobaciones (Activo Fijo e Ingresos)'],['facturacion','Facturación'],['destruccion','Destrucción certificada'],['donacion','Donación'],['fiscal','Fiscal'],['config','Tabulador y reglas'],['ingenieros','Accesos por clínica'],
-  ['h','Humand','hm'],['hbazar','Bazar de Activos'],['compra','Gestión de Servicios · compra'],['hfirma','Firma del formato de compra'],['hnotif','Notificaciones'],['h','Google'],['correos','Correos enviados'],['h','Para Humand'],['integracion','Integración técnica']],
- fac:[['h','Facturación','mv'],['facturacion','Facturas por emitir'],['alertas','Mis alertas'],['recorrido','Recorrido de un equipo']],
- fis:[['h','Fiscal (Jurídico)','mv'],['fiscal','Revisión fiscal'],['alertas','Mis alertas'],['recorrido','Recorrido de un equipo']],
- ing:[['h','Mis clínicas','mv'],['misequipos','Mis equipos'],['alertas','Mis alertas'],['ingeniero','Diagnóstico y entregas'],['recorrido','Recorrido de un equipo']],
- ti:[['h','Inventario de Sistemas','mt'],['alertas','Alertas'],['ti','Activos por colaborador'],['carta','Carta responsiva'],
-  ['h','Humand','hm'],['hfirma','Firma de carta responsiva'],['hnotif','Notificaciones'],['h','Para Humand'],['integracion','Integración técnica']]};
+ admin:[N_PEND,N_EQ,N_SAL,N_PAN,N_REG,['h','Modo presentación','hm'],['recorrido','Recorrido de un equipo'],['hbazar','Humand · equipos disponibles'],['compra','Humand · compra'],['hfirma','Humand · firmas'],['hnotif','Humand · avisos'],['correos','Anexo · correos'],['integracion','Anexo · integración']],
+ ing:[N_PEND,['misequipos','Equipos']],af:[N_PEND,N_EQ,N_SAL,N_PAN],ingr:[N_PEND,N_EQ],fac:[N_PEND,N_EQ],fis:[N_PEND,N_EQ],sis:[N_PEND,N_EQ,N_SAL,N_PAN,N_REG],dir:[N_PAN,['recorrido','Recorrido de un equipo']]};
+/* pantallas de trabajo que no están en el menú: a qué entrada pertenecen */
+const PARENT={ingeniero:'pend',hgestion:'pend',facturacion:'pend',fiscal:'pend',alertas:'pend',donacion:'salidas',destruccion:'salidas',config:'reglas',ingenieros:'reglas',clinicas:'inventario',seguimiento:'inventario'};
+const curRole=()=>ING()?'ing':AREA()||'admin';
 const MODV={ti:['ti','carta'],venta:['panel','recorrido','misequipos','ingenieros','clinicas','inventario','ingeniero','seguimiento','compra','facturacion','destruccion','donacion','fiscal','config','hgestion','hbazar','correos']};
 const MODTAG={venta:['VENTA DE EQUIPO DE CLÍNICAS','Equipo de cómputo de las clínicas que cumplió su vida útil: venta local, destrucción o donación.'],ti:['INVENTARIO DE SISTEMAS','Equipo asignado a cada colaborador y su carta responsiva consolidada (SGC-N4-347).']};
 const HMV=['compra','hbazar','hfirma','hnotif'];
 const pendOf=(type)=>S.reqs.filter(r=>r.state==='Pendiente'&&(Array.isArray(type)?type.includes(r.type):r.type===type)).length;
-function counts(){return{alertas:alerts().filter(x=>x.l!=='info').length,hgestion:S.reqs.filter(r=>r.state==='Pendiente'&&RT[r.type].ch==='humand').length,hbazar:S.items.filter(e=>e.p==='PUBLICADO'||e.p==='SUBASTA').length,
+function counts(){return{pend:curRole()==='admin'||curRole()==='dir'?null:tasks().n,alertas:alerts().filter(x=>x.l!=='info').length,hgestion:S.reqs.filter(r=>r.state==='Pendiente'&&RT[r.type].ch==='humand').length,hbazar:S.items.filter(e=>e.p==='PUBLICADO'||e.p==='SUBASTA').length,
   misequipos:ING()?S.items.filter(e=>mine(e)&&!e.p&&soon(e)).length:null,
   ingeniero:S.items.filter(e=>mine(e)&&((!e.p&&soon(e))||['CONFIRMADO','AGENDA','ENTREGA','DONACION'].includes(e.p))).length,seguimiento:S.items.filter(e=>e.p&&!['ENTREGADO',...DESTR].includes(e.p)).length,
   hnotif:S.notifs.filter(n=>n.d===S.today).length,donacion:S.items.filter(e=>['DONACION','DONADO_FACT'].includes(e.p)).length,
   hfirma:S.mod==='ti'?Object.values(S.cartas).filter(L=>L[L.length-1].st==='Pendiente de firma').length:pendOf(['FIRMA_COL','FIRMA_JEFE']),ti:S.ast.filter(tiSoon).length,
   facturacion:pendOf('FACTURA'),fiscal:pendOf('REVFIS'),correos:S.mails.filter(m=>m.d===S.today).length}}
 
-function renderNav(){const c=counts();$('#nav').innerHTML=NAVS[ING()?'ing':AREA()||S.mod||'venta'].map(n=>n[0]==='h'?`<h6 class="${n[2]||''}">${n[1]}</h6>`:`<button data-v="${n[0]}" class="${HMV.includes(n[0])?'hmb ':''}${S.view===n[0]?'on':''}">${n[1]}${c[n[0]]!=null?`<span class="cnt ${['hgestion','hfirma','alertas'].includes(n[0])&&c[n[0]]?'hot':''}">${c[n[0]]}</span>`:''}</button>`).join('')}
-function go(v){if(MODV.ti.includes(v))S.mod='ti';else if(MODV.venta.includes(v))S.mod='venta';S.view=v;save();render();window.scrollTo(0,0)}
+function renderNav(){const c=counts(),L=NAVS[curRole()],act=L.some(n=>n[0]===S.view)?S.view:PARENT[S.view];
+  $('#nav').innerHTML=L.map(n=>n[0]==='h'?`<h6 class="${n[2]||''}">${n[1]}</h6>`:`<button data-v="${n[0]}" class="${HMV.includes(n[0])?'hmb ':''}${act===n[0]?'on':''}">${n[1]}${n[0]==='pend'&&c.pend?`<span class="cnt hot">${c.pend}</span>`:''}</button>`).join('')}
+function go(v){S.mod='venta';S.view=v;save();render();window.scrollTo(0,0)}
 function setMod(m){S.mod=m;S.view=m==='ti'?'ti':'panel';closeDrawer();save();render();window.scrollTo(0,0)}
-function render(){const rl=ING()?'ing':AREA();if(rl){S.mod='venta';if(!ROLE_V[rl].includes(S.view))S.view=ROLE_V[rl][0]}document.body.classList.toggle('rol-ing',!!rl);paintViewAs();
-  if(!S.mod)S.mod=MODV.ti.includes(S.view)?'ti':'venta';$('#today').textContent=fd(S.today);document.body.classList.toggle('mod-ti',S.mod==='ti');$$('#mods [data-modulo]').forEach(b=>{const on=b.dataset.modulo===S.mod;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});renderNav();const f=VIEWS[S.view]||VIEWS.panel;const t=MODTAG[S.mod];$('#main').innerHTML=`<div class="modtag"><b>${t[0]}</b><span>${t[1]}</span></div>`+f();after[S.view]?.();paintGreet()}
+function render(){const rl=ING()?'ing':AREA();S.mod='venta';if(rl){if(!ROLE_V[rl].includes(S.view))S.view=ROLE_V[rl][0]}else if(MODV.ti.includes(S.view)||!VIEWS[S.view])S.view='pend';document.body.classList.toggle('rol-ing',!!rl);paintViewAs();
+  if(!S.mod)S.mod=MODV.ti.includes(S.view)?'ti':'venta';$('#today').textContent=fd(S.today);document.body.classList.toggle('mod-ti',S.mod==='ti');$$('#mods [data-modulo]').forEach(b=>{const on=b.dataset.modulo===S.mod;b.classList.toggle('on',on);b.setAttribute('aria-selected',String(on))});renderNav();const f=VIEWS[S.view]||VIEWS.pend;const inNav=NAVS[curRole()].some(n=>n[0]===S.view),bk=!inNav&&PARENT[S.view]&&NAVS[curRole()].find(n=>n[0]===PARENT[S.view]);
+  $('#main').innerHTML=(bk?`<button class="back" data-v="${bk[0]}">← ${bk[1]}</button>`:'')+f();after[S.view]?.();paintGreet()}
 const after={},VIEWS={};
+
+/* ================= MIS PENDIENTES ================= */
+/* Lista de tareas del rol: grupos [{t,items:[{e|title,sub,what,days,late,btn,act}]}] */
+function tasksFor(r,all){const G=[],add=(t,items,info)=>{if(items.length)G.push({t,info:!!info,items:items.sort((a,b)=>(b.late-a.late)||(b.days-a.days))})};
+  const rq=(type,t,btn,act,what)=>add(t,S.reqs.filter(q=>q.state==='Pendiente'&&q.type===type&&S.items[q.eq]).map(q=>{const e=S.items[q.eq];return{e,what:typeof what==='function'?what(e,q):what,days:reqDays(q),late:!slaOk(q),meta:slaOf(q),btn,act,extra:q.amount!=null?money2(q.amount):''}}));
+  if(r==='ing'){const my=S.items.filter(e=>all||mine(e)),K=C();
+    const byC={};my.filter(e=>!e.p&&soon(e)).forEach(e=>(byC[e.CLINICA]??=[]).push(e));
+    add('Equipos por sustituir',Object.entries(byC).map(([c,l])=>{const v=l.filter(e=>baseSt(e)==='VENCIDO').length;return{title:tCase(c),sub:`${l.length} equipo${l.length>1?'s':''}: ${v} ya cumplieron 5 años, ${l.length-v} los cumplen en 3 meses o menos`,what:'Cuando llegue el equipo nuevo, confirma para empezar el diagnóstico',days:0,late:false,btn:'Ver clínica',act:{eng:c}}}),true);
+    add('Falta diagnóstico',my.filter(e=>e.p==='CONFIRMADO').map(e=>{const t=sisTask(e);return{e,what:'Revisa el equipo y llena el diagnóstico',days:t.days,late:!t.ok,meta:K.sla.SIS,btn:'Diagnosticar',act:{dx:e._i}}}));
+    add('Entregas por agendar',my.filter(e=>e.p==='AGENDA').map(e=>{const q=curReq(e);return{e,what:`Pagado y facturado. Propón fecha y hora a ${String(e.buyer||'').split(' · ')[0]}`,days:q?reqDays(q):0,late:q?!slaOk(q):false,meta:K.sla.SIS,btn:'Agendar',act:{eng:e.CLINICA}}}));
+    add('Entregas agendadas',my.filter(e=>e.p==='ENTREGA').map(e=>({e,what:`Cita el ${fd(e.cita?.d)} a las ${e.cita?.h||''} con ${String(e.buyer||'').split(' · ')[0]}`,days:e.cita?Math.max(0,diff(e.cita.d,S.today)):0,late:!!e.cita&&e.cita.d<S.today,btn:'Registrar entrega',act:{del:e._i}})));
+    add('Donaciones por entregar',my.filter(e=>e.p==='DONACION').map(e=>({e,what:`Entregar a ${e.don?.org||'la donataria'} el ${fd(e.don?.d)}`,days:0,late:!!e.don?.d&&e.don.d<S.today,btn:'Ver entrega',act:{eng:e.CLINICA}})))}
+  if(r==='af'){rq('PRECIO','Precios por definir','Definir precio',{v:'hgestion',tab:'AF'},'Revisa el diagnóstico y define el precio');rq('DECISION','Equipos sin venta','Decidir',{v:'hgestion',tab:'AF'},e=>`Lleva ${e.pub?diff(e.pub,S.today):15} días publicado sin venta. Decide qué sigue`);rq('DONFACT','Facturas de donataria por adjuntar','Adjuntar factura',{v:'hgestion',tab:'AF'},e=>`Adjunta la factura de ${e.don?.org||'la donataria'}`);
+    add('Destrucciones por recoger',S.items.filter(e=>e.p==='DESTRUCCION').map(e=>({e,what:'Aprobado para destrucción; falta pedir la recolección',days:e.destD?diff(e.destD,S.today):0,late:!!e.destD&&diff(e.destD,S.today)>30,btn:'Ver salida',act:{v:'salidas',sal:'destruccion'}})))}
+  if(r==='ingr')rq('DEPOSITO','Depósitos por validar','Validar depósito',{v:'hgestion',tab:'ING'},e=>`Revisa el váucher de ${String(e.buyer||'').split(' · ')[0]} y confirma el depósito`);
+  if(r==='fac')rq('FACTURA','Ventas por facturar','Adjuntar factura',{v:'facturacion'},e=>`Emite la factura de ${e.sale?.folio||'la venta'} y adjúntala`);
+  if(r==='fis')rq('REVFIS','Donaciones por revisar','Revisar',{v:'fiscal'},e=>`Revisa la factura de ${e.don?.org||'la donataria'}`);
+  if(r==='sis'){add('Diagnósticos atrasados',S.items.filter(e=>e.p==='CONFIRMADO'&&!sisTask(e).ok).map(e=>({e,what:`Lleva ${sisTask(e).days} días hábiles sin diagnóstico · ${tCase(e.INGENIERO)}`,days:sisTask(e).days,late:true,meta:C().sla.SIS,btn:'Ver equipo',act:{eq:e._i}})));
+    const byC={};S.items.filter(e=>!e.p&&baseSt(e)==='VENCIDO').forEach(e=>(byC[e.CLINICA]??=[]).push(e));
+    add('Clínicas con equipo acumulado',Object.entries(byC).filter(([c,l])=>l.length>=2).sort((a,b)=>b[1].length-a[1].length).slice(0,8).map(([c,l])=>({title:tCase(c),sub:`${l.length} equipos ya cumplieron 5 años y no han iniciado proceso`,what:'Revisar con el ingeniero si ya llegó el reemplazo',days:0,late:false,btn:'Ver clínica',act:{clin:c}})),true)}
+  G.sort((a,b)=>a.info-b.info);const flat=G.flatMap(g=>g.items),todo=G.filter(g=>!g.info).flatMap(g=>g.items);return{G,flat,n:todo.length,late:todo.filter(x=>x.late).length}}
+const tasks=()=>tasksFor(curRole());
+function taskCard(x,i){const d=x.days>0?`<span class="pill ${x.late?'p-bad':'p-mut'}">${x.late?'Va tarde · ':''}${x.days} día${x.days===1?'':'s'}${x.meta&&x.late?`, debían ser ${x.meta}`:''}</span>`:(x.late?'<span class="pill p-bad">Va tarde</span>':'');
+  return `<div class="tk ${x.late?'late':''}"><div class="tk-m">${x.e?eqLine(x.e):`<b>${esc(x.title)}</b><div class="note">${esc(x.sub||'')}</div>`}</div><div class="tk-w">${esc(x.what)}${x.extra?` · <b>${esc(x.extra)}</b>`:''}<div class="tk-d">${d}</div></div><button class="btn p" data-tk="${i}">${esc(x.btn)}</button></div>`}
+VIEWS.pend=()=>{const r=curRole();
+  if(r==='admin'){const L=[['af'],['ingr'],['fac'],['fis'],['sis'],['ing',true]].map(([k,all])=>({k,t:tasksFor(k,all)}));
+    return `<div><h1>Mis pendientes</h1><p class="sub">Como administrador ves el resumen de todas las áreas. Para trabajar un pendiente, entra como el área que lo resuelve.</p></div>
+    <div class="grid g3">${L.map(o=>`<div class="card"><div class="row"><h2>${o.k==='ing'?'Sistemas · ingenieros de clínica':ROLES[o.k]}</h2></div><div class="tk-n">${o.t.n}<small>pendiente${o.t.n===1?'':'s'}${o.t.late?` · <b style="color:var(--bad)">${o.t.late} va${o.t.late===1?'':'n'} tarde</b>`:''}</small></div>
+      <div class="note">${o.t.G.map(g=>`${esc(g.t)}: ${g.items.length}`).join(' · ')||'Sin pendientes'}</div><div class="row" style="margin-top:10px"><button class="btn sm" data-as="${o.k}">Ver como ${o.k==='ing'?'ingeniero':ROLES[o.k]}</button></div></div>`).join('')}</div>`}
+  const T=tasks(),who=r==='ing'?engLabel(engCur()):ROLES[r];let i=0;
+  const done=r==='ing'?[]:S.reqs.filter(q=>q.state!=='Pendiente'&&({af:['PRECIO','DECISION','DONFACT'],ingr:['DEPOSITO'],fac:['FACTURA'],fis:['REVFIS']}[r]||[]).includes(q.type)&&S.items[q.eq]).slice(0,10);
+  return `<div><h1>Mis pendientes</h1><p class="sub">${esc(who)} · ${T.n?`Tienes ${T.n} pendiente${T.n===1?'':'s'}${T.late?`; ${T.late} va${T.late===1?'':'n'} tarde`:''}.`:'No tienes pendientes.'}</p></div>
+  ${T.flat.length?T.G.map(g=>`<section class="tkg"><h2>${esc(g.t)} <span class="cnt">${g.items.length}</span>${g.info?'<span class="note" style="font-weight:400">Aviso, no cuenta como pendiente</span>':''}</h2>${g.items.map(x=>taskCard(x,i++)).join('')}</section>`).join(''):`<div class="card"><p style="margin:0">Todo al día. Puedes revisar el estado de cualquier equipo en <a href="#" data-v="${NAVS[r][1]?.[0]||'inventario'}">Equipos</a>.</p></div>`}
+  ${done.length?`<details class="card tk-done"><summary>Ya resolví · últimos ${done.length}</summary>${done.map(q=>`<div class="tk-r" data-eq="${q.eq}"><span>${eqLine(S.items[q.eq])}</span><span class="note">${esc(RT[q.type].n)} · ${esc(q.state)} · ${esc(q.res||'')}</span></div>`).join('')}</details>`:''}`};
+after.pend=()=>{$$('[data-as]').forEach(b=>b.onclick=()=>b.dataset.as==='ing'?setRole('ing',engList()[0]?.id):setRole(b.dataset.as));
+  const F=curRole()==='admin'?[]:tasks().flat;
+  $$('[data-tk]').forEach(b=>b.onclick=()=>{const a=F[+b.dataset.tk].act;if(a.eq!=null){openEq(a.eq);return}if(a.del!=null){openDelivery(a.del);return}if(a.clin){openClinic(a.clin);return}
+    if(a.dx!=null){S.engClinic=S.items[a.dx].CLINICA;S.dxId=a.dx;S.dxDraft=null;go('ingeniero');$('#dxf')?.scrollIntoView({block:'center'});return}
+    if(a.eng){S.engClinic=a.eng;S.dxId=null;go('ingeniero');return}if(a.tab)S.hmTab=a.tab;if(a.sal)S.salTab=a.sal;go(a.v)})};
+
+/* ================= SALIDAS SIN VENTA y REGLAS (pantallas con pestañas) ================= */
+function tabView(key,tabs,title,sub){const cur=tabs.some(t=>t[0]===S[key])?S[key]:(S[key]=tabs[0][0]);
+  return `<div><h1>${title}</h1><p class="sub">${sub}</p></div><div class="tabs" id="tv-${key}">${tabs.map(t=>`<button data-tab="${t[0]}" class="${t[0]===cur?'on':''}">${t[1]}</button>`).join('')}</div><div class="tv-in">${VIEWS[cur]()}</div>`}
+function tabAfter(key){$$(`#tv-${key} [data-tab]`).forEach(b=>b.onclick=()=>{S[key]=b.dataset.tab;save();render()});after[S[key]]?.()}
+const SAL_T=[['donacion','Donación'],['destruccion','Destrucción']];
+VIEWS.salidas=()=>tabView('salTab',SAL_T,'Salidas sin venta','Equipo que no se vendió o que no enciende. Cada salida se cierra con su documento.');
+after.salidas=()=>tabAfter('salTab');
+const REG_T=()=>curRole()==='sis'?[['ingenieros','Accesos por clínica']]:[['config','Tabulador y plazos'],['ingenieros','Accesos por clínica']];
+VIEWS.reglas=()=>tabView('regTab',REG_T(),'Reglas','Lo que define cómo se calcula el precio, los plazos de cada área y quién atiende cada clínica.');
+after.reglas=()=>tabAfter('regTab');
 
 /* ================= PANEL EJECUTIVO ================= */
 function metrics(){
